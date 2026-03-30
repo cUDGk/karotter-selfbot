@@ -1,11 +1,11 @@
 # Karotter Selfbot API リファレンス & ライブラリ
 
-![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&logoColor=white)
-![API Endpoints](https://img.shields.io/badge/API_Endpoints-130+-green)
-![Socket.IO Events](https://img.shields.io/badge/Socket.IO_Events-35+-orange)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![Status](https://img.shields.io/badge/Status-非公式_·_都度更新-red)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](python/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&logoColor=white)](typescript/)
+[![API Endpoints](https://img.shields.io/badge/API_Endpoints-130+-green)](docs/)
+[![Socket.IO Events](https://img.shields.io/badge/Socket.IO_Events-35+-orange)](docs/socketio.md)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-非公式_·_都度更新-red)](#注意事項)
 
 [Karotter](https://karotter.com) の非公式APIリファレンスとセルフBot用クライアントライブラリです。
 
