@@ -334,18 +334,8 @@ Karotter uses Firebase Cloud Messaging for push notifications. Below is the publ
 
 ### Firebase Config
 
-| Key | Value |
-|-----|-------|
-| `apiKey` | `AIzaSyCXIbraWaApMZrQ5VP5RA4fc4i0YZ-W8I8` |
-| `projectId` | `karotter-e9b8d` |
-| `messagingSenderId` | `672327254767` |
-| `appId` | `1:672327254767:web:da22193035ab880a86d11a` |
-
-### VAPID Key (Web Push)
-
-```
-BDB3C6i4Xa0E58vdrNk_GiFdzQXrMjOAlW32mBi8F1kowFwG3eidq0NpK82h9xUe3sbvblObkLXA6PaS0Uo4p78
-```
+> Firebase/FCMの設定値はKarotterのフロントエンドから取得可能ですが、GitHub Secret Scanningの誤検知を避けるためここでは省略します。
+> APKまたはWebアプリのソースから確認してください。
 
 ### Usage Example (JavaScript)
 
