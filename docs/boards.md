@@ -19,6 +19,15 @@
 - [Delete a Thread](#delete-a-thread)
 - [Post a Reply](#post-a-reply)
 - [Server-Sent Events (SSE)](#server-sent-events-sse)
+- [Follow a Board](#follow-a-board)
+- [Unfollow a Board](#unfollow-a-board)
+- [Get Following Boards](#get-following-boards)
+- [Follow a Thread](#follow-a-thread)
+- [Unfollow a Thread](#unfollow-a-thread)
+- [React to a Thread](#react-to-a-thread)
+- [React to a Reply](#react-to-a-reply)
+- [Get Reaction Users (Thread)](#get-reaction-users-thread)
+- [Get Reaction Users (Reply)](#get-reaction-users-reply)
 - [Content Parsing](#content-parsing)
 - [Age Gate](#age-gate)
 - [Object Reference: Board](#object-reference-board)
@@ -487,6 +496,278 @@ Check out https://typescriptlang.org #typescript @tsdev
 | 401 | `{"error": "ログインが必要です"}` | Not logged in |
 | 403 | `{"error": "年齢制限により投稿できません"}` | User does not meet minimum age |
 | 404 | `{"error": "スレッドが見つかりません"}` | Thread not found |
+
+---
+
+## Follow a Board
+
+Follows a board to receive updates when new threads are posted.
+
+```
+POST /api/boards/:slug/follow
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+
+### Request Body
+
+None.
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "掲示板をフォローしました"}` | Board followed |
+| 400 | `{"error": "既にフォローしています"}` | Already following |
+
+---
+
+## Unfollow a Board
+
+Unfollows a board.
+
+```
+DELETE /api/boards/:slug/follow
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "掲示板のフォローを解除しました"}` | Board unfollowed |
+
+---
+
+## Get Following Boards
+
+Returns boards you are currently following.
+
+```
+GET /api/boards/following
+```
+
+### Query Parameters
+
+None.
+
+### Response
+
+```json
+{
+  "boards": [
+    {
+      "id": 5,
+      "title": "General Discussion",
+      "slug": "general-discussion",
+      "description": "Talk about anything!",
+      "minimumAge": 13,
+      "threadCount": 42,
+      "replyCount": 1337,
+      "lastPostAt": "2026-03-28T23:45:00.000Z"
+    }
+  ]
+}
+```
+
+---
+
+## Follow a Thread
+
+Follows a specific thread to receive notifications when new replies are posted.
+
+```
+POST /api/boards/:slug/threads/:id/follow
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+| `id` | number | Yes | Thread ID |
+
+### Request Body
+
+None.
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "スレッドをフォローしました"}` | Thread followed |
+| 400 | `{"error": "既にフォローしています"}` | Already following |
+
+---
+
+## Unfollow a Thread
+
+Unfollows a thread.
+
+```
+DELETE /api/boards/:slug/threads/:id/follow
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+| `id` | number | Yes | Thread ID |
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "スレッドのフォローを解除しました"}` | Thread unfollowed |
+
+---
+
+## React to a Thread
+
+Adds an emoji reaction to a thread's original post.
+
+```
+POST /api/boards/:slug/threads/:id/reactions
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+| `id` | number | Yes | Thread ID |
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `emoji` | string | Yes | Emoji text (max 32 characters) |
+
+### Example
+
+```http
+POST /api/boards/general-discussion/threads/101/reactions HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+Content-Type: application/json
+
+{
+  "emoji": "👍"
+}
+```
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "リアクションしました"}` | Reaction added |
+| 400 | `{"error": "既にリアクションしています"}` | Already reacted with this emoji |
+
+---
+
+## React to a Reply
+
+Adds an emoji reaction to a board reply.
+
+```
+POST /api/boards/:slug/replies/:replyId/reactions
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+| `replyId` | number | Yes | Reply ID |
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `emoji` | string | Yes | Emoji text (max 32 characters) |
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "リアクションしました"}` | Reaction added |
+| 400 | `{"error": "既にリアクションしています"}` | Already reacted with this emoji |
+
+---
+
+## Get Reaction Users (Thread)
+
+Returns users who reacted to a thread with a specific emoji.
+
+```
+GET /api/boards/:slug/threads/:id/reactions/:emoji/users
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+| `id` | number | Yes | Thread ID |
+| `emoji` | string | Yes | URL-encoded emoji |
+
+### Response
+
+```json
+{
+  "users": [
+    {
+      "id": 18179,
+      "username": "reactor",
+      "displayName": "Reactor",
+      "avatarUrl": "/uploads/avatars/abc.webp"
+    }
+  ]
+}
+```
+
+---
+
+## Get Reaction Users (Reply)
+
+Returns users who reacted to a reply with a specific emoji.
+
+```
+GET /api/boards/:slug/replies/:replyId/reactions/:emoji/users
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `slug` | string | Yes | Board slug |
+| `replyId` | number | Yes | Reply ID |
+| `emoji` | string | Yes | URL-encoded emoji |
+
+### Response
+
+```json
+{
+  "users": [
+    {
+      "id": 18179,
+      "username": "reactor",
+      "displayName": "Reactor",
+      "avatarUrl": "/uploads/avatars/abc.webp"
+    }
+  ]
+}
+```
 
 ---
 

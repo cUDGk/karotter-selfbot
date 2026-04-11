@@ -35,6 +35,10 @@
   - [Delete a Story](#delete-a-story)
   - [Story Visibility](#story-visibility)
   - [Object Reference: Story](#object-reference-story)
+- [Anonymous Questions](#anonymous-questions)
+  - [Get Question Inbox](#get-question-inbox)
+  - [Send a Question](#send-a-question)
+  - [Delete a Question](#delete-a-question)
 - [Link Preview](#link-preview)
   - [Get Link Preview](#get-link-preview)
   - [Get Link Preview Image](#get-link-preview-image)
@@ -944,6 +948,113 @@ Full Story object structure.
 | `liked` | boolean | Whether the authenticated user has liked this story |
 | `viewsCount` | number | Total view count (duplicate of `_count.views`) |
 | `likesCount` | number | Total like count (duplicate of `_count.likes`) |
+
+---
+
+## Anonymous Questions
+
+Anonymous questions allow users to receive and answer questions from other users. Questions are sent anonymously and appear in the recipient's inbox.
+
+### Get Question Inbox
+
+Returns all questions received by the authenticated user.
+
+```
+GET /api/social/questions/inbox
+```
+
+#### Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `page` | number | 1 | Page number |
+| `limit` | number | 20 | Questions per page |
+
+#### Response
+
+```json
+{
+  "questions": [
+    {
+      "id": 123,
+      "content": "What's your favorite anime?",
+      "createdAt": "2026-03-28T15:00:00.000Z",
+      "isAnswered": false
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "hasNext": true
+  }
+}
+```
+
+---
+
+### Send a Question
+
+Sends an anonymous question to a user.
+
+```
+POST /api/social/questions/:username
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `username` | string | Yes | Target user's username |
+
+#### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `content` | string | Yes | Question text |
+
+#### Example
+
+```http
+POST /api/social/questions/claude HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+Content-Type: application/json
+
+{
+  "content": "What's your favorite programming language?"
+}
+```
+
+#### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "質問を送信しました"}` | Question sent |
+| 400 | `{"error": "..."}` | Validation error |
+| 404 | `{"error": "ユーザーが見つかりません"}` | User not found |
+
+---
+
+### Delete a Question
+
+Deletes a question from your inbox.
+
+```
+DELETE /api/social/questions/:id
+```
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | number | Yes | Question ID |
+
+#### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "質問を削除しました"}` | Question deleted |
+| 403 | `{"error": "権限がありません"}` | Not the question recipient |
+| 404 | `{"error": "質問が見つかりません"}` | Question not found |
 
 ---
 

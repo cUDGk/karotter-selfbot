@@ -2,7 +2,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](python/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&logoColor=white)](typescript/)
-[![API Endpoints](https://img.shields.io/badge/API_Endpoints-130+-green)](docs/)
+[![API Endpoints](https://img.shields.io/badge/API_Endpoints-145+-green)](docs/)
 [![Socket.IO Events](https://img.shields.io/badge/Socket.IO_Events-35+-orange)](docs/socketio.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-非公式_·_都度更新-red)](#注意事項)
@@ -33,7 +33,7 @@ Karotterの全APIエンドポイントを機能ごとにまとめたドキュメ
 | [Follow](docs/follow.md) | フォロー/アンフォロー、ブロック、ミュート、フォローリクエスト |
 | [DM](docs/dm.md) | ダイレクトメッセージ、グループチャット、添付ファイル、投票、通話 |
 | [Notifications](docs/notifications.md) | 通知タイプ、プッシュ通知 (FCM)、未読数 |
-| [Social](docs/social.md) | サークル、リスト、ストーリー、リンクプレビュー |
+| [Social](docs/social.md) | サークル、リスト、ストーリー、匿名質問、リンクプレビュー |
 | [Radio](docs/radio.md) | スペース (音声通話)、WebRTC、スピーカー管理 |
 | [Draw Chat](docs/draw.md) | 絵チャ (共同お絵かき)、レイヤー、ストローク |
 | [Boards](docs/boards.md) | 掲示板、スレッド、リプライ、SSE |

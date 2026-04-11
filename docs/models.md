@@ -467,21 +467,16 @@ Represents a topic board (community board / forum-like feature).
 ```ts
 interface Board {
   id: number;                              // Unique board identifier
-  name: string;                            // Board name
-  description: string;                     // Board description
-  iconUrl: string | null;                  // Board icon URL
-  bannerUrl: string | null;                // Board banner image URL
-  ownerId: number;                         // User ID of the board creator
-  isPublic: boolean;                       // Whether the board is publicly visible
-  isArchived: boolean;                     // Whether the board is archived (read-only)
-  memberCount: number;                     // Total number of members
+  title: string;                           // Board title
+  slug: string;                            // URL-friendly slug (used in all board URLs)
+  description: string | null;              // Board description
+  minimumAge: number;                      // Minimum age to access (13-99)
   threadCount: number;                     // Total number of threads
-  category: string;                        // Board category
-  rules: string[];                         // List of board rules
-
-  // Viewer state
-  isMember: boolean;                       // Whether the viewer is a member
-  role: "owner" | "moderator" | "member" | null;
+  replyCount: number;                      // Total number of replies across all threads
+  lastPostAt: string | null;               // ISO 8601 timestamp of most recent activity
+  creator: {
+    id: number;                            // Creator's user ID
+  };
 
   // Timestamps
   createdAt: string;

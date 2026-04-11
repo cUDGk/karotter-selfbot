@@ -285,6 +285,48 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 Use cursor-based pagination. Pass the `nextCursor` value from the response as the `cursor` query parameter in the next request. When `nextCursor` is `null` or absent, there are no more results.
 
+### `GET /users/:id/mutual-followers`
+
+Get users who follow both you and the specified user ("mutual followers" / "知り合いのフォロワー").
+
+**Query Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `limit` | `number` | `20` | Results per page |
+| `cursor` | `string` | — | Cursor for pagination |
+
+**Request:**
+
+```http
+GET /users/clx1abc2d3ef4gh5ij6kl7mn8/mutual-followers?limit=20 HTTP/1.1
+Host: api.karotter.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+```
+
+**Response `200 OK`:**
+
+```json
+{
+  "users": [
+    {
+      "id": "clx_mutual1",
+      "username": "mutualfriend",
+      "displayName": "Mutual Friend",
+      "avatarUrl": "https://cdn.karotter.com/avatars/clx_mutual1.webp",
+      "bio": "Hello!",
+      "isPrivate": false,
+      "officialMark": [],
+      "isParodyAccount": false,
+      "isBotAccount": false
+    }
+  ],
+  "pagination": {
+    "nextCursor": "cursor_mutual123"
+  }
+}
+```
+
 ---
 
 ## Edit Profile

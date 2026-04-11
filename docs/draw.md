@@ -17,6 +17,8 @@
 - [Join a Room](#join-a-room)
 - [Update Layers](#update-layers)
 - [Rotate Invite Code](#rotate-invite-code)
+- [Get Layers](#get-layers)
+- [Send Chat Message (REST)](#send-chat-message-rest)
 - [Canvas Specifications](#canvas-specifications)
 - [Layer System](#layer-system)
 - [Stroke Types](#stroke-types)
@@ -403,6 +405,81 @@ None.
 |--------|------|-------------|
 | 200 | `{"inviteCode": "..."}` | New invite code generated |
 | 403 | `{"error": "権限がありません"}` | Not the room owner |
+
+---
+
+## Get Layers
+
+Returns only the layers of a draw room, without full room details. Useful for polling layer updates.
+
+```
+GET /api/draw/rooms/:id/layers
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | number | Yes | Room ID |
+
+### Response
+
+```json
+{
+  "layers": [
+    {
+      "id": "layer-001",
+      "name": "Background",
+      "order": 0,
+      "visible": true,
+      "opacity": 1,
+      "dataUrl": "data:image/png;base64,iVBOR..."
+    }
+  ]
+}
+```
+
+---
+
+## Send Chat Message (REST)
+
+Sends a text chat message in a draw room via the REST API. This is an alternative to emitting the `draw:chat` Socket.IO event.
+
+```
+POST /api/draw/rooms/:id/chat
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `id` | number | Yes | Room ID |
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `content` | string | Yes | Message text (max 400 characters) |
+
+### Example
+
+```http
+POST /api/draw/rooms/15/chat HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+Content-Type: application/json
+
+{
+  "content": "Nice drawing!"
+}
+```
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "メッセージを送信しました"}` | Message sent |
+| 403 | `{"error": "ルームに参加していません"}` | Not a participant |
 
 ---
 

@@ -523,6 +523,28 @@ socket.on("radio:host-reconnected", (data: {
 }) => { /* handle */ });
 ```
 
+#### `radio:message`
+
+Fired when a chat message is sent in the radio room.
+
+```ts
+socket.on("radio:message", (data: {
+  roomId: string;
+  message: {
+    id: number;
+    content: string;
+    senderId: number;
+    sender: {
+      id: number;
+      username: string;
+      displayName: string;
+      avatarUrl: string | null;
+    };
+    createdAt: string;
+  };
+}) => { /* handle */ });
+```
+
 ### Events to Emit and Listen (Bidirectional)
 
 #### `radio:signal`
@@ -583,17 +605,25 @@ socket.on("radio:renegotiate-request", (data: {
 }) => { /* handle */ });
 ```
 
-### Emit Only
+### Emit and Listen
 
 #### `radio:reaction`
 
 Send a floating reaction emoji in the radio room (visible to all participants).
 
 ```ts
+// Emit
 socket.emit("radio:reaction", {
   roomId: string;
   emoji: string;                     // e.g. "fire", "heart", "clap", "100"
 });
+
+// Listen
+socket.on("radio:reaction", (data: {
+  roomId: string;
+  userId: number;
+  emoji: string;
+}) => { /* handle */ });
 ```
 
 ---
@@ -922,7 +952,8 @@ socket.on("notification", (data: {
 | `radio:signal` | Emit / Listen | Radio | WebRTC signaling |
 | `radio:participant-state` | Emit / Listen | Radio | Participant state |
 | `radio:renegotiate-request` | Emit / Listen | Radio | WebRTC renegotiation |
-| `radio:reaction` | Emit | Radio | Floating emoji reaction |
+| `radio:reaction` | Emit / Listen | Radio | Floating emoji reaction |
+| `radio:message` | Listen | Radio | Chat message in room |
 | `draw:join` | Emit | Draw | Join draw room |
 | `draw:leave` | Emit | Draw | Leave draw room |
 | `draw:stroke` | Emit / Listen | Draw | Drawing stroke |

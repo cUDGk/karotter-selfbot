@@ -21,6 +21,10 @@
 - [Get Pending Follow Requests](#get-pending-follow-requests)
 - [Accept Follow Request](#accept-follow-request)
 - [Reject Follow Request](#reject-follow-request)
+- [Enable Post Notifications](#enable-post-notifications)
+- [Disable Post Notifications](#disable-post-notifications)
+- [Hide Rekarots](#hide-rekarots)
+- [Unhide Rekarots](#unhide-rekarots)
 - [Optimistic Update Logic](#optimistic-update-logic)
 
 ---
@@ -643,6 +647,167 @@ X-CSRF-Token: abc123
 
 ---
 
+## Enable Post Notifications
+
+Enables push notifications for new posts from a specific user you follow.
+
+```
+POST /api/follow/:userId/post-notify
+```
+
+### Path Parameters
+
+| Parameter | Type   | Required | Description                     |
+|-----------|--------|----------|---------------------------------|
+| `userId`  | number | Yes      | The numeric ID of the target user |
+
+### Request Body
+
+None.
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "投稿通知をオンにしました"}` | Post notifications enabled |
+| 400 | `{"error": "フォローしていません"}` | Not following this user |
+
+### Example
+
+```http
+POST /api/follow/18179/post-notify HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+```
+
+```json
+{
+  "message": "投稿通知をオンにしました"
+}
+```
+
+---
+
+## Disable Post Notifications
+
+Disables push notifications for new posts from a specific user.
+
+```
+DELETE /api/follow/:userId/post-notify
+```
+
+### Path Parameters
+
+| Parameter | Type   | Required | Description                     |
+|-----------|--------|----------|---------------------------------|
+| `userId`  | number | Yes      | The numeric ID of the target user |
+
+### Request Body
+
+None.
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "投稿通知をオフにしました"}` | Post notifications disabled |
+
+### Example
+
+```http
+DELETE /api/follow/18179/post-notify HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+```
+
+```json
+{
+  "message": "投稿通知をオフにしました"
+}
+```
+
+---
+
+## Hide Rekarots
+
+Hides rekarots (reposts) from a specific user in your timeline. You will still see their original posts, but not their rekarots.
+
+```
+POST /api/follow/hide-rekarots/:userId
+```
+
+### Path Parameters
+
+| Parameter | Type   | Required | Description                     |
+|-----------|--------|----------|---------------------------------|
+| `userId`  | number | Yes      | The numeric ID of the target user |
+
+### Request Body
+
+None.
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "リカロットを非表示にしました"}` | Rekarots hidden |
+
+### Example
+
+```http
+POST /api/follow/hide-rekarots/18179 HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+```
+
+```json
+{
+  "message": "リカロットを非表示にしました"
+}
+```
+
+---
+
+## Unhide Rekarots
+
+Restores rekarots from a specific user in your timeline.
+
+```
+DELETE /api/follow/hide-rekarots/:userId
+```
+
+### Path Parameters
+
+| Parameter | Type   | Required | Description                     |
+|-----------|--------|----------|---------------------------------|
+| `userId`  | number | Yes      | The numeric ID of the target user |
+
+### Request Body
+
+None.
+
+### Responses
+
+| Status | Body | Description |
+|--------|------|-------------|
+| 200 | `{"message": "リカロットの非表示を解除しました"}` | Rekarots unhidden |
+
+### Example
+
+```http
+DELETE /api/follow/hide-rekarots/18179 HTTP/1.1
+Authorization: Bearer eyJ...
+X-CSRF-Token: abc123
+```
+
+```json
+{
+  "message": "リカロットの非表示を解除しました"
+}
+```
+
+---
+
 ## Optimistic Update Logic
 
 The Karotter frontend uses optimistic updates for all follow-related operations to provide instant UI feedback. The general pattern is:
@@ -671,6 +836,10 @@ The Karotter frontend uses optimistic updates for all follow-related operations 
 | Remove Follower | `isFollowedBy` -> `false`, self `followersCount` -1 |
 | Accept Request | Remove from pending list, self `followersCount` +1 |
 | Reject Request | Remove from pending list |
+| Hide Rekarots | `hideRekarots` -> `true` for that user |
+| Unhide Rekarots | `hideRekarots` -> `false` for that user |
+| Post Notify On | `postNotify` -> `true` for that user |
+| Post Notify Off | `postNotify` -> `false` for that user |
 
 ### Rate Limiting
 

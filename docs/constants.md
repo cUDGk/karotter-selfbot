@@ -374,6 +374,7 @@ All `localStorage` keys used by the Karotter web client. All keys are prefixed w
 | `karotter:userId` | `string` | Current user's ID |
 | `karotter:username` | `string` | Current user's username |
 | `karotter:accounts` | `string` (JSON) | Serialized array of `Account` objects for multi-account support |
+| `karotter:active-account-id` | `string` | ID of the currently active account |
 | `karotter:activeAccountIndex` | `string` (number) | Index of the active account in the accounts array |
 | `karotter:theme` | `string` | UI theme: `"light"`, `"dark"`, or `"system"` |
 | `karotter:accentColor` | `string` | Accent color hex code |
@@ -409,6 +410,7 @@ Keys used by the native (iOS/Android) apps, stored in platform-specific secure s
 | `karotter_native_accessToken` | `string` | JWT access token (stored securely) |
 | `karotter_native_refreshToken` | `string` | Refresh token (stored securely) |
 | `karotter_native_deviceId` | `string` | Device UUID |
+| `karotter_native_active_account_id` | `string` | ID of the currently active account |
 | `karotter_native_sessionId` | `string` | Current session ID |
 | `karotter_native_userId` | `string` | Current user ID |
 | `karotter_native_biometricEnabled` | `boolean` | Whether biometric unlock is enabled |
