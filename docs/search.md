@@ -14,8 +14,8 @@
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `q` | `string` | — | Search query string (required) |
-| `limit` | `number` | `12` | Maximum results per category |
+| `q` | `string` | — | 検索クエリ文字列（必須） |
+| `limit` | `number` | `12` | カテゴリあたりの最大結果数 |
 
 **リクエスト:**
 
@@ -78,14 +78,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `hasNext` | `boolean` | Whether more results are available |
-| `nextCursor` | `string \| null` | Cursor for the next page of results |
-| `page` | `number` | Current page number |
-| `pages` | `number` | Total number of pages available |
+| `hasNext` | `boolean` | さらに結果があるかどうか |
+| `nextCursor` | `string \| null` | 次ページの結果用カーソル |
+| `page` | `number` | 現在のページ番号 |
+| `pages` | `number` | 利用可能な総ページ数 |
 
 ---
 
-## 検索 Posts
+## 投稿検索
 
 ### `GET /search/posts`
 
@@ -95,18 +95,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `q` | `string` | — | Search query string (required) |
-| `sort` | `string` | `latest` | Sort order (see below) |
-| `hasMedia` | `boolean` | — | Filter to posts with media attachments only |
-| `limit` | `number` | `12` | Results per page |
-| `cursor` | `string` | — | Pagination cursor from previous response |
+| `q` | `string` | — | 検索クエリ文字列（必須） |
+| `sort` | `string` | `latest` | ソート順（下記参照） |
+| `hasMedia` | `boolean` | — | メディア添付の投稿のみにフィルタ |
+| `limit` | `number` | `12` | 1ページあたりの結果数 |
+| `cursor` | `string` | — | 前回のレスポンスからのページネーションカーソル |
 
 **ソート値:**
 
 | ソート | 説明 |
 |------|-------------|
-| `latest` | Most recent posts first (chronological) |
-| `topics` | Sorted by topical relevance to the query |
+| `latest` | 最新の投稿順（時系列） |
+| `topics` | クエリとのトピック関連性でソート |
 
 **リクエスト:**
 
@@ -156,7 +156,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Request (next page):**
+**リクエスト（次ページ）:**
 
 ```http
 GET /search/posts?q=sunset&sort=latest&hasMedia=true&limit=12&cursor=cursor_posts_def456 HTTP/1.1
@@ -166,7 +166,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## 検索 Users
+## ユーザー検索
 
 ### `GET /search/users`
 
@@ -176,10 +176,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `q` | `string` | — | Search query string (required) |
-| `limit` | `number` | `12` | Results per page. Use `6` for suggestion dropdowns, `12` for full search results. |
+| `q` | `string` | — | 検索クエリ文字列（必須） |
+| `limit` | `number` | `12` | 1ページあたりの結果数。サジェストドロップダウンには`6`、完全な検索結果には`12`を使用。 |
 
-**Request (suggestion mode):**
+**リクエスト（サジェストモード）:**
 
 ```http
 GET /search/users?q=karo&limit=6 HTTP/1.1
@@ -187,7 +187,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Request (full search):**
+**リクエスト（フル検索）:**
 
 ```http
 GET /search/users?q=karotter&limit=12 HTTP/1.1
@@ -230,13 +230,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 **ユーザー検索のReact Query設定:**
 
-| Setting | Value |
+| 設定 | 値 |
 |---------|-------|
-| `staleTime` | `15000` (15 seconds) |
+| `staleTime` | `15000`（15秒） |
 
 ---
 
-## 検索 Hashtags
+## ハッシュタグ検索
 
 ### `GET /search/hashtags`
 
@@ -246,7 +246,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `q` | `string` | — | Hashtag search query (without the `#` prefix) |
+| `q` | `string` | — | ハッシュタグ検索クエリ（`#`プレフィックスなし） |
 
 **リクエスト:**
 
@@ -287,10 +287,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `string` | Unique hashtag identifier |
-| `name` | `string` | Hashtag text (without `#` prefix) |
-| `usageCount` | `number` | Total number of posts using this hashtag |
-| `trendScore` | `number` | Trending score (higher = more trending recently) |
+| `id` | `string` | ユニークなハッシュタグ識別子 |
+| `name` | `string` | ハッシュタグテキスト（`#`プレフィックスなし） |
+| `usageCount` | `number` | このハッシュタグを使用した投稿の総数 |
+| `trendScore` | `number` | トレンドスコア（高いほど最近トレンド） |
 
 ---
 
@@ -304,7 +304,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `20` | Maximum number of trending topics to return |
+| `limit` | `number` | `20` | 返すトレンドトピックの最大数 |
 
 **リクエスト:**
 
@@ -357,10 +357,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `type` | `string` | Always `HASHTAG` (currently the only supported type) |
-| `label` | `string` | Display label with `#` prefix |
-| `postCount` | `number` | Number of posts using this topic in the trending period |
-| `token` | `string` | Raw token value (hashtag name without `#`) for use in search queries |
+| `type` | `string` | 常に `HASHTAG`（現在サポートされている唯一のタイプ） |
+| `label` | `string` | `#`プレフィックス付きの表示ラベル |
+| `postCount` | `number` | トレンド期間中にこのトピックを使用した投稿数 |
+| `token` | `string` | 検索クエリで使用する生のトークン値（`#`なしのハッシュタグ名） |
 
 ---
 
@@ -382,8 +382,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `12` | Results per page |
-| `cursor` | `string` | — | Pagination cursor from previous response |
+| `limit` | `number` | `12` | 1ページあたりの結果数 |
+| `cursor` | `string` | — | 前回のレスポンスからのページネーションカーソル |
 
 **リクエスト:**
 
@@ -393,7 +393,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK` (example for `/discover/latest`):**
+**レスポンス `200 OK`（`/discover/latest`の例）:**
 
 ```json
 {
@@ -421,7 +421,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Request (next page):**
+**リクエスト（次ページ）:**
 
 ```http
 GET /search/discover/latest?limit=12&cursor=cursor_discover_ghi789 HTTP/1.1
@@ -429,7 +429,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK` (example for `/discover/media`):**
+**レスポンス `200 OK`（`/discover/media`の例）:**
 
 ```json
 {
@@ -470,25 +470,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## 検索 History
+## 検索履歴
 
 検索履歴は**クライアント側**の `localStorage` に保存されます。サーバーでは管理されません。
 
-**Storage Key Format:**
+**ストレージキーフォーマット:**
 
 ```
 karotter-search-history-v1:{userId}
 ```
 
-**Example:** For user `clx1abc2d3ef4gh5ij6kl7mn8`, the key is:
+**例:** ユーザー `clx1abc2d3ef4gh5ij6kl7mn8` の場合、キーは:
 
 ```
 karotter-search-history-v1:clx1abc2d3ef4gh5ij6kl7mn8
 ```
 
-**Storage Format:**
+**ストレージフォーマット:**
 
-The value is a JSON-encoded array of search query strings, ordered from most recent to oldest.
+値はJSON形式の検索クエリ文字列の配列で、最新のものから古いものの順に並んでいます。
 
 ```json
 ["karotter", "sunset photos", "gamedev", "minecraft mod"]
@@ -498,17 +498,17 @@ The value is a JSON-encoded array of search query strings, ordered from most rec
 
 | 設定 | 値 | 説明 |
 |---------|-------|-------------|
-| Maximum entries | `12` | Only the 12 most recent search queries are stored |
+| 最大エントリ数 | `12` | 最新の12件の検索クエリのみ保存 |
 
-**Behavior:**
-- When a new search is performed, it is added to the front of the array.
-- If the query already exists in the history, it is moved to the front (deduplicated).
-- If the array exceeds 12 entries, the oldest entry is removed.
-- Each user ID has its own independent search history.
-- Search history is per-browser/per-device since it uses `localStorage`.
-- The server has no knowledge of search history; there is no API endpoint to read or write it.
+**動作:**
+- 新しい検索が実行されると、配列の先頭に追加されます。
+- クエリが既に履歴に存在する場合、先頭に移動されます（重複排除）。
+- 配列が12エントリを超えると、最も古いエントリが削除されます。
+- 各ユーザーIDには独立した検索履歴があります。
+- 検索履歴は`localStorage`を使用するため、ブラウザ/デバイスごとに独立しています。
+- サーバーは検索履歴を把握しておらず、読み書き用のAPIエンドポイントはありません。
 
-**Example Implementation:**
+**実装例:**
 
 ```js
 const STORAGE_KEY = `karotter-search-history-v1:${userId}`;

@@ -14,18 +14,18 @@
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `page` | `number` | `1` | Page number (1-indexed) |
-| `limit` | `number` | `12` | Results per page |
-| `mode` | `string` | `latest` | Feed sorting mode (see below) |
+| `page` | `number` | `1` | ページ番号（1始まり） |
+| `limit` | `number` | `12` | 1ページあたりの結果数 |
+| `mode` | `string` | `latest` | フィードソートモード（下記参照） |
 
 **モード値:**
 
 | モード | 説明 |
 |------|-------------|
-| `latest` | Chronological order (newest first) |
-| `ranked` | Algorithmically ranked by engagement and relevance |
-| `trending` | Currently trending posts |
-| `following` | Posts from users you follow (alias for the default behavior) |
+| `latest` | 時系列順（新しい順） |
+| `ranked` | エンゲージメントと関連性によるアルゴリズムランキング |
+| `trending` | 現在トレンドの投稿 |
+| `following` | フォロー中ユーザーの投稿（デフォルト動作のエイリアス） |
 
 **リクエスト:**
 
@@ -122,18 +122,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `12` | Results per page |
-| `mode` | `string` | `algorithm` | Recommendation mode (see below) |
-| `page` | `number` | — | Page-based pagination (used with some modes) |
-| `cursor` | `string` | — | Cursor-based pagination (used with some modes) |
+| `limit` | `number` | `12` | 1ページあたりの結果数 |
+| `mode` | `string` | `algorithm` | おすすめモード（下記参照） |
+| `page` | `number` | — | ページベースのページネーション（一部モードで使用） |
+| `cursor` | `string` | — | カーソルベースのページネーション（一部モードで使用） |
 
 **モード値:**
 
 | モード | 説明 |
 |------|-------------|
-| `algorithm` | Standard algorithmic recommendations |
-| `latest` | Latest posts from all users (not just following) |
-| `beta` | Beta recommendation algorithm with A/B test variants |
+| `algorithm` | 標準的なアルゴリズムおすすめ |
+| `latest` | 全ユーザーの最新投稿（フォロー中に限定されない） |
+| `beta` | A/Bテストバリアント付きのベータおすすめアルゴリズム |
 
 **リクエスト:**
 
@@ -176,43 +176,43 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `posts` | `Post[]` | Array of recommended post objects |
-| `pagination` | `object` | Pagination info (`page`, `limit`) |
-| `betaVariant` | `string \| undefined` | The A/B test variant assigned (only present in `beta` mode) |
+| `posts` | `Post[]` | おすすめ投稿オブジェクトの配列 |
+| `pagination` | `object` | ページネーション情報（`page`, `limit`） |
+| `betaVariant` | `string \| undefined` | 割り当てられたA/Bテストバリアント（`beta`モード時のみ存在） |
 
 ---
 
 ## ベータA/Bテストバリアント
 
-When `mode=beta`, users are assigned to one of 5 variants based on their user ID. The assignment formula is:
+`mode=beta`の場合、ユーザーはユーザーIDに基づいて5つのバリアントのいずれかに割り当てられます。割り当て式は:
 
 ```
 variant = ["A", "B", "C", "D", "E"][userId % 5]
 ```
 
-Each variant uses a different scoring algorithm to rank posts:
+各バリアントは異なるスコアリングアルゴリズムを使用して投稿をランク付けします:
 
 | バリアント | 戦略 | ブーストスコア | 説明 |
 |---------|----------|-------------|-------------|
-| **A** | Freshness priority | +22 | Heavily favors recent posts. Newer posts get a significant scoring boost. |
-| **B** | Quality | +8 | Favors posts with high engagement quality (like-to-view ratio, meaningful replies). |
-| **C** | Balanced | +14 | Balanced mix of freshness and quality signals. |
-| **D** | Conversation | +10 | Prioritizes posts that generate discussions (high reply counts, reply chains). |
-| **E** | Discovery | +12 | Promotes posts from users outside the viewer's normal social graph. |
+| **A** | 新しさ優先 | +22 | 最近の投稿を大幅に優遇。新しい投稿ほど大きなスコアブーストを得る。 |
+| **B** | 品質 | +8 | エンゲージメント品質が高い投稿を優遇（いいね対閲覧比率、有意義なリプライ）。 |
+| **C** | バランス | +14 | 新しさと品質シグナルのバランスの取れたミックス。 |
+| **D** | 会話 | +10 | ディスカッションを生む投稿を優先（高リプライ数、リプライチェーン）。 |
+| **E** | ディスカバリー | +12 | 閲覧者の通常のソーシャルグラフ外のユーザーからの投稿をプロモート。 |
 
-**Common rules across all variants:**
-- **1-author-1-post diversity**: Each page of results will contain at most one post per author. This prevents a single prolific user from dominating the feed.
+**全バリアント共通ルール:**
+- **1投稿者1投稿の多様性**: 各ページの結果には1投稿者あたり最大1投稿のみ含まれます。これにより、1人の多作なユーザーがフィードを独占するのを防ぎます。
 
 ### `POST /posts/feedback/beta-survey`
 
-Submit user feedback on the beta recommendation algorithm.
+ベータおすすめアルゴリズムに対するユーザーフィードバックを送信します。
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `preference` | `string` | Yes | Either `current` (prefers the standard algorithm) or `beta` (prefers the beta variant) |
-| `variant` | `string` | Yes | The beta variant the user was shown (A-E) |
+| `preference` | `string` | Yes | `current`（標準アルゴリズムを好む）または`beta`（ベータバリアントを好む） |
+| `variant` | `string` | Yes | ユーザーに表示されたベータバリアント（A-E） |
 
 **リクエスト:**
 
@@ -243,13 +243,13 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `GET /social/lists/:id/posts`
 
-Get posts from a specific user list. Returns a single page of results with no pagination support.
+特定のユーザーリストからの投稿を取得します。ページネーションなしで1ページ分の結果を返します。
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `string` | The list ID |
+| `id` | `string` | リストID |
 
 **リクエスト:**
 
@@ -281,24 +281,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-> **注意:** This endpoint returns a **single page** of results. There is no pagination; you receive all available posts in one response.
+> **注意:** このエンドポイントは**1ページ分**の結果を返します。ページネーションはなく、利用可能なすべての投稿を1つのレスポンスで受け取ります。
 
 ---
 
 ## タブ構造
 
-The client organizes feeds into tabs with the following structure:
+クライアントは以下の構造でフィードをタブに整理しています:
 
 ### フォロー中タブ
 
-| Sub-tab | Endpoint | Mode |
+| サブタブ | エンドポイント | モード |
 |---------|----------|------|
 | Latest | `GET /posts/timeline` | `mode=latest` |
 | Ranked | `GET /posts/timeline` | `mode=ranked` |
 
 ### おすすめタブ
 
-| Sub-tab | Endpoint | Mode |
+| サブタブ | エンドポイント | モード |
 |---------|----------|------|
 | Algorithm | `GET /posts/recommended` | `mode=algorithm` |
 | Latest | `GET /posts/recommended` | `mode=latest` |
@@ -306,36 +306,36 @@ The client organizes feeds into tabs with the following structure:
 
 ### リストタブ
 
-| Selection | Endpoint |
+| 選択 | エンドポイント |
 |-----------|----------|
-| Specific list (by `listId`) | `GET /social/lists/:listId/posts` |
+| 特定のリスト（`listId`指定） | `GET /social/lists/:listId/posts` |
 
 ---
 
 ## React Query設定
 
-The official client uses React Query (TanStack Query) with the following settings for timeline feeds:
+公式クライアントはタイムラインフィードに対して以下の設定でReact Query（TanStack Query）を使用しています:
 
 | 設定 | 値 | 説明 |
 |---------|-------|-------------|
-| `refetchInterval` | `30000` (30 seconds) | Automatically refetch the feed every 30 seconds |
-| `staleTime` | `10000` (10 seconds) | Data is considered fresh for 10 seconds after fetch |
-| `retry` | `2` | Retry failed requests up to 2 times |
+| `refetchInterval` | `30000`（30秒） | 30秒ごとにフィードを自動再取得 |
+| `staleTime` | `10000`（10秒） | 取得後10秒間はデータを新鮮とみなす |
+| `retry` | `2` | 失敗したリクエストを最大2回リトライ |
 
 ---
 
 ## バッチビュー
 
-The client automatically reports post views as the user scrolls through the timeline:
+クライアントは、ユーザーがタイムラインをスクロールする際に自動的に投稿の閲覧を報告します:
 
 | 設定 | 値 | 説明 |
 |---------|-------|-------------|
-| Endpoint | `POST /posts/batch-views` | See [Posts > Batch Views](./posts.md#batch-views) |
-| Interval | Every **5 seconds** | Accumulated post IDs are flushed every 5s |
-| Dwell time | **1 second** | Post must be visible for at least 1s to count |
-| Visibility threshold | **50%** | At least 50% of the post must be in the viewport |
+| エンドポイント | `POST /posts/batch-views` | [Posts > Batch Views](./posts.md#batch-views)を参照 |
+| 間隔 | **5秒**ごと | 蓄積された投稿IDが5秒ごとにフラッシュ |
+| 滞在時間 | **1秒** | 投稿がカウントされるには最低1秒表示される必要あり |
+| 表示閾値 | **50%** | 投稿の少なくとも50%がビューポートに表示される必要あり |
 
-The batch views payload is:
+バッチビューのペイロード:
 
 ```json
 {

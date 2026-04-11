@@ -24,15 +24,15 @@ https://karotter.com/control-room-x9k2
 /api/admin
 ```
 
-For example: `https://api.karotter.com/api/admin/analytics`
+例: `https://api.karotter.com/api/admin/analytics`
 
 ### 認証
 
-Admin endpoints require:
+管理エンドポイントには以下が必要です:
 
-1. A valid `Authorization: Bearer <token>` header (same as all authenticated endpoints)
-2. The authenticated user must have `isAdmin === true`
-3. Standard `x-csrf-token` header for mutating requests
+1. 有効な `Authorization: Bearer <token>` ヘッダー（すべての認証済みエンドポイントと同様）
+2. 認証済みユーザーが `isAdmin === true` であること
+3. 変更リクエストには標準の `x-csrf-token` ヘッダー
 
 非管理者ユーザーはすべての管理エンドポイントで `403 Forbidden` を受け取ります。
 
@@ -40,18 +40,18 @@ Admin endpoints require:
 
 ## 管理パネルタブ
 
-The admin panel frontend is organized into 8 tabs:
+管理パネルのフロントエンドは8つのタブで構成されています:
 
 | タブ | ルート | 説明 |
 |-----|-------|-------------|
-| Dashboard | `/control-room-x9k2` | Analytics overview |
-| Users | `/control-room-x9k2/users` | User management |
-| Posts | `/control-room-x9k2/posts` | Post moderation |
-| Stories | `/control-room-x9k2/stories` | Story moderation |
-| Recommend | `/control-room-x9k2/recommend` | Recommendation algorithm testing |
-| Trending | `/control-room-x9k2/trending` | Trending algorithm testing |
-| Survey | `/control-room-x9k2/survey` | Survey/poll results |
-| Beta Experiment | `/control-room-x9k2/beta-experiment` | A/B testing results |
+| ダッシュボード | `/control-room-x9k2` | アナリティクス概要 |
+| ユーザー | `/control-room-x9k2/users` | ユーザー管理 |
+| 投稿 | `/control-room-x9k2/posts` | 投稿モデレーション |
+| ストーリー | `/control-room-x9k2/stories` | ストーリーモデレーション |
+| おすすめ | `/control-room-x9k2/recommend` | おすすめアルゴリズムテスト |
+| トレンド | `/control-room-x9k2/trending` | トレンドアルゴリズムテスト |
+| アンケート | `/control-room-x9k2/survey` | アンケート/投票結果 |
+| ベータ実験 | `/control-room-x9k2/beta-experiment` | A/Bテスト結果 |
 
 ---
 
@@ -74,10 +74,10 @@ The admin panel frontend is organized into 8 tabs:
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `totalUsers` | `number` | Total registered users on the platform |
-| `totalPosts` | `number` | Total posts ever created |
-| `activeUsers` | `number` | Users active in the recent period |
-| `totalReports` | `number` | Total pending/active reports |
+| `totalUsers` | `number` | プラットフォームの登録ユーザー総数 |
+| `totalPosts` | `number` | 作成された投稿の総数 |
+| `activeUsers` | `number` | 直近期間のアクティブユーザー数 |
+| `totalReports` | `number` | 保留中/アクティブな通報の総数 |
 
 ---
 
@@ -91,9 +91,9 @@ The admin panel frontend is organized into 8 tabs:
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `30` | Number of users per page (max 100) |
-| `search` | `string` | — | Search by username (prefix with `@` to search by exact username) |
-| `cursor` | `string` | — | Pagination cursor from previous response |
+| `limit` | `number` | `30` | 1ページあたりのユーザー数（最大100） |
+| `search` | `string` | — | ユーザー名で検索（`@`を先頭に付けると完全一致検索） |
+| `cursor` | `string` | — | 前回のレスポンスからのページネーションカーソル |
 
 **リクエスト:**
 
@@ -139,25 +139,25 @@ GET /admin/users?limit=30&search=@testuser HTTP/1.1
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `number` | User ID |
-| `username` | `string` | Username |
-| `displayName` | `string` | Display name |
-| `email` | `string` | Email address |
-| `emailVerified` | `boolean` | Whether email is verified |
-| `officialMark` | `string[]` | Array of official mark color codes |
-| `isParodyAccount` | `boolean` | Self-declared parody account |
-| `isBotAccount` | `boolean` | Self-declared bot account |
-| `adminForceHidden` | `boolean` | Admin-forced profile hiding |
-| `adminForceParody` | `boolean` | Admin-forced parody label |
-| `adminForceBot` | `boolean` | Admin-forced bot label |
-| `showBotAccounts` | `boolean` | User preference: show bot accounts |
-| `showHiddenPosts` | `boolean` | User preference: show hidden posts |
-| `showR18Content` | `boolean` | User preference: show R18 content |
-| `hideProfileFromMinors` | `boolean` | Whether profile is hidden from minors |
-| `isBanned` | `boolean` | Whether the user is banned |
-| `isRestricted` | `boolean` | Whether the user is restricted |
-| `followersCount` | `number` | Follower count |
-| `postsCount` | `number` | Post count |
+| `id` | `number` | ユーザーID |
+| `username` | `string` | ユーザー名 |
+| `displayName` | `string` | 表示名 |
+| `email` | `string` | メールアドレス |
+| `emailVerified` | `boolean` | メールが確認済みかどうか |
+| `officialMark` | `string[]` | 公式マークカラーコードの配列 |
+| `isParodyAccount` | `boolean` | 自己申告のパロディアカウント |
+| `isBotAccount` | `boolean` | 自己申告のBotアカウント |
+| `adminForceHidden` | `boolean` | 管理者によるプロフィール非表示の強制 |
+| `adminForceParody` | `boolean` | 管理者によるパロディラベルの強制 |
+| `adminForceBot` | `boolean` | 管理者によるBotラベルの強制 |
+| `showBotAccounts` | `boolean` | ユーザー設定: Botアカウントの表示 |
+| `showHiddenPosts` | `boolean` | ユーザー設定: 非表示投稿の表示 |
+| `showR18Content` | `boolean` | ユーザー設定: R18コンテンツの表示 |
+| `hideProfileFromMinors` | `boolean` | 未成年者からプロフィールを非表示にするかどうか |
+| `isBanned` | `boolean` | ユーザーがBANされているかどうか |
+| `isRestricted` | `boolean` | ユーザーが制限されているかどうか |
+| `followersCount` | `number` | フォロワー数 |
+| `postsCount` | `number` | 投稿数 |
 
 ---
 
@@ -167,15 +167,15 @@ GET /admin/users?limit=30&search=@testuser HTTP/1.1
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | User ID to ban |
+| `id` | `number` | BANするユーザーID |
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `reason` | `string` | Yes | Reason for the ban (stored for audit) |
+| `reason` | `string` | Yes | BANの理由（監査用に保存） |
 
 **リクエスト:**
 
@@ -206,9 +206,9 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | User ID to unban |
+| `id` | `number` | BAN解除するユーザーID |
 
 **リクエストボディ:** Empty object `{}`
 
@@ -239,19 +239,19 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | User ID |
+| `id` | `number` | ユーザーID |
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `username` | `string` | No | New username |
-| `displayName` | `string` | No | New display name |
-| `email` | `string` | No | New email address |
-| `password` | `string` | No | New password (plain text, server hashes it) |
-| `emailVerified` | `boolean` | No | Override email verification status |
+| `username` | `string` | No | 新しいユーザー名 |
+| `displayName` | `string` | No | 新しい表示名 |
+| `email` | `string` | No | 新しいメールアドレス |
+| `password` | `string` | No | 新しいパスワード（平文、サーバーがハッシュ化） |
+| `emailVerified` | `boolean` | No | メール確認ステータスの上書き |
 
 **リクエスト:**
 
@@ -279,8 +279,8 @@ x-csrf-token: <csrf-token>
 ```
 
 **注意:**
-- All fields are optional; only provided fields are updated.
-- Changing the `password` invalidates all existing sessions for that user.
+- すべてのフィールドは任意です。指定されたフィールドのみ更新されます。
+- `password`を変更すると、そのユーザーの既存セッションがすべて無効になります。
 
 ---
 
@@ -290,17 +290,17 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | User ID |
+| `id` | `number` | ユーザーID |
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `officialMark` | `string[]` | Yes | Array of mark color codes. Pass `[]` to remove all marks. |
+| `officialMark` | `string[]` | Yes | マークカラーコードの配列。`[]`を渡すとすべてのマークを削除します。 |
 
-**Important:** The `officialMark` field is an **array**. A user can have multiple marks simultaneously (e.g., `["BLUE", "PURPLE"]` for a verified admin).
+**重要:** `officialMark`フィールドは**配列**です。ユーザーは複数のマークを同時に持つことができます（例: 認証済み管理者の場合 `["BLUE", "PURPLE"]`）。
 
 **リクエスト:**
 
@@ -326,16 +326,16 @@ x-csrf-token: <csrf-token>
 
 **利用可能なマークカラー:**
 
-| Code | Hex | Meaning |
+| コード | Hex | 意味 |
 |------|-----|---------|
-| `BLUE` | `#1d9bf0` | Verified individual (本人確認) |
-| `YELLOW` | `#f8c500` | Organization/group (団体・企業) |
-| `ORANGE` | `#ff7a00` | Orange mark |
-| `PURPLE` | `#8b5cf6` | Platform staff/admin (運営) |
-| `GRAY` | `#9ca3af` | Government/official body (政府・公的機関) |
-| `BLACK` | `#111827` | Black mark |
-| `RED` | `#ef4444` | Red mark |
-| `GREEN` | `#22c55e` | Green mark |
+| `BLUE` | `#1d9bf0` | 本人確認（個人） |
+| `YELLOW` | `#f8c500` | 団体・企業 |
+| `ORANGE` | `#ff7a00` | オレンジマーク |
+| `PURPLE` | `#8b5cf6` | 運営・管理者 |
+| `GRAY` | `#9ca3af` | 政府・公的機関 |
+| `BLACK` | `#111827` | ブラックマーク |
+| `RED` | `#ef4444` | レッドマーク |
+| `GREEN` | `#22c55e` | グリーンマーク |
 
 ---
 
@@ -345,23 +345,23 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | User ID |
+| `id` | `number` | ユーザーID |
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `isParodyAccount` | `boolean` | No | Self-declared parody flag |
-| `adminForceHidden` | `boolean` | No | Force-hide the user's profile and posts |
-| `adminForceParody` | `boolean` | No | Force the parody label on the user |
-| `isBotAccount` | `boolean` | No | Self-declared bot flag |
-| `adminForceBot` | `boolean` | No | Force the bot label on the user |
-| `showBotAccounts` | `boolean` | No | Override user's bot visibility preference |
-| `showHiddenPosts` | `boolean` | No | Override user's hidden posts preference |
-| `showR18Content` | `boolean` | No | Override user's R18 content preference |
-| `hideProfileFromMinors` | `boolean` | No | Force hide profile from minor accounts |
+| `isParodyAccount` | `boolean` | No | 自己申告のパロディフラグ |
+| `adminForceHidden` | `boolean` | No | ユーザーのプロフィールと投稿を強制非表示 |
+| `adminForceParody` | `boolean` | No | ユーザーにパロディラベルを強制付与 |
+| `isBotAccount` | `boolean` | No | 自己申告のBotフラグ |
+| `adminForceBot` | `boolean` | No | ユーザーにBotラベルを強制付与 |
+| `showBotAccounts` | `boolean` | No | ユーザーのBot表示設定を上書き |
+| `showHiddenPosts` | `boolean` | No | ユーザーの非表示投稿表示設定を上書き |
+| `showR18Content` | `boolean` | No | ユーザーのR18コンテンツ表示設定を上書き |
+| `hideProfileFromMinors` | `boolean` | No | 未成年アカウントからプロフィールを強制非表示 |
 
 **リクエスト:**
 
@@ -393,9 +393,9 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | User ID to delete |
+| `id` | `number` | 削除するユーザーID |
 
 **リクエスト:**
 
@@ -413,7 +413,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Warning:** This action is irreversible. All posts, DMs, reactions, and other data associated with the user are permanently removed.
+**警告:** この操作は元に戻せません。ユーザーに関連するすべての投稿、DM、リアクション、その他のデータが完全に削除されます。
 
 ---
 
@@ -427,9 +427,9 @@ x-csrf-token: <csrf-token>
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `30` | Number of posts per page |
-| `search` | `string` | — | Search by post content |
-| `cursor` | `string` | — | Pagination cursor |
+| `limit` | `number` | `30` | 1ページあたりの投稿数 |
+| `search` | `string` | — | 投稿内容で検索 |
+| `cursor` | `string` | — | ページネーションカーソル |
 
 **リクエスト:**
 
@@ -470,18 +470,18 @@ GET /admin/posts?limit=30&search=keyword HTTP/1.1
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `number` | Post ID |
-| `content` | `string` | Post text content |
-| `author.username` | `string` | Author's username |
-| `author.displayName` | `string` | Author's display name |
-| `author.officialMark` | `string[]` | Author's official marks |
-| `viewsCount` | `number` | Total views |
-| `likesCount` | `number` | Total likes |
-| `rekarotsCount` | `number` | Total reposts |
-| `repliesCount` | `number` | Total replies |
-| `isR18` | `boolean` | Whether the post is marked R18 by the author |
-| `adminForceR18` | `boolean` | Whether an admin has force-flagged the post as R18 |
-| `adminForceHidden` | `boolean` | Whether an admin has hidden the post |
+| `id` | `number` | 投稿ID |
+| `content` | `string` | 投稿テキスト内容 |
+| `author.username` | `string` | 投稿者のユーザー名 |
+| `author.displayName` | `string` | 投稿者の表示名 |
+| `author.officialMark` | `string[]` | 投稿者の公式マーク |
+| `viewsCount` | `number` | 合計閲覧数 |
+| `likesCount` | `number` | 合計いいね数 |
+| `rekarotsCount` | `number` | 合計リポスト数 |
+| `repliesCount` | `number` | 合計リプライ数 |
+| `isR18` | `boolean` | 投稿者がR18マークを付けたかどうか |
+| `adminForceR18` | `boolean` | 管理者がR18として強制フラグしたかどうか |
+| `adminForceHidden` | `boolean` | 管理者が投稿を非表示にしたかどうか |
 
 ---
 
@@ -491,16 +491,16 @@ GET /admin/posts?limit=30&search=keyword HTTP/1.1
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | Post ID |
+| `id` | `number` | 投稿ID |
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `adminForceR18` | `boolean` | No | Force the post to be marked as R18/NSFW |
-| `adminForceHidden` | `boolean` | No | Force-hide the post from all timelines |
+| `adminForceR18` | `boolean` | No | 投稿をR18/NSFWとして強制マーク |
+| `adminForceHidden` | `boolean` | No | すべてのタイムラインから投稿を強制非表示 |
 
 **リクエスト:**
 
@@ -532,9 +532,9 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | Post ID to delete |
+| `id` | `number` | 削除する投稿ID |
 
 **リクエスト:**
 
@@ -564,8 +564,8 @@ x-csrf-token: <csrf-token>
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `30` | Number of stories per page |
-| `cursor` | `string` | — | Pagination cursor |
+| `limit` | `number` | `30` | 1ページあたりのストーリー数 |
+| `cursor` | `string` | — | ページネーションカーソル |
 
 **レスポンス `200 OK`:**
 
@@ -604,16 +604,16 @@ x-csrf-token: <csrf-token>
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `id` | `number` | Story ID |
+| `id` | `number` | ストーリーID |
 
 **リクエストボディ:**
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `adminForceR18` | `boolean` | No | Force-flag the story as R18 |
-| `adminForceHidden` | `boolean` | No | Force-hide the story |
+| `adminForceR18` | `boolean` | No | ストーリーをR18として強制フラグ |
+| `adminForceHidden` | `boolean` | No | ストーリーを強制非表示 |
 
 **リクエスト:**
 
@@ -666,14 +666,14 @@ x-csrf-token: <csrf-token>
 
 完全なスコアリング詳細でおすすめアルゴリズムをテストします。このエンドポイントは重い計算のためタイムアウトが延長されています。
 
-**タイムアウト:** 60 seconds
+**タイムアウト:** 60秒
 
 **クエリパラメータ:**
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `userId` | `number` | — | Optional: test recommendations for a specific user ID |
-| `limit` | `number` | `30` | Number of recommended posts to return |
+| `userId` | `number` | — | 任意: 特定のユーザーIDでおすすめをテスト |
+| `limit` | `number` | `30` | 返すおすすめ投稿の数 |
 
 **リクエスト:**
 
@@ -723,14 +723,14 @@ Authorization: Bearer <admin-token>
 
 | スコア | 範囲 | 説明 |
 |-------|-------|-------------|
-| `engagement` | 0.0 - 1.0 | How much engagement the post has received (likes, reposts, replies) |
-| `freshness` | 0.0 - 1.0 | Time decay score (newer = higher) |
-| `authorAffinity` | 0.0 - 1.0 | How much the target user interacts with this author |
-| `graph` | 0.0 - 1.0 | Social graph proximity (mutual follows, follow chains) |
-| `socialProof` | 0.0 - 1.0 | Whether users the target follows have engaged with the post |
-| `tagAffinity` | 0.0 - 1.0 | Match between post topics/tags and user's interests |
-| `inNetwork` | 0.0 - 1.0 | Whether the post is from someone in the user's direct network |
-| `totalRecommend` | 0.0 - 1.0 | Final weighted recommendation score |
+| `engagement` | 0.0 - 1.0 | 投稿が受けたエンゲージメント量（いいね、リポスト、リプライ） |
+| `freshness` | 0.0 - 1.0 | 時間減衰スコア（新しいほど高い） |
+| `authorAffinity` | 0.0 - 1.0 | 対象ユーザーがこの投稿者とどの程度インタラクションしているか |
+| `graph` | 0.0 - 1.0 | ソーシャルグラフの近接度（相互フォロー、フォローチェーン） |
+| `socialProof` | 0.0 - 1.0 | 対象のフォロー中ユーザーがこの投稿にエンゲージしているか |
+| `tagAffinity` | 0.0 - 1.0 | 投稿のトピック/タグとユーザーの興味の一致度 |
+| `inNetwork` | 0.0 - 1.0 | 投稿がユーザーの直接ネットワーク内の人からのものか |
+| `totalRecommend` | 0.0 - 1.0 | 最終的な重み付きおすすめスコア |
 
 ---
 
@@ -740,13 +740,13 @@ Authorization: Bearer <admin-token>
 
 詳細なウィンドウ統計でトレンドアルゴリズムをテストします。
 
-**タイムアウト:** 60 seconds
+**タイムアウト:** 60秒
 
 **クエリパラメータ:**
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `30` | Number of trending posts to return |
+| `limit` | `number` | `30` | 返すトレンド投稿の数 |
 
 **リクエスト:**
 
@@ -800,18 +800,18 @@ Authorization: Bearer <admin-token>
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `likes1h` | `number` | Likes received in the last 1 hour |
-| `likes6h` | `number` | Likes received in the last 6 hours |
-| `likes24h` | `number` | Likes received in the last 24 hours |
-| `rekarots1h` | `number` | Reposts in the last 1 hour |
-| `rekarots6h` | `number` | Reposts in the last 6 hours |
-| `rekarots24h` | `number` | Reposts in the last 24 hours |
-| `replies1h` | `number` | Replies in the last 1 hour |
-| `replies6h` | `number` | Replies in the last 6 hours |
-| `replies24h` | `number` | Replies in the last 24 hours |
-| `uniqueActors1h` | `number` | Unique users who interacted in last 1 hour |
-| `uniqueActors6h` | `number` | Unique users who interacted in last 6 hours |
-| `uniqueActors24h` | `number` | Unique users who interacted in last 24 hours |
+| `likes1h` | `number` | 過去1時間のいいね数 |
+| `likes6h` | `number` | 過去6時間のいいね数 |
+| `likes24h` | `number` | 過去24時間のいいね数 |
+| `rekarots1h` | `number` | 過去1時間のリポスト数 |
+| `rekarots6h` | `number` | 過去6時間のリポスト数 |
+| `rekarots24h` | `number` | 過去24時間のリポスト数 |
+| `replies1h` | `number` | 過去1時間のリプライ数 |
+| `replies6h` | `number` | 過去6時間のリプライ数 |
+| `replies24h` | `number` | 過去24時間のリプライ数 |
+| `uniqueActors1h` | `number` | 過去1時間にインタラクションしたユニークユーザー数 |
+| `uniqueActors6h` | `number` | 過去6時間にインタラクションしたユニークユーザー数 |
+| `uniqueActors24h` | `number` | 過去24時間にインタラクションしたユニークユーザー数 |
 
 ---
 
@@ -821,13 +821,13 @@ Authorization: Bearer <admin-token>
 
 プラットフォーム全体の集計されたアンケート/投票結果を取得します。
 
-**タイムアウト:** 30 seconds
+**タイムアウト:** 30秒
 
 **クエリパラメータ:**
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `10` | Number of surveys to return |
+| `limit` | `number` | `10` | 返すアンケートの数 |
 
 **リクエスト:**
 
@@ -951,26 +951,26 @@ Authorization: Bearer <admin-token>
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `variant` | `string` | Variant identifier: `"A"`, `"B"`, `"C"`, `"D"`, or `"E"` |
-| `label` | `string` | Human-readable description of the variant |
-| `uniqueUsers` | `number` | Number of unique users assigned to this variant |
-| `impressions` | `number` | Total post impressions shown under this variant |
-| `survey.preferBeta` | `number` | Users who preferred the beta/new variant in the survey |
-| `survey.preferCurrent` | `number` | Users who preferred the current/control variant |
+| `variant` | `string` | バリアント識別子: `"A"`, `"B"`, `"C"`, `"D"`, または `"E"` |
+| `label` | `string` | バリアントの人間が読める説明 |
+| `uniqueUsers` | `number` | このバリアントに割り当てられたユニークユーザー数 |
+| `impressions` | `number` | このバリアントで表示された投稿インプレッション総数 |
+| `survey.preferBeta` | `number` | アンケートでベータ/新バリアントを好んだユーザー数 |
+| `survey.preferCurrent` | `number` | 現行/コントロールバリアントを好んだユーザー数 |
 
 ---
 
 ## 公式マークカラーリファレンス
 
-For quick reference, the complete official mark color palette:
+公式マークカラーパレットの完全なクイックリファレンス:
 
-| Code | Hex Color | CSS Preview | Japanese Label | Typical Usage |
+| コード | Hex カラー | CSSプレビュー | 日本語ラベル | 一般的な用途 |
 |------|-----------|-------------|----------------|---------------|
-| `BLUE` | `#1d9bf0` | ![#1d9bf0](https://via.placeholder.com/12/1d9bf0/1d9bf0) | 本人確認 | Verified individual identity |
-| `YELLOW` | `#f8c500` | ![#f8c500](https://via.placeholder.com/12/f8c500/f8c500) | 団体・企業 | Organization or company |
-| `ORANGE` | `#ff7a00` | ![#ff7a00](https://via.placeholder.com/12/ff7a00/ff7a00) | オレンジ | Special designation |
-| `PURPLE` | `#8b5cf6` | ![#8b5cf6](https://via.placeholder.com/12/8b5cf6/8b5cf6) | 運営 | Platform staff / admin |
-| `GRAY` | `#9ca3af` | ![#9ca3af](https://via.placeholder.com/12/9ca3af/9ca3af) | 政府・公的機関 | Government / official body |
-| `BLACK` | `#111827` | ![#111827](https://via.placeholder.com/12/111827/111827) | ブラック | Special designation |
-| `RED` | `#ef4444` | ![#ef4444](https://via.placeholder.com/12/ef4444/ef4444) | レッド | Special designation |
-| `GREEN` | `#22c55e` | ![#22c55e](https://via.placeholder.com/12/22c55e/22c55e) | グリーン | Special designation |
+| `BLUE` | `#1d9bf0` | ![#1d9bf0](https://via.placeholder.com/12/1d9bf0/1d9bf0) | 本人確認 | 本人確認 |
+| `YELLOW` | `#f8c500` | ![#f8c500](https://via.placeholder.com/12/f8c500/f8c500) | 団体・企業 | 団体・企業 |
+| `ORANGE` | `#ff7a00` | ![#ff7a00](https://via.placeholder.com/12/ff7a00/ff7a00) | オレンジ | 特別指定 |
+| `PURPLE` | `#8b5cf6` | ![#8b5cf6](https://via.placeholder.com/12/8b5cf6/8b5cf6) | 運営 | 運営・管理者 |
+| `GRAY` | `#9ca3af` | ![#9ca3af](https://via.placeholder.com/12/9ca3af/9ca3af) | 政府・公的機関 | 政府・公的機関 |
+| `BLACK` | `#111827` | ![#111827](https://via.placeholder.com/12/111827/111827) | ブラック | 特別指定 |
+| `RED` | `#ef4444` | ![#ef4444](https://via.placeholder.com/12/ef4444/ef4444) | レッド | 特別指定 |
+| `GREEN` | `#22c55e` | ![#22c55e](https://via.placeholder.com/12/22c55e/22c55e) | グリーン | 特別指定 |

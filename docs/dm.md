@@ -320,7 +320,7 @@ POST /api/dm/groups/:id/messages
 
 > ***Important:** At least one of `content`, `attachments`, or `pollOptions` must be provided.
 
-> **CRITICAL:** The file field name is `attachments`, NOT `media`. Using `media` will result in a 500 error. This differs from the post creation endpoint which uses `media`.
+> **重要:** ファイルフィールド名は `attachments` であり、`media` ではありません。`media` を使用すると500エラーになります。投稿作成エンドポイントでは `media` を使用しますが、DMでは異なります。
 
 ### 投票ルール
 

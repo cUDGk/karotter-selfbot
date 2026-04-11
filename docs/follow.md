@@ -37,11 +37,11 @@
 POST /api/follow/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the target user |
+| `userId`  | number | はい      | 対象ユーザーの数値ID |
 
 ### リクエストボディ
 
@@ -90,11 +90,11 @@ X-CSRF-Token: abc123
 DELETE /api/follow/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the target user |
+| `userId`  | number | はい      | 対象ユーザーの数値ID |
 
 ### リクエストボディ
 
@@ -139,11 +139,11 @@ X-CSRF-Token: abc123
 POST /api/follow/block/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the user to block |
+| `userId`  | number | はい      | ブロックするユーザーの数値ID |
 
 ### リクエストボディ
 
@@ -191,11 +191,11 @@ X-CSRF-Token: abc123
 DELETE /api/follow/block/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the user to unblock |
+| `userId`  | number | はい      | ブロック解除するユーザーの数値ID |
 
 ### リクエストボディ
 
@@ -240,11 +240,11 @@ X-CSRF-Token: abc123
 POST /api/follow/mute/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the user to mute |
+| `userId`  | number | はい      | ミュートするユーザーの数値ID |
 
 ### リクエストボディ
 
@@ -290,11 +290,11 @@ X-CSRF-Token: abc123
 DELETE /api/follow/mute/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the user to unmute |
+| `userId`  | number | はい      | ミュート解除するユーザーの数値ID |
 
 ### リクエストボディ
 
@@ -339,11 +339,11 @@ X-CSRF-Token: abc123
 DELETE /api/follow/follower/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                          |
+| パラメータ | 型   | 必須 | 説明                          |
 |-----------|--------|----------|--------------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the follower to remove |
+| `userId`  | number | はい      | 削除するフォロワーの数値ID |
 
 ### リクエストボディ
 
@@ -559,11 +559,11 @@ Authorization: Bearer eyJ...
 POST /api/follow/requests/:requestId/accept
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                        |
+| パラメータ | 型   | 必須 | 説明                        |
 |-----------|--------|----------|------------------------------------|
-| `requestId` | number | Yes   | The follow request ID from the pending requests list |
+| `requestId` | number | はい   | 保留中フォローリクエストリストのリクエストID |
 
 ### リクエストボディ
 
@@ -608,11 +608,11 @@ X-CSRF-Token: abc123
 POST /api/follow/requests/:requestId/reject
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                        |
+| パラメータ | 型   | 必須 | 説明                        |
 |-----------|--------|----------|------------------------------------|
-| `requestId` | number | Yes   | The follow request ID from the pending requests list |
+| `requestId` | number | はい   | 保留中フォローリクエストリストのリクエストID |
 
 ### リクエストボディ
 
@@ -655,24 +655,24 @@ X-CSRF-Token: abc123
 POST /api/follow/:userId/post-notify
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the target user |
+| `userId`  | number | はい      | 対象ユーザーの数値ID |
 
 ### リクエストボディ
 
 なし。
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "投稿通知をオンにしました"}` | Post notifications enabled |
-| 400 | `{"error": "フォローしていません"}` | Not following this user |
+| 200 | `{"message": "投稿通知をオンにしました"}` | 投稿通知が有効化された |
+| 400 | `{"error": "フォローしていません"}` | このユーザーをフォローしていない |
 
-### Example
+### 例
 
 ```http
 POST /api/follow/18179/post-notify HTTP/1.1
@@ -696,23 +696,23 @@ X-CSRF-Token: abc123
 DELETE /api/follow/:userId/post-notify
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the target user |
+| `userId`  | number | はい      | 対象ユーザーの数値ID |
 
 ### リクエストボディ
 
 なし。
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "投稿通知をオフにしました"}` | Post notifications disabled |
+| 200 | `{"message": "投稿通知をオフにしました"}` | 投稿通知が無効化された |
 
-### Example
+### 例
 
 ```http
 DELETE /api/follow/18179/post-notify HTTP/1.1
@@ -736,23 +736,23 @@ X-CSRF-Token: abc123
 POST /api/follow/hide-rekarots/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the target user |
+| `userId`  | number | はい      | 対象ユーザーの数値ID |
 
 ### リクエストボディ
 
 なし。
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "リカロットを非表示にしました"}` | Rekarots hidden |
+| 200 | `{"message": "リカロットを非表示にしました"}` | リカロットが非表示になった |
 
-### Example
+### 例
 
 ```http
 POST /api/follow/hide-rekarots/18179 HTTP/1.1
@@ -776,23 +776,23 @@ X-CSRF-Token: abc123
 DELETE /api/follow/hide-rekarots/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type   | Required | Description                     |
+| パラメータ | 型   | 必須 | 説明                     |
 |-----------|--------|----------|---------------------------------|
-| `userId`  | number | Yes      | The numeric ID of the target user |
+| `userId`  | number | はい      | 対象ユーザーの数値ID |
 
 ### リクエストボディ
 
 なし。
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "リカロットの非表示を解除しました"}` | Rekarots unhidden |
+| 200 | `{"message": "リカロットの非表示を解除しました"}` | リカロットの非表示が解除された |
 
-### Example
+### 例
 
 ```http
 DELETE /api/follow/hide-rekarots/18179 HTTP/1.1

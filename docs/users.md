@@ -12,9 +12,9 @@
 
 **パスパラメータ:**
 
-| Parameter | タイプ | 説明 |
+| パラメータ | タイプ | 説明 |
 |-----------|------|-------------|
-| `usernameOrId` | `string` | The user's username (e.g. `myusername`) or their unique ID (e.g. `clx1abc2d3ef...`) |
+| `usernameOrId` | `string` | ユーザーのユーザー名（例: `myusername`）またはユニークID（例: `clx1abc2d3ef...`） |
 
 **リクエスト:**
 
@@ -84,64 +84,64 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `string` | Unique user identifier (CUID format) |
-| `username` | `string` | Unique username (1-15 chars, alphanumeric + underscore) |
-| `displayName` | `string` | Display name (1-40 Unicode characters) |
-| `avatarUrl` | `string \| null` | URL to avatar image, or `null` if not set |
-| `headerUrl` | `string \| null` | URL to header/banner image, or `null` if not set |
-| `bio` | `string` | User biography (0-200 characters) |
-| `location` | `string \| null` | Free-text location |
-| `websiteUrl` | `string \| null` | User's website URL |
-| `birthday` | `string \| null` | Birthday in `YYYY-MM-DD` format, or `null` |
-| `birthdayVisibility` | `string` | One of `PRIVATE`, `PUBLIC` |
-| `birthdayBalloonsEnabled` | `boolean` | Whether birthday balloon animation is enabled |
-| `createdAt` | `string` | ISO 8601 account creation timestamp |
-| `followersCount` | `number` | Number of followers |
-| `followingCount` | `number` | Number of users being followed |
-| `postsCount` | `number` | Total number of posts |
-| `isPrivate` | `boolean` | Whether the account is private (requires follow approval) |
-| `isBanned` | `boolean` | Whether the account is banned |
-| `onlineStatus` | `string` | One of `ONLINE`, `OFFLINE`, `DND` |
-| `statusMessage` | `string \| null` | Custom status message (max 15 characters) |
-| `showLikedPosts` | `boolean` | Whether the user's liked posts tab is public |
-| `officialMark` | `array` | Array of official verification marks (empty for unverified users) |
-| `isParodyAccount` | `boolean` | Whether the user has self-declared as a parody account |
-| `adminForceParody` | `boolean` | Whether an admin has forced the parody label |
-| `isBotAccount` | `boolean` | Whether the user has self-declared as a bot account |
-| `adminForceBot` | `boolean` | Whether an admin has forced the bot label |
+| `id` | `string` | ユニークユーザー識別子（CUID形式） |
+| `username` | `string` | ユニークなユーザー名（1-15文字、英数字+アンダースコア） |
+| `displayName` | `string` | 表示名（1-40 Unicode文字） |
+| `avatarUrl` | `string \| null` | アバター画像のURL、未設定の場合は `null` |
+| `headerUrl` | `string \| null` | ヘッダー/バナー画像のURL、未設定の場合は `null` |
+| `bio` | `string` | ユーザー自己紹介（0-200文字） |
+| `location` | `string \| null` | 自由テキストの所在地 |
+| `websiteUrl` | `string \| null` | ユーザーのウェブサイトURL |
+| `birthday` | `string \| null` | 誕生日（`YYYY-MM-DD`形式）、または `null` |
+| `birthdayVisibility` | `string` | `PRIVATE` または `PUBLIC` のいずれか |
+| `birthdayBalloonsEnabled` | `boolean` | 誕生日バルーンアニメーションが有効かどうか |
+| `createdAt` | `string` | ISO 8601 アカウント作成タイムスタンプ |
+| `followersCount` | `number` | フォロワー数 |
+| `followingCount` | `number` | フォロー中のユーザー数 |
+| `postsCount` | `number` | 投稿総数 |
+| `isPrivate` | `boolean` | アカウントが非公開かどうか（フォロー承認が必要） |
+| `isBanned` | `boolean` | アカウントがBANされているかどうか |
+| `onlineStatus` | `string` | `ONLINE`, `OFFLINE`, `DND` のいずれか |
+| `statusMessage` | `string \| null` | カスタムステータスメッセージ（最大15文字） |
+| `showLikedPosts` | `boolean` | ユーザーのいいねタブが公開されているかどうか |
+| `officialMark` | `array` | 公式認証マークの配列（未認証ユーザーは空） |
+| `isParodyAccount` | `boolean` | ユーザーがパロディアカウントを自己申告しているかどうか |
+| `adminForceParody` | `boolean` | 管理者がパロディラベルを強制しているかどうか |
+| `isBotAccount` | `boolean` | ユーザーがBotアカウントを自己申告しているかどうか |
+| `adminForceBot` | `boolean` | 管理者がBotラベルを強制しているかどうか |
 
 **関係フィールド（認証済み閲覧者との相対値）:**
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `isFollowing` | `boolean` | Whether the viewer follows this user |
-| `isFollowedBy` | `boolean` | Whether this user follows the viewer |
-| `hasPendingRequest` | `boolean` | Whether the viewer has a pending follow request to this user |
-| `hasBlocked` | `boolean` | Whether the viewer has blocked this user |
-| `isBlockedBy` | `boolean` | Whether the viewer is blocked by this user |
-| `isMuted` | `boolean` | Whether the viewer has muted this user |
-| `mutualFollowersCount` | `number` | Number of followers in common |
-| `mutualFollowersPreview` | `array` | Small preview array of mutual follower user objects |
-| `pinnedPost` | `Post \| null` | The user's pinned post, or `null` |
+| `isFollowing` | `boolean` | 閲覧者がこのユーザーをフォローしているかどうか |
+| `isFollowedBy` | `boolean` | このユーザーが閲覧者をフォローしているかどうか |
+| `hasPendingRequest` | `boolean` | 閲覧者がこのユーザーへのフォローリクエストを保留中かどうか |
+| `hasBlocked` | `boolean` | 閲覧者がこのユーザーをブロックしているかどうか |
+| `isBlockedBy` | `boolean` | 閲覧者がこのユーザーにブロックされているかどうか |
+| `isMuted` | `boolean` | 閲覧者がこのユーザーをミュートしているかどうか |
+| `mutualFollowersCount` | `number` | 共通フォロワー数 |
+| `mutualFollowersPreview` | `array` | 共通フォロワーのユーザーオブジェクトの小さなプレビュー配列 |
+| `pinnedPost` | `Post \| null` | ユーザーのピン留め投稿、または `null` |
 
 **プロフィール非表示理由:**
 
-When `profileUnavailableReason` is non-null, the profile content may be hidden from the viewer.
+`profileUnavailableReason`がnull以外の場合、プロフィールの内容は閲覧者から非表示になっている可能性があります。
 
 | `profileUnavailableReason` | 説明 |
 |----------------------------|-------------|
-| `FILTERED` | Profile is filtered from the viewer's view |
-| `null` | Profile is fully visible |
+| `FILTERED` | 閲覧者のビューからフィルタリングされたプロフィール |
+| `null` | プロフィールは完全に表示 |
 
-The `profileUnavailableDetails` array provides specific reasons:
+`profileUnavailableDetails`配列は具体的な理由を提供します:
 
 | 詳細 | 説明 |
 |--------|-------------|
-| `ADMIN_HIDDEN` | An admin has hidden this profile |
-| `PARODY_FILTERED` | The viewer has parody accounts filtered out |
-| `BOT_FILTERED` | The viewer has bot accounts filtered out |
-| `R18_FILTERED` | The viewer has R18/adult content filtered out |
-| `MINOR_RESTRICTED` | The viewer is a minor and this content is age-restricted |
+| `ADMIN_HIDDEN` | 管理者がこのプロフィールを非表示にした |
+| `PARODY_FILTERED` | 閲覧者がパロディアカウントをフィルタリングしている |
+| `BOT_FILTERED` | 閲覧者がBotアカウントをフィルタリングしている |
+| `R18_FILTERED` | 閲覧者がR18/アダルトコンテンツをフィルタリングしている |
+| `MINOR_RESTRICTED` | 閲覧者が未成年で、このコンテンツは年齢制限付き |
 
 ---
 
@@ -167,8 +167,8 @@ The `profileUnavailableDetails` array provides specific reasons:
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `page` | `number` | `1` | Page number (1-indexed) |
-| `limit` | `number` | `20` | Results per page |
+| `page` | `number` | `1` | ページ番号（1始まり） |
+| `limit` | `number` | `20` | 1ページあたりの結果数 |
 
 **リクエスト:**
 
@@ -221,8 +221,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `20` | Results per page |
-| `cursor` | `string` | — | Cursor for pagination (from previous response) |
+| `limit` | `number` | `20` | 1ページあたりの結果数 |
+| `cursor` | `string` | — | ページネーション用カーソル（前回のレスポンスから） |
 
 **リクエスト:**
 
@@ -260,41 +260,41 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-> **IMPORTANT: Snake case fields.** The follower/following user objects use **snake_case** for relationship fields (`is_following`, `is_followed_by`, `follow_request_sent`) instead of the camelCase used elsewhere in the API. This is an inconsistency in the server response.
+> **重要: スネークケースフィールド。** フォロワー/フォロー中のユーザーオブジェクトは、リレーションシップフィールド（`is_following`, `is_followed_by`, `follow_request_sent`）に **snake_case** を使用しています。API全体では camelCase が使われていますが、これはサーバーレスポンスの不整合です。
 
 **フォロワー/フォロー中ユーザーオブジェクトフィールド:**
 
 | フィールド | 型 | ケース | 説明 |
 |-------|------|------|-------------|
-| `id` | `string` | camelCase | User ID |
-| `username` | `string` | camelCase | Username |
-| `displayName` | `string` | camelCase | Display name |
-| `avatarUrl` | `string \| null` | camelCase | Avatar URL |
-| `bio` | `string` | camelCase | Bio text |
-| `isPrivate` | `boolean` | camelCase | Whether account is private |
-| `is_following` | `boolean` | **snake_case** | Whether the viewer follows this user |
-| `is_followed_by` | `boolean` | **snake_case** | Whether this user follows the viewer |
-| `follow_request_sent` | `boolean` | **snake_case** | Whether the viewer has a pending follow request |
-| `officialMark` | `array` | camelCase | Official verification marks |
-| `isParodyAccount` | `boolean` | camelCase | Parody account flag |
-| `adminForceParody` | `boolean` | camelCase | Admin-forced parody label |
-| `isBotAccount` | `boolean` | camelCase | Bot account flag |
-| `adminForceBot` | `boolean` | camelCase | Admin-forced bot label |
+| `id` | `string` | camelCase | ユーザーID |
+| `username` | `string` | camelCase | ユーザー名 |
+| `displayName` | `string` | camelCase | 表示名 |
+| `avatarUrl` | `string \| null` | camelCase | アバターURL |
+| `bio` | `string` | camelCase | 自己紹介テキスト |
+| `isPrivate` | `boolean` | camelCase | アカウントが非公開かどうか |
+| `is_following` | `boolean` | **snake_case** | 閲覧者がこのユーザーをフォローしているか |
+| `is_followed_by` | `boolean` | **snake_case** | このユーザーが閲覧者をフォローしているか |
+| `follow_request_sent` | `boolean` | **snake_case** | 閲覧者がフォローリクエストを送信しているか |
+| `officialMark` | `array` | camelCase | 公式認証マーク |
+| `isParodyAccount` | `boolean` | camelCase | パロディアカウントフラグ |
+| `adminForceParody` | `boolean` | camelCase | 管理者によるパロディラベル強制 |
+| `isBotAccount` | `boolean` | camelCase | Botアカウントフラグ |
+| `adminForceBot` | `boolean` | camelCase | 管理者によるBotラベル強制 |
 
 **ページネーション:**
 
-Use cursor-based pagination. Pass the `nextCursor` value from the response as the `cursor` query parameter in the next request. When `nextCursor` is `null` or absent, there are no more results.
+カーソルベースのページネーションを使用します。レスポンスの `nextCursor` の値を次のリクエストの `cursor` クエリパラメータとして渡してください。`nextCursor` が `null` または存在しない場合、これ以上の結果はありません。
 
 ### `GET /users/:id/mutual-followers`
 
-Get users who follow both you and the specified user ("mutual followers" / "知り合いのフォロワー").
+あなたと指定ユーザーの両方をフォローしているユーザーを取得します（「共通フォロワー」/「知り合いのフォロワー」）。
 
 **クエリパラメータ:**
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `20` | Results per page |
-| `cursor` | `string` | — | Cursor for pagination |
+| `limit` | `number` | `20` | 1ページあたりの結果数 |
+| `cursor` | `string` | — | ページネーション用カーソル |
 
 **リクエスト:**
 
@@ -339,14 +339,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 制約 | 説明 |
 |-------|------|-------------|-------------|
-| `displayName` | `string` | 1-40 Unicode characters | Display name |
-| `bio` | `string` | 0-200 characters | Biography text |
-| `location` | `string \| null` | — | Location text |
-| `websiteUrl` | `string \| null` | — | Website URL |
-| `birthday` | `string \| null` | `YYYY-MM-DD` or `null` | Birthday (set `null` to clear) |
-| `birthdayVisibility` | `string` | `PRIVATE` or `PUBLIC` | Birthday visibility |
-| `birthdayBalloonsEnabled` | `boolean` | — | Enable birthday balloon animation |
-| `gender` | `string` | `MALE`, `FEMALE`, or `OTHER` | Gender |
+| `displayName` | `string` | 1-40 Unicode文字 | 表示名 |
+| `bio` | `string` | 0-200文字 | 自己紹介テキスト |
+| `location` | `string \| null` | — | 所在地テキスト |
+| `websiteUrl` | `string \| null` | — | ウェブサイトURL |
+| `birthday` | `string \| null` | `YYYY-MM-DD` または `null` | 誕生日（`null`を設定するとクリア） |
+| `birthdayVisibility` | `string` | `PRIVATE` または `PUBLIC` | 誕生日の公開設定 |
+| `birthdayBalloonsEnabled` | `boolean` | — | 誕生日バルーンアニメーションを有効にする |
+| `gender` | `string` | `MALE`, `FEMALE`, または `OTHER` | 性別 |
 
 **リクエスト:**
 
@@ -382,11 +382,11 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### テキストサニタイゼーション
 
-All text fields undergo server-side sanitization:
+すべてのテキストフィールドはサーバー側でサニタイゼーションされます:
 
-1. **HTML stripping** (`stripHtml`): Any HTML tags are removed from the input.
-2. **Control character removal**: Unicode control characters (C0, C1 ranges) are stripped.
-3. **Character counting**: Character count is calculated as `Array.from(text).length`, which counts **Unicode codepoints**, not bytes. This means one emoji (e.g. `😀`) counts as 1 character, and combined emoji (e.g. `👨‍👩‍👧‍👦`) may count as multiple codepoints.
+1. **HTMLストリッピング** (`stripHtml`): 入力からすべてのHTMLタグが除去されます。
+2. **制御文字の除去**: Unicode制御文字（C0、C1範囲）がストリップされます。
+3. **文字カウント**: 文字数は `Array.from(text).length` で計算され、バイトではなく **Unicodeコードポイント** をカウントします。つまり、1つの絵文字（例: `😀`）は1文字としてカウントされ、結合絵文字（例: `👨‍👩‍👧‍👦`）は複数コードポイントとしてカウントされる場合があります。
 
 ---
 
@@ -400,8 +400,8 @@ All text fields undergo server-side sanitization:
 
 | フィールド | 型 | 制約 | 説明 |
 |-------|------|-------------|-------------|
-| `status` | `string` | `ONLINE`, `OFFLINE`, `DND` | Online status |
-| `statusMessage` | `string` | Max 15 characters | Custom status text |
+| `status` | `string` | `ONLINE`, `OFFLINE`, `DND` | オンラインステータス |
+| `statusMessage` | `string` | 最大15文字 | カスタムステータスメッセージ |
 
 **リクエスト:**
 
@@ -439,7 +439,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `avatar` | `File` | Image file (JPEG, PNG, WebP, GIF) |
+| `avatar` | `File` | 画像ファイル (JPEG, PNG, WebP, GIF) |
 
 **リクエスト:**
 
@@ -474,7 +474,7 @@ Content-Type: image/png
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `header` | `File` | Image file (JPEG, PNG, WebP, GIF) |
+| `header` | `File` | 画像ファイル (JPEG, PNG, WebP, GIF) |
 
 **レスポンス `200 OK`:**
 
@@ -496,8 +496,8 @@ Content-Type: image/png
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `currentPassword` | `string` | Yes | Current password for verification |
-| `newPassword` | `string` | Yes | New password (must pass password policy) |
+| `currentPassword` | `string` | Yes | 確認用の現在のパスワード |
+| `newPassword` | `string` | Yes | 新しいパスワード（パスワードポリシーを満たす必要あり） |
 
 **リクエスト:**
 
@@ -526,8 +526,8 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 | ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `400` | `WEAK_PASSWORD` | New password fails password policy |
-| `401` | `INVALID_PASSWORD` | Current password is incorrect |
+| `400` | `WEAK_PASSWORD` | 新しいパスワードがパスワードポリシーを満たしていない |
+| `401` | `INVALID_PASSWORD` | 現在のパスワードが正しくない |
 
 ---
 
@@ -541,7 +541,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 | フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
-| `username` | `string` | Yes | `/^[a-zA-Z0-9_]{1,15}$/` | New username |
+| `username` | `string` | Yes | `/^[a-zA-Z0-9_]{1,15}$/` | 新しいユーザー名 |
 
 **リクエスト:**
 
@@ -572,9 +572,9 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 | ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `400` | `INVALID_USERNAME` | Does not match regex pattern |
-| `409` | `USERNAME_TAKEN` | Username is already in use |
-| `429` | `QUOTA_EXCEEDED` | No remaining username changes in the 14-day window |
+| `400` | `INVALID_USERNAME` | 正規表現パターンに一致しない |
+| `409` | `USERNAME_TAKEN` | ユーザー名は既に使用されている |
+| `429` | `QUOTA_EXCEEDED` | 14日間ウィンドウでのユーザー名変更回数の残りがない |
 
 ### `GET /users/username/quota`
 
@@ -609,28 +609,28 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `isPrivate` | `boolean` | Make account private (require follow approval) |
-| `showLikedPosts` | `boolean` | Show liked posts tab on profile |
-| `showReadReceipts` | `boolean` | Show read receipts in DMs |
-| `directMessagesEnabled` | `boolean` | Allow direct messages |
-| `dmRequestPolicy` | `string` | DM request policy: `EVERYONE`, `FOLLOWING`, `CIRCLE` |
-| `showReactions` | `boolean` | Show reactions on posts. **Special:** setting to `false` also forces `notifyReactions` to `false` |
-| `notifyLikes` | `boolean` | Notify on likes |
-| `notifyReplies` | `boolean` | Notify on replies |
-| `notifyRekarots` | `boolean` | Notify on rekarots |
-| `notifyFollows` | `boolean` | Notify on new followers |
-| `notifyMentions` | `boolean` | Notify on mentions |
-| `notifyQuotes` | `boolean` | Notify on quote posts |
-| `notifyReactions` | `boolean` | Notify on reactions |
-| `notifyDMs` | `boolean` | Notify on direct messages |
-| `notifyDMRequests` | `boolean` | Notify on DM requests |
-| `notifyPollResults` | `boolean` | Notify on poll result updates |
-| `showOnlineStatus` | `boolean` | Show online status to others |
-| `showFollowerCount` | `boolean` | Show follower count on profile |
-| `showFollowingCount` | `boolean` | Show following count on profile |
-| `showPostCount` | `boolean` | Show post count on profile |
-| `showBirthday` | `boolean` | Show birthday on profile |
-| `mutedKeywords` | `string[]` | Array of muted keyword strings |
+| `isPrivate` | `boolean` | アカウントを非公開にする（フォロー承認が必要） |
+| `showLikedPosts` | `boolean` | プロフィールにいいねタブを表示 |
+| `showReadReceipts` | `boolean` | DMで既読表示を表示 |
+| `directMessagesEnabled` | `boolean` | ダイレクトメッセージを許可 |
+| `dmRequestPolicy` | `string` | DMリクエストポリシー: `EVERYONE`, `FOLLOWING`, `CIRCLE` |
+| `showReactions` | `boolean` | 投稿にリアクションを表示。**特別:** `false`に設定すると`notifyReactions`も`false`になる |
+| `notifyLikes` | `boolean` | いいね時に通知 |
+| `notifyReplies` | `boolean` | リプライ時に通知 |
+| `notifyRekarots` | `boolean` | リカロット時に通知 |
+| `notifyFollows` | `boolean` | 新規フォロー時に通知 |
+| `notifyMentions` | `boolean` | メンション時に通知 |
+| `notifyQuotes` | `boolean` | 引用投稿時に通知 |
+| `notifyReactions` | `boolean` | リアクション時に通知 |
+| `notifyDMs` | `boolean` | ダイレクトメッセージ時に通知 |
+| `notifyDMRequests` | `boolean` | DMリクエスト時に通知 |
+| `notifyPollResults` | `boolean` | 投票結果更新時に通知 |
+| `showOnlineStatus` | `boolean` | オンラインステータスを他のユーザーに表示 |
+| `showFollowerCount` | `boolean` | プロフィールにフォロワー数を表示 |
+| `showFollowingCount` | `boolean` | プロフィールにフォロー中数を表示 |
+| `showPostCount` | `boolean` | プロフィールに投稿数を表示 |
+| `showBirthday` | `boolean` | プロフィールに誕生日を表示 |
+| `mutedKeywords` | `string[]` | ミュートキーワード文字列の配列 |
 
 **リクエスト:**
 
@@ -681,7 +681,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-> **注意:** When `showReactions` is set to `false`, the server automatically sets `notifyReactions` to `false` as well, regardless of what value was sent for `notifyReactions`.
+> **注意:** `showReactions`を`false`に設定すると、`notifyReactions`に送信された値に関係なく、サーバーは自動的に`notifyReactions`も`false`に設定します。
 
 ---
 
@@ -695,7 +695,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `password` | `string` | Yes | Current password for confirmation |
+| `password` | `string` | Yes | 確認用の現在のパスワード |
 
 **リクエスト:**
 
@@ -731,7 +731,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `3` | Number of recommendations to return |
+| `limit` | `number` | `3` | 返すおすすめユーザーの数 |
 
 **リクエスト:**
 

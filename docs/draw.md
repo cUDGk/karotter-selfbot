@@ -9,22 +9,22 @@
 
 ## 目次
 
-- [Overview](#overview)
-- [List Rooms](#list-rooms)
-- [Create a Room](#create-a-room)
-- [Get Room Details](#get-room-details)
-- [Delete a Room](#delete-a-room)
-- [Join a Room](#join-a-room)
-- [Update Layers](#update-layers)
-- [Rotate Invite Code](#rotate-invite-code)
-- [Get Layers](#get-layers)
-- [Send Chat Message (REST)](#send-chat-message-rest)
-- [Canvas Specifications](#canvas-specifications)
-- [Layer System](#layer-system)
-- [Stroke Types](#stroke-types)
-- [Text Objects](#text-objects)
-- [Chat](#chat)
-- [Socket.IO Events](#socketio-events)
+- [概要](#概要)
+- [ルーム一覧](#ルーム一覧)
+- [ルーム作成](#ルーム作成)
+- [ルーム詳細取得](#ルーム詳細取得)
+- [ルーム削除](#ルーム削除)
+- [ルームに参加](#ルームに参加)
+- [レイヤー更新](#レイヤー更新)
+- [招待コードのローテーション](#招待コードのローテーション)
+- [レイヤー取得](#レイヤー取得)
+- [チャットメッセージ送信 (REST)](#チャットメッセージ送信-rest)
+- [キャンバス仕様](#キャンバス仕様)
+- [レイヤーシステム](#レイヤーシステム)
+- [ストロークタイプ](#ストロークタイプ)
+- [テキストオブジェクト](#テキストオブジェクト)
+- [チャット](#チャット)
+- [Socket.IOイベント](#socketioイベント)
 
 ---
 
@@ -44,14 +44,14 @@
 GET /api/draw/rooms
 ```
 
-### Query Parameters
+### クエリパラメータ
 
 | パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `page` | number | 1 | Page number (1-indexed) |
-| `limit` | number | 5 | Rooms per page |
+| `page` | number | 1 | ページ番号（1始まり） |
+| `limit` | number | 5 | 1ページあたりのルーム数 |
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -81,16 +81,16 @@ GET /api/draw/rooms
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `rooms` | Room[] | Array of room summary objects |
-| `rooms[].id` | number | Room ID |
-| `rooms[].name` | string | Room name |
-| `rooms[].visibility` | string | `"PUBLIC"` or `"INVITE"` |
-| `rooms[].participantCount` | number | Current number of participants |
-| `rooms[].ownerId` | number | Room owner's user ID |
-| `rooms[].ownerUsername` | string | Room owner's username |
-| `rooms[].inviteCode` | string \| null | Current invite code (null for public rooms) |
-| `rooms[].createdAt` | string | ISO 8601 creation timestamp |
-| `rooms[].updatedAt` | string | ISO 8601 last update timestamp |
+| `rooms` | Room[] | ルームサマリーオブジェクトの配列 |
+| `rooms[].id` | number | ルームID |
+| `rooms[].name` | string | ルーム名 |
+| `rooms[].visibility` | string | `"PUBLIC"` または `"INVITE"` |
+| `rooms[].participantCount` | number | 現在の参加者数 |
+| `rooms[].ownerId` | number | ルームオーナーのユーザーID |
+| `rooms[].ownerUsername` | string | ルームオーナーのユーザー名 |
+| `rooms[].inviteCode` | string \| null | 現在の招待コード（公開ルームの場合はnull） |
+| `rooms[].createdAt` | string | ISO 8601 作成タイムスタンプ |
+| `rooms[].updatedAt` | string | ISO 8601 最終更新タイムスタンプ |
 
 ---
 
@@ -106,10 +106,10 @@ POST /api/draw/rooms
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `name` | string | Yes | Room name |
-| `visibility` | string | No | `"PUBLIC"` (default) or `"INVITE"` |
+| `name` | string | Yes | ルーム名 |
+| `visibility` | string | No | `"PUBLIC"`（デフォルト）または `"INVITE"` |
 
-### Example
+### 例
 
 ```http
 POST /api/draw/rooms HTTP/1.1
@@ -123,7 +123,7 @@ Content-Type: application/json
 }
 ```
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -152,13 +152,13 @@ Content-Type: application/json
 GET /api/draw/rooms/:id
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -206,21 +206,21 @@ GET /api/draw/rooms/:id
 
 | フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `room.id` | number | Room ID |
-| `room.name` | string | Room name |
-| `room.visibility` | string | `"PUBLIC"` or `"INVITE"` |
-| `room.participantCount` | number | Number of active participants |
-| `room.participants` | object[] | Array of participant objects |
-| `room.participants[].userId` | number | Participant's user ID |
-| `room.participants[].username` | string | Participant's username |
-| `room.participants[].displayName` | string | Participant's display name |
-| `room.participants[].avatarUrl` | string \| null | Participant's avatar URL |
-| `room.participants[].joinedAt` | string | When the participant joined |
-| `room.ownerId` | number | Owner's user ID |
-| `room.ownerUsername` | string | Owner's username |
-| `room.inviteCode` | string \| null | Current invite code |
-| `room.updatedAt` | string | ISO 8601 last update timestamp |
-| `room.layers` | Layer[] | Array of canvas layer objects |
+| `room.id` | number | ルームID |
+| `room.name` | string | ルーム名 |
+| `room.visibility` | string | `"PUBLIC"` または `"INVITE"` |
+| `room.participantCount` | number | アクティブな参加者数 |
+| `room.participants` | object[] | 参加者オブジェクトの配列 |
+| `room.participants[].userId` | number | 参加者のユーザーID |
+| `room.participants[].username` | string | 参加者のユーザー名 |
+| `room.participants[].displayName` | string | 参加者の表示名 |
+| `room.participants[].avatarUrl` | string \| null | 参加者のアバターURL |
+| `room.participants[].joinedAt` | string | 参加者が参加した日時 |
+| `room.ownerId` | number | オーナーのユーザーID |
+| `room.ownerUsername` | string | オーナーのユーザー名 |
+| `room.inviteCode` | string \| null | 現在の招待コード |
+| `room.updatedAt` | string | ISO 8601 最終更新タイムスタンプ |
+| `room.layers` | Layer[] | キャンバスレイヤーオブジェクトの配列 |
 
 ---
 
@@ -232,19 +232,19 @@ GET /api/draw/rooms/:id
 DELETE /api/draw/rooms/:id
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "ルームを削除しました"}` | Room deleted |
-| 403 | `{"error": "権限がありません"}` | Not the room owner |
-| 404 | `{"error": "ルームが見つかりません"}` | Room not found |
+| 200 | `{"message": "ルームを削除しました"}` | ルーム削除完了 |
+| 403 | `{"error": "権限がありません"}` | ルームオーナーではない |
+| 404 | `{"error": "ルームが見つかりません"}` | ルームが見つからない |
 
 ---
 
@@ -256,19 +256,19 @@ DELETE /api/draw/rooms/:id
 POST /api/draw/rooms/:id/join
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
 ### リクエストボディ
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `inviteCode` | string | No* | Invite code (required for `INVITE` visibility rooms) |
+| `inviteCode` | string | No* | 招待コード（`INVITE`公開設定のルームでは必須） |
 
-### Example: Join Public Room
+### 例: 公開ルームに参加
 
 ```http
 POST /api/draw/rooms/15/join HTTP/1.1
@@ -276,7 +276,7 @@ Authorization: Bearer eyJ...
 X-CSRF-Token: abc123
 ```
 
-### Example: Join Invite-Only Room
+### 例: 招待制ルームに参加
 
 ```http
 POST /api/draw/rooms/16/join HTTP/1.1
@@ -289,14 +289,14 @@ Content-Type: application/json
 }
 ```
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "ルームに参加しました", "room": {...}}` | Joined |
-| 400 | `{"error": "既に参加しています"}` | Already in room |
-| 403 | `{"error": "招待コードが必要です"}` | Invite code required but not provided |
-| 403 | `{"error": "招待コードが正しくありません"}` | Invalid invite code |
+| 200 | `{"message": "ルームに参加しました", "room": {...}}` | 参加完了 |
+| 400 | `{"error": "既に参加しています"}` | 既にルームに参加中 |
+| 403 | `{"error": "招待コードが必要です"}` | 招待コードが必要だが未提供 |
+| 403 | `{"error": "招待コードが正しくありません"}` | 無効な招待コード |
 
 ---
 
@@ -308,30 +308,30 @@ Content-Type: application/json
 PUT /api/draw/rooms/:id/layers
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
 ### リクエストボディ
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `layers` | Layer[] | Yes | Complete array of all layers |
+| `layers` | Layer[] | Yes | すべてのレイヤーの完全な配列 |
 
-### Layer Object
+### レイヤーオブジェクト
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `id` | string | Yes | Layer ID (client-generated, e.g., UUID) |
-| `name` | string | Yes | Layer name |
-| `order` | number | Yes | Layer order (0 = bottom) |
-| `visible` | boolean | Yes | Whether the layer is visible |
-| `opacity` | number | Yes | Layer opacity (0.0 to 1.0) |
-| `dataUrl` | string | Yes | Base64-encoded PNG data URL |
+| `id` | string | Yes | レイヤーID（クライアント生成、例: UUID） |
+| `name` | string | Yes | レイヤー名 |
+| `order` | number | Yes | レイヤー順序（0 = 最下層） |
+| `visible` | boolean | Yes | レイヤーが表示されるかどうか |
+| `opacity` | number | Yes | レイヤー不透明度（0.0 から 1.0） |
+| `dataUrl` | string | Yes | Base64エンコードされたPNGデータURL |
 
-### Example
+### 例
 
 ```http
 PUT /api/draw/rooms/15/layers HTTP/1.1
@@ -361,15 +361,15 @@ Content-Type: application/json
 }
 ```
 
-> **CRITICAL WARNING:** This endpoint performs a **full replacement**. You MUST include ALL existing layers in the request. Any layer not included in the `layers` array will be **permanently deleted**. Always fetch the current layers first with `GET /api/draw/rooms/:id` before updating.
+> **重大な警告:** このエンドポイントは**完全置換**を実行します。リクエストにすべての既存レイヤーを含める必要があります。`layers`配列に含まれないレイヤーは**完全に削除**されます。更新前に必ず `GET /api/draw/rooms/:id` で現在のレイヤーを取得してください。
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "レイヤーを更新しました"}` | Layers updated |
-| 400 | `{"error": "レイヤー数の上限を超えています"}` | Exceeds 7 layer limit |
-| 413 | (varies) | Payload too large (~5MB limit exceeded) |
+| 200 | `{"message": "レイヤーを更新しました"}` | レイヤー更新完了 |
+| 400 | `{"error": "レイヤー数の上限を超えています"}` | 7レイヤーの上限を超過 |
+| 413 | (様々) | ペイロードが大きすぎる（~5MB制限超過） |
 
 ---
 
@@ -381,17 +381,17 @@ Content-Type: application/json
 POST /api/draw/rooms/:id/invite/rotate
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
 ### リクエストボディ
 
 なし。
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -399,12 +399,12 @@ POST /api/draw/rooms/:id/invite/rotate
 }
 ```
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"inviteCode": "..."}` | New invite code generated |
-| 403 | `{"error": "権限がありません"}` | Not the room owner |
+| 200 | `{"inviteCode": "..."}` | 新しい招待コード生成完了 |
+| 403 | `{"error": "権限がありません"}` | ルームオーナーではない |
 
 ---
 
@@ -416,13 +416,13 @@ POST /api/draw/rooms/:id/invite/rotate
 GET /api/draw/rooms/:id/layers
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -449,19 +449,19 @@ REST API経由で絵チャルームにテキストチャットメッセージを
 POST /api/draw/rooms/:id/chat
 ```
 
-### Path Parameters
+### パスパラメータ
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
-| `id` | number | Yes | Room ID |
+| `id` | number | Yes | ルームID |
 
 ### リクエストボディ
 
 | フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `content` | string | Yes | Message text (max 400 characters) |
+| `content` | string | Yes | メッセージテキスト（最大400文字） |
 
-### Example
+### 例
 
 ```http
 POST /api/draw/rooms/15/chat HTTP/1.1
@@ -474,12 +474,12 @@ Content-Type: application/json
 }
 ```
 
-### Responses
+### レスポンス
 
 | ステータス | ボディ | 説明 |
 |--------|------|-------------|
-| 200 | `{"message": "メッセージを送信しました"}` | Message sent |
-| 403 | `{"error": "ルームに参加していません"}` | Not a participant |
+| 200 | `{"message": "メッセージを送信しました"}` | メッセージ送信完了 |
+| 403 | `{"error": "ルームに参加していません"}` | 参加者ではない |
 
 ---
 
@@ -487,12 +487,12 @@ Content-Type: application/json
 
 | プロパティ | 値 |
 |----------|-------|
-| Canvas size | 2560 x 2560 pixels |
-| Color format | RGBA (32-bit color with alpha channel) |
-| Image format | PNG |
-| Maximum layers | 7 |
-| Maximum payload size | ~5 MB (for the entire PUT /layers request) |
-| Data encoding | Base64 data URL (`data:image/png;base64,...`) |
+| キャンバスサイズ | 2560 x 2560 ピクセル |
+| カラーフォーマット | RGBA（32ビットカラー、アルファチャンネル付き） |
+| 画像フォーマット | PNG |
+| 最大レイヤー数 | 7 |
+| 最大ペイロードサイズ | 約5 MB（PUT /layersリクエスト全体） |
+| データエンコーディング | Base64データURL (`data:image/png;base64,...`) |
 
 ### キャンバス座標系
 
@@ -504,41 +504,41 @@ Content-Type: application/json
 (0,2560) ---- (2560,2560)
 ```
 
-Origin is at the top-left corner. X increases to the right, Y increases downward.
+原点は左上隅です。Xは右方向に増加し、Yは下方向に増加します。
 
 ---
 
 ## レイヤーシステム
 
-Layers are composited in order from `order: 0` (bottom) to `order: N` (top). Each layer is an independent 2560x2560 RGBA PNG image.
+レイヤーは `order: 0`（最下層）から `order: N`（最上層）の順に合成されます。各レイヤーは独立した2560x2560 RGBA PNG画像です。
 
 ### レイヤープロパティ
 
 | プロパティ | 型 | 範囲 | 説明 |
 |----------|------|-------|-------------|
-| `id` | string | - | Unique identifier (client-generated) |
-| `name` | string | - | Human-readable layer name |
-| `order` | number | 0-6 | Stacking order (0 = bottom) |
-| `visible` | boolean | - | Whether the layer is rendered |
-| `opacity` | number | 0.0 - 1.0 | Layer opacity |
-| `dataUrl` | string | - | Base64 PNG data URL |
+| `id` | string | - | ユニーク識別子（クライアント生成） |
+| `name` | string | - | 人間が読めるレイヤー名 |
+| `order` | number | 0-6 | 重ね順序（0 = 最下層） |
+| `visible` | boolean | - | レイヤーが描画されるかどうか |
+| `opacity` | number | 0.0 - 1.0 | レイヤー不透明度 |
+| `dataUrl` | string | - | Base64 PNGデータURL |
 
 ### レイヤー制限
 
-- Maximum 7 layers per room
-- Each layer is a full 2560x2560 RGBA PNG
-- Total payload for all layers must be under ~5MB
-- Transparent layers (all-zero alpha) still count toward the limit
+- 1ルームあたり最大7レイヤー
+- 各レイヤーは完全な2560x2560 RGBA PNG
+- すべてのレイヤーの合計ペイロードは約5MB以下
+- 透明レイヤー（すべてゼロアルファ）も制限にカウントされる
 
 ---
 
 ## ストロークタイプ
 
-Drawing operations are transmitted via Socket.IO in real-time. Each stroke type has specific properties.
+描画操作はSocket.IOを介してリアルタイムに送信されます。各ストロークタイプには固有のプロパティがあります。
 
-### Line Stroke
+### ラインストローク
 
-Draws a line segment between two points.
+2点間に線分を描画します。
 
 ```json
 {
@@ -554,38 +554,38 @@ Draws a line segment between two points.
 }
 ```
 
-#### Line Properties
+#### ラインプロパティ
 
-| Property | タイプ | 説明 |
+| プロパティ | タイプ | 説明 |
 |----------|------|-------------|
-| `x1` | number | Start X coordinate |
-| `y1` | number | Start Y coordinate |
-| `x2` | number | End X coordinate |
-| `y2` | number | End Y coordinate |
-| `color` | string | Color in hex format (e.g., `"#FF0000"`) |
-| `size` | number | Brush size in pixels |
-| `opacity` | number | Stroke opacity (0.0 - 1.0) |
-| `tool` | string | Drawing tool |
+| `x1` | number | 開始X座標 |
+| `y1` | number | 開始Y座標 |
+| `x2` | number | 終了X座標 |
+| `y2` | number | 終了Y座標 |
+| `color` | string | hex形式の色（例: `"#FF0000"`） |
+| `size` | number | ブラシサイズ（ピクセル） |
+| `opacity` | number | ストローク不透明度（0.0 - 1.0） |
+| `tool` | string | 描画ツール |
 
-#### Available Tools
+#### 利用可能なツール
 
 | ツール | 説明 |
 |------|-------------|
-| `pen` | Standard hard-edge pen |
-| `pencil` | Soft pencil with texture |
-| `marker` | Wide semi-transparent marker |
-| `watercolor` | Soft watercolor brush with blending |
-| `chalk` | Textured chalk stroke |
-| `charcoal` | Dark charcoal texture |
-| `spraypaint` | Spray paint with random particle distribution |
-| `neon` | Glowing neon effect |
-| `eraser` | Standard eraser (removes pixels) |
-| `eraser-hard` | Hard-edge eraser with no feathering |
-| `eraser-soft` | Soft eraser with feathered edges |
+| `pen` | 標準のハードエッジペン |
+| `pencil` | テクスチャ付きのソフト鉛筆 |
+| `marker` | 幅広の半透明マーカー |
+| `watercolor` | ブレンド付きのソフト水彩ブラシ |
+| `chalk` | テクスチャ付きチョークストローク |
+| `charcoal` | ダークな木炭テクスチャ |
+| `spraypaint` | ランダムパーティクル分布のスプレーペイント |
+| `neon` | 光るネオンエフェクト |
+| `eraser` | 標準消しゴム（ピクセルを消去） |
+| `eraser-hard` | フェザリングなしのハードエッジ消しゴム |
+| `eraser-soft` | フェザリング付きのソフト消しゴム |
 
-### Bucket Fill Stroke
+### バケツ塗りストローク
 
-Fills a contiguous area with a color.
+隣接する領域を色で塗りつぶします。
 
 ```json
 {
@@ -598,19 +598,19 @@ Fills a contiguous area with a color.
 }
 ```
 
-#### Bucket Properties
+#### バケツプロパティ
 
-| Property | タイプ | 説明 |
+| プロパティ | タイプ | 説明 |
 |----------|------|-------------|
-| `x` | number | Fill origin X coordinate |
-| `y` | number | Fill origin Y coordinate |
-| `color` | string | Fill color in hex |
-| `opacity` | number | Fill opacity (0.0 - 1.0) |
-| `tolerance` | number | Color matching tolerance: `20` (strict) or `60` (loose) |
+| `x` | number | 塗りつぶし開始X座標 |
+| `y` | number | 塗りつぶし開始Y座標 |
+| `color` | string | hex形式の塗りつぶし色 |
+| `opacity` | number | 塗りつぶし不透明度（0.0 - 1.0） |
+| `tolerance` | number | 色のマッチング許容値: `20`（厳密）または `60`（緩い） |
 
-### Shape Stroke
+### シェイプストローク
 
-Draws geometric shapes.
+幾何学的な図形を描画します。
 
 ```json
 {
@@ -626,36 +626,36 @@ Draws geometric shapes.
 }
 ```
 
-#### Shape Properties
+#### シェイププロパティ
 
-| Property | タイプ | 説明 |
+| プロパティ | タイプ | 説明 |
 |----------|------|-------------|
-| `shape` | string | Shape type (see table below) |
-| `x1` | number | Start X (top-left for rectangles, center for ellipses) |
-| `y1` | number | Start Y |
-| `x2` | number | End X (bottom-right for rectangles) |
-| `y2` | number | End Y |
-| `color` | string | Stroke/fill color in hex |
-| `size` | number | Stroke width in pixels (for outline shapes) |
-| `opacity` | number | Shape opacity (0.0 - 1.0) |
+| `shape` | string | シェイプタイプ（下表参照） |
+| `x1` | number | 開始X（矩形の場合は左上、楕円の場合は中心） |
+| `y1` | number | 開始Y |
+| `x2` | number | 終了X（矩形の場合は右下） |
+| `y2` | number | 終了Y |
+| `color` | string | hex形式のストローク/塗りつぶし色 |
+| `size` | number | ストローク幅（ピクセル、アウトライン図形用） |
+| `opacity` | number | シェイプ不透明度（0.0 - 1.0） |
 
-#### Available Shapes
+#### 利用可能なシェイプ
 
 | シェイプ | 説明 |
 |-------|-------------|
-| `line` | Straight line from (x1,y1) to (x2,y2) |
-| `rect` | Rectangle outline |
-| `rect-fill` | Filled rectangle |
-| `ellipse` | Ellipse outline |
-| `ellipse-fill` | Filled ellipse |
-| `triangle` | Triangle outline |
-| `triangle-fill` | Filled triangle |
-| `arrow` | Arrow from (x1,y1) to (x2,y2) |
-| `star` | Five-pointed star |
+| `line` | (x1,y1)から(x2,y2)への直線 |
+| `rect` | 矩形アウトライン |
+| `rect-fill` | 塗りつぶし矩形 |
+| `ellipse` | 楕円アウトライン |
+| `ellipse-fill` | 塗りつぶし楕円 |
+| `triangle` | 三角形アウトライン |
+| `triangle-fill` | 塗りつぶし三角形 |
+| `arrow` | (x1,y1)から(x2,y2)への矢印 |
+| `star` | 五芒星 |
 
-### Gradient Stroke
+### グラデーションストローク
 
-Applies a linear gradient fill.
+リニアグラデーション塗りつぶしを適用します。
 
 ```json
 {
@@ -670,23 +670,23 @@ Applies a linear gradient fill.
 }
 ```
 
-#### Gradient Properties
+#### グラデーションプロパティ
 
-| Property | タイプ | 説明 |
+| プロパティ | タイプ | 説明 |
 |----------|------|-------------|
-| `x1` | number | Gradient start X |
-| `y1` | number | Gradient start Y |
-| `x2` | number | Gradient end X |
-| `y2` | number | Gradient end Y |
-| `color` | string | Start color in hex |
-| `secondaryColor` | string | End color in hex |
-| `opacity` | number | Gradient opacity (0.0 - 1.0) |
+| `x1` | number | グラデーション開始X |
+| `y1` | number | グラデーション開始Y |
+| `x2` | number | グラデーション終了X |
+| `y2` | number | グラデーション終了Y |
+| `color` | string | hex形式の開始色 |
+| `secondaryColor` | string | hex形式の終了色 |
+| `opacity` | number | グラデーション不透明度（0.0 - 1.0） |
 
 ---
 
 ## テキストオブジェクト
 
-Text can be placed on the canvas as persistent objects.
+テキストはキャンバス上に永続的なオブジェクトとして配置できます。
 
 ```json
 {
@@ -703,53 +703,53 @@ Text can be placed on the canvas as persistent objects.
 }
 ```
 
-### Text Object Properties
+### テキストオブジェクトプロパティ
 
 | プロパティ | 型 | 範囲 | 説明 |
 |----------|------|-------|-------------|
-| `id` | string | - | Unique text object ID |
-| `layerId` | string | - | ID of the layer this text belongs to |
-| `x` | number | 0-2560 | X position on canvas |
-| `y` | number | 0-2560 | Y position on canvas |
-| `width` | number | 70-1600 | Text box width in pixels |
-| `height` | number | 36-1000 | Text box height in pixels |
-| `rotation` | number | 0-360 | Rotation in degrees |
-| `color` | string | - | Text color in hex |
-| `fontSize` | number | 8-200 | Font size in pixels |
-| `content` | string | max 600 chars | Text content |
+| `id` | string | - | ユニークなテキストオブジェクトID |
+| `layerId` | string | - | このテキストが属するレイヤーのID |
+| `x` | number | 0-2560 | キャンバス上のX位置 |
+| `y` | number | 0-2560 | キャンバス上のY位置 |
+| `width` | number | 70-1600 | テキストボックスの幅（ピクセル） |
+| `height` | number | 36-1000 | テキストボックスの高さ（ピクセル） |
+| `rotation` | number | 0-360 | 回転角度（度） |
+| `color` | string | - | hex形式のテキスト色 |
+| `fontSize` | number | 8-200 | フォントサイズ（ピクセル） |
+| `content` | string | 最大600文字 | テキスト内容 |
 
-### Text Constraints
+### テキスト制約
 
 | 制約 | 値 |
 |-----------|-------|
-| Minimum width | 70 px |
-| Maximum width | 1600 px |
-| Minimum height | 36 px |
-| Maximum height | 1000 px |
-| Minimum font size | 8 px |
-| Maximum font size | 200 px |
-| Maximum content length | 600 characters |
+| 最小幅 | 70 px |
+| 最大幅 | 1600 px |
+| 最小高さ | 36 px |
+| 最大高さ | 1000 px |
+| 最小フォントサイズ | 8 px |
+| 最大フォントサイズ | 200 px |
+| 最大コンテンツ長 | 600文字 |
 
 ---
 
 ## チャット
 
-Each draw room has a built-in text chat for communication between participants.
+各絵チャルームには参加者間のコミュニケーション用のテキストチャットが組み込まれています。
 
-### チャット Constraints
+### チャット制約
 
 | 制約 | 値 |
 |-----------|-------|
-| Maximum messages in memory | 80 |
-| Maximum characters per message | 400 |
+| メモリ内の最大メッセージ数 | 80 |
+| 1メッセージあたりの最大文字数 | 400 |
 
-Chat messages are ephemeral and transmitted via Socket.IO. They are not persisted to the database and will be lost when all participants leave.
+チャットメッセージは一時的で、Socket.IOを介して送信されます。データベースには永続化されず、すべての参加者が退出すると失われます。
 
 ---
 
 ## Socket.IOイベント
 
-Draw chat uses Socket.IO for real-time synchronization.
+絵チャはSocket.IOを使用してリアルタイム同期を行います。
 
 ### 接続
 
@@ -762,28 +762,28 @@ const socket = io("https://karotter.com", {
 });
 ```
 
-### Events
+### イベント
 
 | イベント | 方向 | ペイロード | 説明 |
 |-------|-----------|---------|-------------|
-| `draw:join` | emit | `{roomId}` | Join a draw room |
-| `draw:leave` | emit | `{roomId}` | Leave a draw room |
-| `draw:room-state` | receive | `{room, layers, participants}` | Full room state after joining |
-| `draw:stroke` | emit/receive | `{roomId, layerId, stroke}` | Real-time stroke data |
-| `draw:text` | emit/receive | `{roomId, textObject}` | Text object placement/update |
-| `draw:layer-update` | receive | `{roomId, layers}` | Layer data updated |
-| `draw:participant-join` | receive | `{roomId, user}` | New participant joined |
-| `draw:participant-leave` | receive | `{roomId, userId}` | Participant left |
-| `draw:chat` | emit/receive | `{roomId, content, sender}` | Chat message |
+| `draw:join` | emit | `{roomId}` | 絵チャルームに参加 |
+| `draw:leave` | emit | `{roomId}` | 絵チャルームを退出 |
+| `draw:room-state` | receive | `{room, layers, participants}` | 参加後の完全なルーム状態 |
+| `draw:stroke` | emit/receive | `{roomId, layerId, stroke}` | リアルタイムストロークデータ |
+| `draw:text` | emit/receive | `{roomId, textObject}` | テキストオブジェクトの配置/更新 |
+| `draw:layer-update` | receive | `{roomId, layers}` | レイヤーデータ更新 |
+| `draw:participant-join` | receive | `{roomId, user}` | 新しい参加者が参加 |
+| `draw:participant-leave` | receive | `{roomId, userId}` | 参加者が退出 |
+| `draw:chat` | emit/receive | `{roomId, content, sender}` | チャットメッセージ |
 
 ### 典型的なフロー
 
-1. Call `POST /api/draw/rooms/:id/join` to join via REST API
-2. Emit `draw:join` with `{roomId}` via Socket.IO
-3. Receive `draw:room-state` with full canvas state
-4. Listen for `draw:stroke` events from other users
-5. Emit `draw:stroke` when drawing locally
-6. Periodically call `PUT /api/draw/rooms/:id/layers` to persist canvas state
+1. `POST /api/draw/rooms/:id/join` を呼び出してREST API経由で参加
+2. Socket.IO経由で `draw:join` を `{roomId}` でemit
+3. 完全なキャンバス状態を含む `draw:room-state` を受信
+4. 他のユーザーからの `draw:stroke` イベントをリッスン
+5. ローカルで描画時に `draw:stroke` をemit
+6. 定期的に `PUT /api/draw/rooms/:id/layers` を呼び出してキャンバス状態を永続化
 
 ---
 
