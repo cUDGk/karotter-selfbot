@@ -1,23 +1,23 @@
-# Search
+# 検索
 
-Complete reference for search endpoints, trending topics, discovery feeds, and search history.
+検索エンドポイント、トレンドトピック、ディスカバリーフィード、検索履歴の完全なリファレンスです。
 
 ---
 
-## Universal Search
+## 統合検索
 
 ### `GET /search`
 
-Perform a combined search across posts, users, and hashtags. Returns results from all categories in a single response.
+投稿、ユーザー、ハッシュタグを横断的に検索します。すべてのカテゴリの結果を1つのレスポンスで返します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `q` | `string` | — | Search query string (required) |
 | `limit` | `number` | `12` | Maximum results per category |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /search?q=karotter&limit=12 HTTP/1.1
@@ -25,7 +25,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -74,9 +74,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Pagination Object:**
+**ページネーションオブジェクト:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `hasNext` | `boolean` | Whether more results are available |
 | `nextCursor` | `string \| null` | Cursor for the next page of results |
@@ -85,15 +85,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Search Posts
+## 検索 Posts
 
 ### `GET /search/posts`
 
-Search specifically for posts with additional filtering and sorting options.
+追加のフィルタリングとソートオプションで投稿を検索します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `q` | `string` | — | Search query string (required) |
 | `sort` | `string` | `latest` | Sort order (see below) |
@@ -101,14 +101,14 @@ Search specifically for posts with additional filtering and sorting options.
 | `limit` | `number` | `12` | Results per page |
 | `cursor` | `string` | — | Pagination cursor from previous response |
 
-**Sort Values:**
+**ソート値:**
 
-| Sort | Description |
+| ソート | 説明 |
 |------|-------------|
 | `latest` | Most recent posts first (chronological) |
 | `topics` | Sorted by topical relevance to the query |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /search/posts?q=sunset&sort=latest&hasMedia=true&limit=12 HTTP/1.1
@@ -116,7 +116,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -166,15 +166,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Search Users
+## 検索 Users
 
 ### `GET /search/users`
 
-Search for users by username or display name.
+ユーザー名または表示名でユーザーを検索します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `q` | `string` | — | Search query string (required) |
 | `limit` | `number` | `12` | Results per page. Use `6` for suggestion dropdowns, `12` for full search results. |
@@ -195,7 +195,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -228,7 +228,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**React Query config for user search:**
+**ユーザー検索のReact Query設定:**
 
 | Setting | Value |
 |---------|-------|
@@ -236,19 +236,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Search Hashtags
+## 検索 Hashtags
 
 ### `GET /search/hashtags`
 
-Search for hashtags by name.
+名前でハッシュタグを検索します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `q` | `string` | — | Hashtag search query (without the `#` prefix) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /search/hashtags?q=sunset HTTP/1.1
@@ -256,7 +256,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -283,9 +283,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Hashtag Object:**
+**ハッシュタグオブジェクト:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | `string` | Unique hashtag identifier |
 | `name` | `string` | Hashtag text (without `#` prefix) |
@@ -294,19 +294,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Trending Topics
+## トレンドトピック
 
 ### `GET /search/trending/topics`
 
-Get currently trending topics/hashtags.
+現在のトレンドトピック/ハッシュタグを取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `20` | Maximum number of trending topics to return |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /search/trending/topics?limit=20 HTTP/1.1
@@ -314,7 +314,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -353,9 +353,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Trend Object:**
+**トレンドオブジェクト:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `type` | `string` | Always `HASHTAG` (currently the only supported type) |
 | `label` | `string` | Display label with `#` prefix |
@@ -364,28 +364,28 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Discover Feeds
+## ディスカバーフィード
 
 ### `GET /search/discover/latest`
 
-Discover the latest posts from across the platform (not limited to followed users).
+プラットフォーム全体の最新投稿を発見します（フォロー中のユーザーに限定されません）。
 
 ### `GET /search/discover/media`
 
-Discover posts that contain media (images/videos).
+メディア（画像/動画）を含む投稿を発見します。
 
 ### `GET /search/discover/topics`
 
-Discover posts organized by trending topics.
+トレンドトピックで整理された投稿を発見します。
 
-**Query Parameters (all three endpoints):**
+**クエリパラメータ（3つのエンドポイント共通）:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `12` | Results per page |
 | `cursor` | `string` | — | Pagination cursor from previous response |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /search/discover/latest?limit=12 HTTP/1.1
@@ -470,9 +470,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Search History
+## 検索 History
 
-Search history is stored **client-side** in `localStorage`. It is not managed by the server.
+検索履歴は**クライアント側**の `localStorage` に保存されます。サーバーでは管理されません。
 
 **Storage Key Format:**
 
@@ -494,9 +494,9 @@ The value is a JSON-encoded array of search query strings, ordered from most rec
 ["karotter", "sunset photos", "gamedev", "minecraft mod"]
 ```
 
-**Limits:**
+**制限:**
 
-| Setting | Value | Description |
+| 設定 | 値 | 説明 |
 |---------|-------|-------------|
 | Maximum entries | `12` | Only the 12 most recent search queries are stored |
 

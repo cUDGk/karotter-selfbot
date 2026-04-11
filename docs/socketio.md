@@ -1,10 +1,10 @@
-# Socket.IO Real-Time Events
+# Socket.IO リアルタイムイベント
 
-Complete reference for all Socket.IO events used in the Karotter platform, including DM messaging, voice calls, radio/spaces, draw-chat, and system events.
+DMメッセージング、音声通話、ラジオ/スペース、絵チャ、システムイベントを含む、Karotterプラットフォームで使用されるすべてのSocket.IOイベントの完全なリファレンスです。
 
 ---
 
-## Connection
+## 接続
 
 ### URL
 
@@ -16,33 +16,33 @@ https://api.karotter.com
 
 There is no custom `path` option -- the default `/socket.io` path is used.
 
-### Connection Configuration
+### 接続 Configuration
 
 ```js
 import { io } from "socket.io-client";
 
 const socket = io("https://api.karotter.com", {
   auth: {
-    token: accessToken,          // JWT access token (without "Bearer " prefix)
+    token: accessToken,          // JWTアクセストークン（"Bearer "プレフィックスなし）
   },
-  withCredentials: true,         // send cookies cross-origin
-  transports: ["websocket"],     // skip HTTP long-polling, connect via WebSocket only
-  reconnection: true,            // enable automatic reconnection
-  reconnectionAttempts: Infinity,// never stop trying
-  reconnectionDelay: 1000,       // initial delay between attempts (ms)
-  reconnectionDelayMax: 8000,    // maximum delay between attempts (ms)
-  timeout: 20000,                // connection timeout (ms)
+  withCredentials: true,         // クロスオリジンでCookieを送信
+  transports: ["websocket"],     // HTTPロングポーリングをスキップし、WebSocketのみで接続
+  reconnection: true,            // 自動再接続を有効化
+  reconnectionAttempts: Infinity,// 無制限にリトライ
+  reconnectionDelay: 1000,       // リトライ間の初期遅延（ミリ秒）
+  reconnectionDelayMax: 8000,    // リトライ間の最大遅延（ミリ秒）
+  timeout: 20000,                // 接続タイムアウト（ミリ秒）
 });
 ```
 
-### Automatic Token Refresh on Auth Failure
+### 認証失敗時の自動トークンリフレッシュ
 
 When a `connect_error` event fires, the client checks whether the error message matches an authentication-related pattern. If so, it refreshes the access token and reconnects:
 
 ```js
 socket.on("connect_error", async (error) => {
   if (/unauthorized|authentication|jwt/i.test(error.message)) {
-    const newToken = await refreshAccessToken(); // call POST /auth/refresh-token
+    const newToken = await refreshAccessToken(); // POST /auth/refresh-token を呼び出す
     socket.auth = { token: newToken };
     socket.connect();
   }
@@ -53,9 +53,9 @@ socket.on("connect_error", async (error) => {
 
 This handles cases where the JWT has expired between reconnection attempts. The client should call `POST /api/auth/refresh-token` to obtain a fresh access token, update `socket.auth.token`, and then call `socket.connect()`.
 
-### Connection Lifecycle Events
+### 接続 Lifecycle Events
 
-| Event | Direction | Description |
+| イベント | 方向 | 説明 |
 |-------|-----------|-------------|
 | `connect` | Listen | Fired when the connection is established. `socket.id` is now available. |
 | `connect_error` | Listen | Fired on connection failure. Check `error.message` for auth issues. |
@@ -66,9 +66,9 @@ This handles cases where the JWT has expired between reconnection attempts. The 
 
 ---
 
-## DM (Direct Message) Events
+## DM（ダイレクトメッセージ）イベント
 
-### Events to Listen For
+### リッスンするイベント
 
 #### `dm:new-message`
 
@@ -85,7 +85,7 @@ socket.on("dm:new-message", (data: {
     content: string;
     encryptedContent: string | null;
     isEncrypted: boolean;
-    systemType: string | null;       // e.g. "MEMBER_JOINED", "MEMBER_LEFT"
+    systemType: string | null;       // 例: "MEMBER_JOINED", "MEMBER_LEFT"
     systemMeta: object | null;
     systemActorId: number | null;
     attachmentUrls: string[];
@@ -95,8 +95,8 @@ socket.on("dm:new-message", (data: {
     attachmentR18Flags: boolean[];
     isDeleted: boolean;
     editedAt: string | null;
-    createdAt: string;               // ISO 8601
-    updatedAt: string;               // ISO 8601
+    createdAt: string;               // ISO 8601形式
+    updatedAt: string;               // ISO 8601形式
     sender: {
       id: number;
       username: string;
@@ -104,7 +104,7 @@ socket.on("dm:new-message", (data: {
       avatarUrl: string | null;
       officialMark: string[];
     };
-    replyTo: object | null;          // nested message object
+    replyTo: object | null;          // ネストされたメッセージオブジェクト
     reactions: Array<{
       emoji: string;
       userId: number;
@@ -120,7 +120,7 @@ Fired when a message is edited in a DM group.
 ```ts
 socket.on("dm:message-updated", (data: {
   groupId: string;
-  message: DmMessage;               // same structure as dm:new-message
+  message: DmMessage;               // dm:new-messageと同じ構造
 }) => { /* handle */ });
 ```
 
@@ -143,7 +143,7 @@ Fired when a member reads messages in the group. Used to update read receipt ind
 socket.on("dm:read", (data: {
   groupId: string;
   userId: number;
-  messageId: number;                 // the latest message the user has read up to
+  messageId: number;                 // ユーザーが既読にした最新のメッセージID
 }) => { /* handle */ });
 ```
 
@@ -188,7 +188,7 @@ Fired when a DM request status changes (accepted or declined).
 ```ts
 socket.on("dm:request-updated", (data: {
   groupId: string;
-  status: string;                    // "accepted" | "declined"
+  status: string;                    // "accepted"（承認） | "declined"（拒否）
 }) => { /* handle */ });
 ```
 
@@ -212,7 +212,7 @@ socket.on("dm:leave", (data: {
 }) => { /* handle */ });
 ```
 
-### Typing Indicator Events
+### タイピングインジケーターイベント
 
 #### `typing:user` (Listen)
 
@@ -237,7 +237,7 @@ socket.on("typing:stop", (data: {
 }) => { /* handle */ });
 ```
 
-### Events to Emit
+### エミットするイベント
 
 #### `typing:start`
 
@@ -294,11 +294,11 @@ socket.emit("markAsRead", {
 
 ---
 
-## Call Events (Voice/Video)
+## 通��イベント（音声/ビデオ）
 
 Voice and video calls use WebRTC with Socket.IO as the signaling layer.
 
-### Events to Listen For
+### リッスンするイベント
 
 #### `call:incoming`
 
@@ -309,7 +309,7 @@ socket.on("call:incoming", (data: {
   groupId: string;
   callerId: number;
   callerUsername: string;
-  callType: string;                  // "voice" | "video"
+  callType: string;                  // "voice"（音声） | "video"（ビデオ）
 }) => { /* handle */ });
 ```
 
@@ -320,7 +320,7 @@ Fired when the call state changes (e.g., someone joins, leaves, or the call ends
 ```ts
 socket.on("call:state", (data: {
   groupId: string;
-  state: string;                     // "ringing" | "active" | "ended"
+  state: string;                     // "ringing"（呼び出し中） | "active"（通話中） | "ended"（終了）
   participants: Array<{
     userId: number;
     username: string;
@@ -330,7 +330,7 @@ socket.on("call:state", (data: {
 }) => { /* handle */ });
 ```
 
-### WebRTC Signaling Events (Emit and Listen)
+### WebRTCシグナリングイベント（エミットとリッスン）
 
 These events are both emitted and listened to. The client sends its own offers/answers/candidates and receives them from other participants.
 
@@ -339,14 +339,14 @@ These events are both emitted and listened to. The client sends its own offers/a
 Send or receive a WebRTC SDP offer.
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("voice:offer", {
   groupId: string;
   targetUserId: number;
-  offer: RTCSessionDescriptionInit;  // { type: "offer", sdp: "..." }
+  offer: RTCSessionDescriptionInit;  // { type: "offer", sdp: "..." } 形式
 });
 
-// Listen
+// リッスン（受信）
 socket.on("voice:offer", (data: {
   groupId: string;
   fromUserId: number;
@@ -359,14 +359,14 @@ socket.on("voice:offer", (data: {
 Send or receive a WebRTC SDP answer.
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("voice:answer", {
   groupId: string;
   targetUserId: number;
-  answer: RTCSessionDescriptionInit; // { type: "answer", sdp: "..." }
+  answer: RTCSessionDescriptionInit; // { type: "answer", sdp: "..." } 形式
 });
 
-// Listen
+// リッスン（受信）
 socket.on("voice:answer", (data: {
   groupId: string;
   fromUserId: number;
@@ -379,14 +379,14 @@ socket.on("voice:answer", (data: {
 Exchange ICE candidates for NAT traversal.
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("voice:ice-candidate", {
   groupId: string;
   targetUserId: number;
   candidate: RTCIceCandidateInit;
 });
 
-// Listen
+// リッスン（受信）
 socket.on("voice:ice-candidate", (data: {
   groupId: string;
   fromUserId: number;
@@ -399,12 +399,12 @@ socket.on("voice:ice-candidate", (data: {
 Signal that the user is hanging up or receive a hangup signal.
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("voice:hangup", {
   groupId: string;
 });
 
-// Listen
+// リッスン（受信）
 socket.on("voice:hangup", (data: {
   groupId: string;
   userId: number;
@@ -416,14 +416,14 @@ socket.on("voice:hangup", (data: {
 Update or receive participant media state changes (mute/unmute, video on/off).
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("voice:participant-state", {
   groupId: string;
   isMuted: boolean;
   isVideoEnabled: boolean;
 });
 
-// Listen
+// リッスン（受信）
 socket.on("voice:participant-state", (data: {
   groupId: string;
   userId: number;
@@ -434,11 +434,11 @@ socket.on("voice:participant-state", (data: {
 
 ---
 
-## Radio Events (Spaces / Live Audio)
+## ラジオイベント（スペース / ライブオーディオ）
 
 Radio is the Karotter equivalent of Twitter Spaces -- live audio rooms with a host, speakers, and listeners.
 
-### Events to Listen For
+### リッスンするイベント
 
 #### `radio:join`
 
@@ -509,7 +509,7 @@ Fired when the host's connection drops. The room stays alive for a grace period.
 ```ts
 socket.on("radio:host-disconnected", (data: {
   roomId: string;
-  gracePeriodMs: number;             // how long before the room auto-closes
+  gracePeriodMs: number;             // ルームが自動で閉じるまでの猶予時間
 }) => { /* handle */ });
 ```
 
@@ -545,21 +545,21 @@ socket.on("radio:message", (data: {
 }) => { /* handle */ });
 ```
 
-### Events to Emit and Listen (Bidirectional)
+### エミットするイベント and Listen (Bidirectional)
 
 #### `radio:signal`
 
 WebRTC signaling for radio audio streams. Used for SDP offers, answers, and ICE candidates between participants.
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("radio:signal", {
   roomId: string;
   targetUserId: number;
-  signal: object;                    // RTCSessionDescriptionInit or RTCIceCandidateInit
+  signal: object;                    // RTCSessionDescriptionInit または RTCIceCandidateInit
 });
 
-// Listen
+// リッスン（受信）
 socket.on("radio:signal", (data: {
   roomId: string;
   fromUserId: number;
@@ -572,13 +572,13 @@ socket.on("radio:signal", (data: {
 Update or receive participant state changes in the radio room (mute/unmute, role changes).
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("radio:participant-state", {
   roomId: string;
   isMuted: boolean;
 });
 
-// Listen
+// リッスン（受信）
 socket.on("radio:participant-state", (data: {
   roomId: string;
   userId: number;
@@ -592,33 +592,33 @@ socket.on("radio:participant-state", (data: {
 Request or receive a WebRTC renegotiation (e.g., when a new speaker joins and streams need to be renegotiated).
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("radio:renegotiate-request", {
   roomId: string;
   targetUserId: number;
 });
 
-// Listen
+// リッスン（受信）
 socket.on("radio:renegotiate-request", (data: {
   roomId: string;
   fromUserId: number;
 }) => { /* handle */ });
 ```
 
-### Emit and Listen
+### エミットとリッスン
 
 #### `radio:reaction`
 
 Send a floating reaction emoji in the radio room (visible to all participants).
 
 ```ts
-// Emit
+// エミット（送信）
 socket.emit("radio:reaction", {
   roomId: string;
-  emoji: string;                     // e.g. "fire", "heart", "clap", "100"
+  emoji: string;                     // 例: "fire", "heart", "clap", "100"
 });
 
-// Listen
+// リッスン（受信）
 socket.on("radio:reaction", (data: {
   roomId: string;
   userId: number;
@@ -628,19 +628,19 @@ socket.on("radio:reaction", (data: {
 
 ---
 
-## Draw Events (Draw-Chat / Collaborative Canvas)
+## 絵チャイベント（共同キャンバス）
 
 Draw-chat provides real-time collaborative drawing with layer support, cursors, and in-room chat.
 
-### Canvas Specifications
+### キャンバス仕様
 
-| Property | Value |
+| プロパティ | 値 |
 |----------|-------|
 | Canvas size | 2560 x 2560 pixels |
 | Format | RGBA PNG |
 | Max payload | ~5 MB (all layers combined) |
 
-### Events to Emit
+### エミットするイベント
 
 #### `draw:join`
 
@@ -670,16 +670,16 @@ Send a drawing stroke to all other participants.
 socket.emit("draw:stroke", {
   roomId: string;
   layerId: string;
-  tool: string;                      // "pen" | "eraser" | "bucket" | etc.
-  color: string;                     // hex color, e.g. "#ff0000"
-  width: number;                     // brush width in pixels
-  opacity: number;                   // 0.0 - 1.0
+  tool: string;                      // "pen" | "eraser" | "bucket" など
+  color: string;                     // 16進カラーコード（例: "#ff0000"）
+  width: number;                     // ブラシの太さ（ピクセル）
+  opacity: number;                   // 0.0 - 1.0（不透明度）
   points: Array<{
     x: number;
     y: number;
-    pressure: number;                // 0.0 - 1.0 (for pressure-sensitive input)
+    pressure: number;                // 0.0 - 1.0（筆圧感知入力用）
   }>;
-  compositeOperation: string;        // e.g. "source-over", "destination-out"
+  compositeOperation: string;        // 例: "source-over", "destination-out"
 });
 ```
 
@@ -690,9 +690,9 @@ Broadcast your cursor position in real time.
 ```ts
 socket.emit("draw:cursor", {
   roomId: string;
-  x: number;                         // 0 - 2560
-  y: number;                         // 0 - 2560
-  drawing: boolean;                  // true if actively drawing
+  x: number;                         // 0 - 2560（X座標）
+  y: number;                         // 0 - 2560（Y座標）
+  drawing: boolean;                  // 描画中ならtrue
 });
 ```
 
@@ -708,12 +708,12 @@ socket.emit("draw:layer-sync", {
     name: string;
     order: number;
     visible: boolean;
-    opacity: number;                 // 0.0 - 1.0
-    dataUrl: string;                 // "data:image/png;base64,..." (full layer image)
+    opacity: number;                 // 0.0 - 1.0（不透明度）
+    dataUrl: string;                 // "data:image/png;base64,..."（レイヤー全体の画像）
   }>;
-  revision: number;                  // monotonically increasing revision number
-  clientId: string;                  // unique client identifier for deduplication
-  broadcast: boolean;                // whether to broadcast to other clients
+  revision: number;                  // 単調増加するリビジョン番号
+  clientId: string;                  // 重複排除用の一意なクライアント識別子
+  broadcast: boolean;                // 他のクライアントにブロードキャストするかどうか
 });
 ```
 
@@ -730,7 +730,7 @@ socket.emit("draw:chat", {
 });
 ```
 
-### Events to Listen For
+### リッスンするイベント
 
 #### `draw:room-state`
 
@@ -840,7 +840,7 @@ socket.on("draw:chat", (data: {
   userId: number;
   username: string;
   message: string;
-  createdAt: string;                 // ISO 8601
+  createdAt: string;                 // ISO 8601形式
 }) => { /* handle */ });
 ```
 
@@ -856,7 +856,7 @@ socket.on("draw:error", (data: {
 
 ---
 
-## Screen Share Events
+## 画面共有イベント
 
 ### `screen-share:view` (Emit)
 
@@ -871,7 +871,7 @@ socket.emit("screen-share:view", {
 
 ---
 
-## User Status Events
+## ユーザーステータスイベント
 
 ### `user:status` (Listen)
 
@@ -887,7 +887,7 @@ socket.on("user:status", (data: {
 
 ---
 
-## Notification Events
+## 通知イベント
 
 ### `notification` (Listen)
 
@@ -915,9 +915,9 @@ socket.on("notification", (data: {
 
 ---
 
-## Event Summary Table
+## イベントサマリーテーブル
 
-| Event Name | Direction | Category | Description |
+| イベント名 | 方向 | カテゴリ | 説明 |
 |------------|-----------|----------|-------------|
 | `dm:new-message` | Listen | DM | New message in a group |
 | `dm:message-updated` | Listen | DM | Message edited |

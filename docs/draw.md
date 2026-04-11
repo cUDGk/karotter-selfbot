@@ -1,13 +1,13 @@
-# Draw Chat API
+# 絵チャ API
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) may be required for some operations.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> 一部の操作ではCookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）が必要な場合があります。
 
 ---
 
-## Table of Contents
+## 目次
 
 - [Overview](#overview)
 - [List Rooms](#list-rooms)
@@ -28,17 +28,17 @@
 
 ---
 
-## Overview
+## 概要
 
-Draw Chat is Karotter's collaborative drawing feature. Users create rooms where multiple people can draw together in real-time on a shared 2560x2560 canvas. The canvas supports up to 7 layers, and all drawing operations are synchronized via Socket.IO.
+絵チャはKarotterの共同お絵かき機能です。ユーザーはルームを作成し、2560x2560の共有キャンバス上で複数人がリアルタイムに一緒に描くことができます。キャンバスは最大7レイヤーをサポートし、すべての描画操作はSocket.IOを通じて同期されます。
 
-Rooms can be public (anyone can join) or invite-only (requires an invite code).
+ルームは公開（誰でも参加可能）または招待制（招待コードが必要）にできます。
 
 ---
 
-## List Rooms
+## ルーム一覧
 
-Returns a paginated list of available draw rooms.
+利用可能な絵チャルームのページネーション付きリストを返します。
 
 ```
 GET /api/draw/rooms
@@ -46,7 +46,7 @@ GET /api/draw/rooms
 
 ### Query Parameters
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number (1-indexed) |
 | `limit` | number | 5 | Rooms per page |
@@ -77,9 +77,9 @@ GET /api/draw/rooms
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `rooms` | Room[] | Array of room summary objects |
 | `rooms[].id` | number | Room ID |
@@ -94,17 +94,17 @@ GET /api/draw/rooms
 
 ---
 
-## Create a Room
+## ルーム作成
 
-Creates a new draw room.
+新しい絵チャルームを作成します。
 
 ```
 POST /api/draw/rooms
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `name` | string | Yes | Room name |
 | `visibility` | string | No | `"PUBLIC"` (default) or `"INVITE"` |
@@ -144,9 +144,9 @@ Content-Type: application/json
 
 ---
 
-## Get Room Details
+## ルーム詳細取得
 
-Returns full details of a draw room, including all layers with their data.
+すべてのレイヤーデータを含む絵チャルームの完全な詳細を返します。
 
 ```
 GET /api/draw/rooms/:id
@@ -154,7 +154,7 @@ GET /api/draw/rooms/:id
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
@@ -202,9 +202,9 @@ GET /api/draw/rooms/:id
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `room.id` | number | Room ID |
 | `room.name` | string | Room name |
@@ -224,9 +224,9 @@ GET /api/draw/rooms/:id
 
 ---
 
-## Delete a Room
+## ルーム削除
 
-Deletes a draw room. Only the room owner can delete it.
+絵チャルームを削除します。ルームオーナーのみ削除可能です。
 
 ```
 DELETE /api/draw/rooms/:id
@@ -234,13 +234,13 @@ DELETE /api/draw/rooms/:id
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ルームを削除しました"}` | Room deleted |
 | 403 | `{"error": "権限がありません"}` | Not the room owner |
@@ -248,9 +248,9 @@ DELETE /api/draw/rooms/:id
 
 ---
 
-## Join a Room
+## ルームに参加
 
-Joins a draw room. For invite-only rooms, an invite code is required.
+絵チャルームに参加します。��待制ルームの場合、招待コードが必要です。
 
 ```
 POST /api/draw/rooms/:id/join
@@ -258,13 +258,13 @@ POST /api/draw/rooms/:id/join
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `inviteCode` | string | No* | Invite code (required for `INVITE` visibility rooms) |
 
@@ -291,7 +291,7 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ルームに参加しました", "room": {...}}` | Joined |
 | 400 | `{"error": "既に参加しています"}` | Already in room |
@@ -300,9 +300,9 @@ Content-Type: application/json
 
 ---
 
-## Update Layers
+## レイヤー更新
 
-Updates all layers of the canvas. This is a **full replacement** operation.
+キャンバスのすべてのレイヤーを更新します。これは**完全置換**操作です。
 
 ```
 PUT /api/draw/rooms/:id/layers
@@ -310,19 +310,19 @@ PUT /api/draw/rooms/:id/layers
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `layers` | Layer[] | Yes | Complete array of all layers |
 
 ### Layer Object
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `id` | string | Yes | Layer ID (client-generated, e.g., UUID) |
 | `name` | string | Yes | Layer name |
@@ -365,7 +365,7 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "レイヤーを更新しました"}` | Layers updated |
 | 400 | `{"error": "レイヤー数の上限を超えています"}` | Exceeds 7 layer limit |
@@ -373,9 +373,9 @@ Content-Type: application/json
 
 ---
 
-## Rotate Invite Code
+## 招待コードのローテーション
 
-Generates a new invite code for a room, invalidating the previous one.
+ルームの新しい招待コードを生成し、以前のコードを無効化します。
 
 ```
 POST /api/draw/rooms/:id/invite/rotate
@@ -383,13 +383,13 @@ POST /api/draw/rooms/:id/invite/rotate
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Response
 
@@ -401,16 +401,16 @@ None.
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"inviteCode": "..."}` | New invite code generated |
 | 403 | `{"error": "権限がありません"}` | Not the room owner |
 
 ---
 
-## Get Layers
+## レイヤー取得
 
-Returns only the layers of a draw room, without full room details. Useful for polling layer updates.
+ルーム詳細なしで絵チャルームのレイヤーのみを返します。レイヤー更新のポーリングに便利です。
 
 ```
 GET /api/draw/rooms/:id/layers
@@ -418,7 +418,7 @@ GET /api/draw/rooms/:id/layers
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
@@ -441,9 +441,9 @@ GET /api/draw/rooms/:id/layers
 
 ---
 
-## Send Chat Message (REST)
+## チャットメッセージ送信 (REST)
 
-Sends a text chat message in a draw room via the REST API. This is an alternative to emitting the `draw:chat` Socket.IO event.
+REST API経由で絵チャルームにテキストチャットメッセージを送信します。`draw:chat` Socket.IOイベントのエミットの代替手段です。
 
 ```
 POST /api/draw/rooms/:id/chat
@@ -451,13 +451,13 @@ POST /api/draw/rooms/:id/chat
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Room ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `content` | string | Yes | Message text (max 400 characters) |
 
@@ -476,16 +476,16 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メッセージを送信しました"}` | Message sent |
 | 403 | `{"error": "ルームに参加していません"}` | Not a participant |
 
 ---
 
-## Canvas Specifications
+## キャンバス仕様
 
-| Property | Value |
+| プロパティ | 値 |
 |----------|-------|
 | Canvas size | 2560 x 2560 pixels |
 | Color format | RGBA (32-bit color with alpha channel) |
@@ -494,7 +494,7 @@ Content-Type: application/json
 | Maximum payload size | ~5 MB (for the entire PUT /layers request) |
 | Data encoding | Base64 data URL (`data:image/png;base64,...`) |
 
-### Canvas Coordinate System
+### キャンバス座標系
 
 ```
 (0,0) -------- (2560,0)
@@ -508,13 +508,13 @@ Origin is at the top-left corner. X increases to the right, Y increases downward
 
 ---
 
-## Layer System
+## レイヤーシステム
 
 Layers are composited in order from `order: 0` (bottom) to `order: N` (top). Each layer is an independent 2560x2560 RGBA PNG image.
 
-### Layer Properties
+### レイヤープロパティ
 
-| Property | Type | Range | Description |
+| プロパティ | 型 | 範囲 | 説明 |
 |----------|------|-------|-------------|
 | `id` | string | - | Unique identifier (client-generated) |
 | `name` | string | - | Human-readable layer name |
@@ -523,7 +523,7 @@ Layers are composited in order from `order: 0` (bottom) to `order: N` (top). Eac
 | `opacity` | number | 0.0 - 1.0 | Layer opacity |
 | `dataUrl` | string | - | Base64 PNG data URL |
 
-### Layer Limits
+### レイヤー制限
 
 - Maximum 7 layers per room
 - Each layer is a full 2560x2560 RGBA PNG
@@ -532,7 +532,7 @@ Layers are composited in order from `order: 0` (bottom) to `order: N` (top). Eac
 
 ---
 
-## Stroke Types
+## ストロークタイプ
 
 Drawing operations are transmitted via Socket.IO in real-time. Each stroke type has specific properties.
 
@@ -556,7 +556,7 @@ Draws a line segment between two points.
 
 #### Line Properties
 
-| Property | Type | Description |
+| Property | タイプ | 説明 |
 |----------|------|-------------|
 | `x1` | number | Start X coordinate |
 | `y1` | number | Start Y coordinate |
@@ -569,7 +569,7 @@ Draws a line segment between two points.
 
 #### Available Tools
 
-| Tool | Description |
+| ツール | 説明 |
 |------|-------------|
 | `pen` | Standard hard-edge pen |
 | `pencil` | Soft pencil with texture |
@@ -600,7 +600,7 @@ Fills a contiguous area with a color.
 
 #### Bucket Properties
 
-| Property | Type | Description |
+| Property | タイプ | 説明 |
 |----------|------|-------------|
 | `x` | number | Fill origin X coordinate |
 | `y` | number | Fill origin Y coordinate |
@@ -628,7 +628,7 @@ Draws geometric shapes.
 
 #### Shape Properties
 
-| Property | Type | Description |
+| Property | タイプ | 説明 |
 |----------|------|-------------|
 | `shape` | string | Shape type (see table below) |
 | `x1` | number | Start X (top-left for rectangles, center for ellipses) |
@@ -641,7 +641,7 @@ Draws geometric shapes.
 
 #### Available Shapes
 
-| Shape | Description |
+| シェイプ | 説明 |
 |-------|-------------|
 | `line` | Straight line from (x1,y1) to (x2,y2) |
 | `rect` | Rectangle outline |
@@ -672,7 +672,7 @@ Applies a linear gradient fill.
 
 #### Gradient Properties
 
-| Property | Type | Description |
+| Property | タイプ | 説明 |
 |----------|------|-------------|
 | `x1` | number | Gradient start X |
 | `y1` | number | Gradient start Y |
@@ -684,7 +684,7 @@ Applies a linear gradient fill.
 
 ---
 
-## Text Objects
+## テキストオブジェクト
 
 Text can be placed on the canvas as persistent objects.
 
@@ -705,7 +705,7 @@ Text can be placed on the canvas as persistent objects.
 
 ### Text Object Properties
 
-| Property | Type | Range | Description |
+| プロパティ | 型 | 範囲 | 説明 |
 |----------|------|-------|-------------|
 | `id` | string | - | Unique text object ID |
 | `layerId` | string | - | ID of the layer this text belongs to |
@@ -720,7 +720,7 @@ Text can be placed on the canvas as persistent objects.
 
 ### Text Constraints
 
-| Constraint | Value |
+| 制約 | 値 |
 |-----------|-------|
 | Minimum width | 70 px |
 | Maximum width | 1600 px |
@@ -732,13 +732,13 @@ Text can be placed on the canvas as persistent objects.
 
 ---
 
-## Chat
+## チャット
 
 Each draw room has a built-in text chat for communication between participants.
 
-### Chat Constraints
+### チャット Constraints
 
-| Constraint | Value |
+| 制約 | 値 |
 |-----------|-------|
 | Maximum messages in memory | 80 |
 | Maximum characters per message | 400 |
@@ -747,11 +747,11 @@ Chat messages are ephemeral and transmitted via Socket.IO. They are not persiste
 
 ---
 
-## Socket.IO Events
+## Socket.IOイベント
 
 Draw chat uses Socket.IO for real-time synchronization.
 
-### Connection
+### 接続
 
 ```javascript
 import { io } from "socket.io-client";
@@ -764,7 +764,7 @@ const socket = io("https://karotter.com", {
 
 ### Events
 
-| Event | Direction | Payload | Description |
+| イベント | 方向 | ペイロード | 説明 |
 |-------|-----------|---------|-------------|
 | `draw:join` | emit | `{roomId}` | Join a draw room |
 | `draw:leave` | emit | `{roomId}` | Leave a draw room |
@@ -776,7 +776,7 @@ const socket = io("https://karotter.com", {
 | `draw:participant-leave` | receive | `{roomId, userId}` | Participant left |
 | `draw:chat` | emit/receive | `{roomId, content, sender}` | Chat message |
 
-### Typical Flow
+### 典型的なフロー
 
 1. Call `POST /api/draw/rooms/:id/join` to join via REST API
 2. Emit `draw:join` with `{roomId}` via Socket.IO
@@ -787,9 +787,9 @@ const socket = io("https://karotter.com", {
 
 ---
 
-## Rate Limiting
+## レート制限
 
-All draw endpoints share the default rate limit:
+すべての絵チャエンドポイントはデフォルトのレート制限を共有しています:
 
 ```
 ratelimit-policy: 100;w=60

@@ -1,30 +1,30 @@
-# Posts
+# 投稿
 
-Complete reference for creating, reading, editing, deleting posts, and all post interactions including likes, rekarots, bookmarks, reactions, polls, replies, analytics, and scheduled posts.
+投稿の作成、取得、編集、削除、およびいいね、リカロット、ブックマーク、リアクション、投票、リプライ、アナリティクス、予約投稿を含むすべての投稿インタラクションの完全なリファレンスです。
 
 ---
 
-## Create Post
+## 投稿の作成
 
 ### `POST /posts`
 
-Create a new post. Uses `multipart/form-data` to support media uploads.
+新しい投稿を作成します。メディアアップロードをサポートするため `multipart/form-data` を使用します。
 
-**Request:** `multipart/form-data`
+**リクエスト:** `multipart/form-data`
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `content` | `string` | No | Post text content. Can be empty if media is attached. |
-| `media` | `File[]` | No | Media files. Use the **same field name** `media` for each file in the FormData. |
-| `mediaAlts` | `string` (JSON) | No | JSON-encoded array of alt text strings, one per media item. Example: `'["Alt for image 1","Alt for image 2"]'` |
-| `mediaSpoilerFlags` | `string` (JSON) | No | JSON-encoded array of booleans indicating spoiler status per media item. Example: `'[false,true]'` |
-| `mediaR18Flags` | `string` (JSON) | No | JSON-encoded array of booleans indicating R18/NSFW status per media item. Example: `'[false,false]'` |
-| `isAiGenerated` | `boolean` | No | Flag for AI-generated content. **Note:** This field does not work when sent via the API; it is ignored server-side. |
-| `visibility` | `string` | No | Post visibility: `PUBLIC` (default) or `CIRCLE` |
-| `replyRestriction` | `string` | No | Who can reply: `EVERYONE` (default), `FOLLOWING`, `MENTIONED`, `CIRCLE` |
-| `parentId` | `string` | No | ID of the parent post (makes this a reply) |
+| `content` | `string` | いいえ | 投稿のテキスト内容。メディアが添付されている場合は空でも可 |
+| `media` | `File[]` | いいえ | メディアファイル。FormDataで各ファイルに同じフィールド名 `media` を使用 |
+| `mediaAlts` | `string` (JSON) | いいえ | 各メディアアイテムの代替テキスト文字列のJSON配列。例: `'["画像1の代替テキスト","画像2の代替テキスト"]'` |
+| `mediaSpoilerFlags` | `string` (JSON) | いいえ | 各メディアアイテムのスポイラーステータスを示すブール値のJSON配列。例: `'[false,true]'` |
+| `mediaR18Flags` | `string` (JSON) | いいえ | 各メディアアイテムのR18/NSFWステータスを示すブール値のJSON配列。例: `'[false,false]'` |
+| `isAiGenerated` | `boolean` | いいえ | AI生成コンテンツフラグ。**注意:** このフィールドはAPI経由で送信しても動作せず、サーバー側で無視されます |
+| `visibility` | `string` | いいえ | 投稿の公開範囲: `PUBLIC`（デフォルト）または `CIRCLE` |
+| `replyRestriction` | `string` | いいえ | リプライ可能な人: `EVERYONE`（デフォルト）, `FOLLOWING`, `MENTIONED`, `CIRCLE` |
+| `parentId` | `string` | いいえ | 親投稿のID（これをリプライにする） |
 
-**Request Example (text only):**
+**リクエスト例（テキストのみ）:**
 
 ```http
 POST /posts HTTP/1.1
@@ -44,7 +44,7 @@ PUBLIC
 ------FormBoundary--
 ```
 
-**Request Example (with images):**
+**リクエスト例（画像付き）:**
 
 ```http
 POST /posts HTTP/1.1
@@ -82,7 +82,7 @@ Content-Disposition: form-data; name="mediaR18Flags"
 ------FormBoundary--
 ```
 
-**Response `201 Created`:**
+**レスポンス `201 Created`:**
 
 ```json
 {
@@ -109,26 +109,26 @@ Content-Disposition: form-data; name="mediaR18Flags"
 }
 ```
 
-> **IMPORTANT: Cannot mix images and videos.** If you attempt to upload both image files and video files in the same post, the server returns a `400 Bad Request` error. Each post may contain either images or a video, but not both.
+> **重要: 画像と動画の混在不可。** 同じ投稿に画像ファイルと動画ファイルの両方をアップロードしようとすると、サーバーは `400 Bad Request` エラーを返します。各投稿には画像または動画のいずれかを含められますが、両方は不可です。
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `400` | `MIXED_MEDIA_TYPES` | Cannot include both images and videos in one post |
-| `400` | `CONTENT_REQUIRED` | Post has no content and no media |
-| `400` | `MEDIA_LIMIT_EXCEEDED` | Too many media files attached |
-| `413` | `PAYLOAD_TOO_LARGE` | Media file size exceeds limit |
+| `400` | `MIXED_MEDIA_TYPES` | 1つの投稿に画像と動画の両方を含めることはできない |
+| `400` | `CONTENT_REQUIRED` | 投稿にコンテンツもメディアもない |
+| `400` | `MEDIA_LIMIT_EXCEEDED` | 添付メディアファイルが多すぎる |
+| `413` | `PAYLOAD_TOO_LARGE` | メディアファイルサイズが上限を超過 |
 
 ---
 
-## Get Post
+## 投稿の取得
 
 ### `GET /posts/:id`
 
-Retrieve a single post by its ID.
+IDを指定して単一の投稿を取得します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123 HTTP/1.1
@@ -136,7 +136,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -191,12 +191,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
     "myReactions": [],
     "reactions": [
       {
-        "emoji": "👍",
+        "emoji": "\ud83d\udc4d",
         "count": 12,
         "hasReacted": false
       },
       {
-        "emoji": "❤️",
+        "emoji": "\u2764\ufe0f",
         "count": 8,
         "hasReacted": true
       }
@@ -208,65 +208,65 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-### Full Post Object Reference
+### 完全な投稿オブジェクトリファレンス
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `string` | Unique post identifier |
-| `content` | `string` | Post text content |
-| `author` | `object` | Author user object (id, username, displayName, avatarUrl, isPrivate, officialMark, isParodyAccount, adminForceParody, isBotAccount, adminForceBot) |
-| `visibility` | `string` | `PUBLIC` or `CIRCLE` |
+| `id` | `string` | 一意の投稿識別子 |
+| `content` | `string` | 投稿のテキスト内容 |
+| `author` | `object` | 投稿者ユーザーオブジェクト (id, username, displayName, avatarUrl, isPrivate, officialMark, isParodyAccount, adminForceParody, isBotAccount, adminForceBot) |
+| `visibility` | `string` | `PUBLIC` または `CIRCLE` |
 | `replyRestriction` | `string` | `EVERYONE`, `FOLLOWING`, `MENTIONED`, `CIRCLE` |
-| `media` | `array` | Array of media objects |
-| `media[].id` | `string` | Media item ID |
-| `media[].url` | `string` | CDN URL for the media file |
-| `media[].type` | `string` | `IMAGE` or `VIDEO` |
-| `media[].width` | `number` | Width in pixels |
-| `media[].height` | `number` | Height in pixels |
-| `media[].alt` | `string \| null` | Alt text description |
-| `media[].isSpoiler` | `boolean` | Whether marked as spoiler |
-| `media[].isR18` | `boolean` | Whether marked as R18/NSFW |
-| `media[].isAiGenerated` | `boolean` | Whether flagged as AI-generated |
-| `poll` | `object \| null` | Poll object if the post contains a poll |
-| `poll.id` | `string` | Poll ID |
-| `poll.options` | `array` | Array of `{id, text, votesCount}` |
-| `poll.totalVotes` | `number` | Total vote count |
-| `poll.expiresAt` | `string` | ISO 8601 expiration timestamp |
-| `poll.hasVoted` | `boolean` | Whether the viewer has voted |
-| `poll.votedOptionId` | `string \| null` | Which option the viewer voted for |
-| `parentId` | `string \| null` | Parent post ID if this is a reply |
-| `parentPost` | `Post \| null` | Parent post object (when included) |
-| `quotedPost` | `Post \| null` | Quoted post object (for quote posts) |
-| `quotedPostId` | `string \| null` | Quoted post ID |
-| `createdAt` | `string` | ISO 8601 creation timestamp |
-| `updatedAt` | `string` | ISO 8601 last update timestamp |
-| `editedAt` | `string \| null` | ISO 8601 edit timestamp, `null` if never edited |
-| `likesCount` | `number` | Number of likes |
-| `repliesCount` | `number` | Number of direct replies |
-| `rekarotsCount` | `number` | Number of rekarots (reposts) |
-| `quotesCount` | `number` | Number of quote posts |
-| `bookmarksCount` | `number` | Number of bookmarks |
-| `viewCount` | `number` | Number of views |
-| `isLiked` | `boolean` | Whether the viewer has liked this post |
-| `isRekaroted` | `boolean` | Whether the viewer has rekaroted this post |
-| `isBookmarked` | `boolean` | Whether the viewer has bookmarked this post |
-| `myReactions` | `string[]` | Array of emoji strings the viewer has reacted with |
-| `reactions` | `array` | Array of `{emoji, count, hasReacted}` objects |
-| `isMutedByViewer` | `boolean` | Whether the viewer has muted this post's conversation |
-| `scheduledFor` | `string \| null` | ISO 8601 scheduled publication time, `null` for published posts |
-| `viewerCircle` | `object \| null` | Circle object if visibility is `CIRCLE` |
+| `media` | `array` | メディアオブジェクトの配列 |
+| `media[].id` | `string` | メディアアイテムID |
+| `media[].url` | `string` | メディアファイルのCDN URL |
+| `media[].type` | `string` | `IMAGE` または `VIDEO` |
+| `media[].width` | `number` | ピクセル単位の幅 |
+| `media[].height` | `number` | ピクセル単位の高さ |
+| `media[].alt` | `string \| null` | 代替テキストの説明 |
+| `media[].isSpoiler` | `boolean` | スポイラーとしてマークされているか |
+| `media[].isR18` | `boolean` | R18/NSFWとしてマークされているか |
+| `media[].isAiGenerated` | `boolean` | AI生成としてフラグ付けされているか |
+| `poll` | `object \| null` | 投稿に投票が含まれる場合の投票オブジェクト |
+| `poll.id` | `string` | 投票ID |
+| `poll.options` | `array` | `{id, text, votesCount}` の配列 |
+| `poll.totalVotes` | `number` | 総投票数 |
+| `poll.expiresAt` | `string` | ISO 8601 有効期限タイムスタンプ |
+| `poll.hasVoted` | `boolean` | 閲覧者が投票したかどうか |
+| `poll.votedOptionId` | `string \| null` | 閲覧者が投票した選択肢 |
+| `parentId` | `string \| null` | リプライの場合の親投稿ID |
+| `parentPost` | `Post \| null` | 親投稿オブジェクト（含まれる場合） |
+| `quotedPost` | `Post \| null` | 引用投稿オブジェクト（引用投稿の場合） |
+| `quotedPostId` | `string \| null` | 引用投稿ID |
+| `createdAt` | `string` | ISO 8601 作成タイムスタンプ |
+| `updatedAt` | `string` | ISO 8601 最終更新タイムスタンプ |
+| `editedAt` | `string \| null` | ISO 8601 編集タイムスタンプ。未編集の場合は `null` |
+| `likesCount` | `number` | いいね数 |
+| `repliesCount` | `number` | 直接リプライ数 |
+| `rekarotsCount` | `number` | リカロット（リポスト）数 |
+| `quotesCount` | `number` | 引用投稿数 |
+| `bookmarksCount` | `number` | ブックマーク数 |
+| `viewCount` | `number` | 閲覧数 |
+| `isLiked` | `boolean` | 閲覧者がこの投稿にいいねしたか |
+| `isRekaroted` | `boolean` | 閲覧者がこの投稿をリカロットしたか |
+| `isBookmarked` | `boolean` | 閲覧者がこの投稿をブックマークしたか |
+| `myReactions` | `string[]` | 閲覧者がリアクションした絵文字文字列の配列 |
+| `reactions` | `array` | `{emoji, count, hasReacted}` オブジェクトの配列 |
+| `isMutedByViewer` | `boolean` | 閲覧者がこの投稿の会話をミュートしたか |
+| `scheduledFor` | `string \| null` | ISO 8601 予約公開時刻。公開済み投稿は `null` |
+| `viewerCircle` | `object \| null` | 公開範囲が `CIRCLE` の場合のサークルオブジェクト |
 
 ---
 
-## Edit Post
+## 投稿の編集
 
 ### `PUT /posts/:id`
 
-Edit an existing post. Only the post's author can edit it.
+既存の投稿を編集します。投稿者のみ編集可能です。
 
-**Request:** Same format as `POST /posts` (multipart/form-data).
+**リクエスト:** `POST /posts` と同じ形式（multipart/form-data）。
 
-**Request:**
+**リクエスト:**
 
 ```http
 PUT /posts/post_abc123 HTTP/1.1
@@ -282,7 +282,7 @@ Updated post content here.
 ------FormBoundary--
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -294,22 +294,22 @@ Updated post content here.
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `403` | `FORBIDDEN` | You are not the author of this post |
-| `404` | `NOT_FOUND` | Post does not exist |
+| `403` | `FORBIDDEN` | この投稿の投稿者ではない |
+| `404` | `NOT_FOUND` | 投稿が存在しない |
 
 ---
 
-## Delete Post
+## 投稿の削除
 
 ### `DELETE /posts/:id`
 
-Delete a post. Only the post's author can delete it.
+投稿を削除します。投稿者のみ削除可能です。
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /posts/post_abc123 HTTP/1.1
@@ -318,7 +318,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -326,21 +326,21 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-> **Note:** The success message is returned in Japanese: "カロートを削除しました" (meaning "Karot has been deleted").
+> **注意:** 成功メッセージは日本語で返されます: "カロートを削除しました"（Karotが削除されたという意味）。
 
 ---
 
-## Like / Unlike
+## いいね / いいね解除
 
 ### `POST /posts/:id/like`
 
-Like a post.
+投稿にいいねします。
 
 ### `DELETE /posts/:id/like`
 
-Unlike a post.
+いいねを取り消します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/post_abc123/like HTTP/1.1
@@ -349,7 +349,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -357,23 +357,23 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Client behavior notes:**
-- The client performs an **optimistic update**: the UI reflects the like/unlike immediately.
-- A **1500ms delayed cache invalidation** is triggered after the API call to sync the actual server state.
+**クライアント動作の注意:**
+- クライアントは**楽観的更新**を実行します: UIはいいね/いいね解除を即座に反映します。
+- API呼び出し後に**1500ms遅延キャッシュ無効化**がトリガーされ、実際のサーバー状態を同期します。
 
 ---
 
-## Rekarot / Un-rekarot
+## リカロット / リカロット解除
 
 ### `POST /posts/:id/rekarot`
 
-Rekarot (repost) a post to your followers.
+投稿をフォロワーにリカロット（リポスト）します。
 
 ### `DELETE /posts/:id/rekarot`
 
-Remove your rekarot.
+リカロットを取り消します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/post_abc123/rekarot HTTP/1.1
@@ -382,7 +382,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -390,24 +390,24 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Interaction guards:** The client checks the following conditions before allowing a rekarot:
-- `canInteract` must be `true` (user is not blocked, etc.)
-- The post author is not a private account (unless you follow them)
-- The post visibility is not `CIRCLE` (circle-only posts cannot be rekaroted)
+**インタラクションガード:** クライアントはリカロット許可前に以下の条件を確認します:
+- `canInteract` が `true`（ユーザーがブロックされていない等）
+- 投稿者が非公開アカウントではない（フォローしている場合を除く）
+- 投稿の公開範囲が `CIRCLE` ではない（サークル限定投稿はリカロット不可）
 
 ---
 
-## Bookmark / Unbookmark
+## ブックマーク / ブックマーク解除
 
 ### `POST /posts/:id/bookmark`
 
-Bookmark a post.
+投稿をブックマークします。
 
 ### `DELETE /posts/:id/bookmark`
 
-Remove a bookmark.
+ブックマークを解除します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/post_abc123/bookmark HTTP/1.1
@@ -416,7 +416,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -426,23 +426,23 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Reactions
+## リアクション
 
 ### `POST /posts/:id/react`
 
-Add an emoji reaction to a post.
+投稿に絵文字リアクションを追加します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Constraints | Description |
+| フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
-| `emoji` | `string` | Yes | Max 32 characters | The emoji to react with |
+| `emoji` | `string` | はい | 最大32文字 | リアクションする絵文字 |
 
-**Limits:**
-- Maximum **20 unique emoji types** per post (across all users).
-- Emoji string must be at most **32 characters** (hard server validation).
+**制限:**
+- 1つの投稿あたり最大**20種類のユニークな絵文字**（全ユーザー合計）。
+- 絵文字文字列は最大**32文字**（サーバー側で厳密にバリデーション）。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/post_abc123/react HTTP/1.1
@@ -452,11 +452,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 {
-  "emoji": "🔥"
+  "emoji": "\ud83d\udd25"
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -466,15 +466,15 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `DELETE /posts/:id/react/:emoji`
 
-Remove your reaction from a post.
+投稿からリアクションを削除します。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| パラメータ | 型 | 説明 |
 |-----------|------|-------------|
-| `emoji` | `string` | URL-encoded emoji string |
+| `emoji` | `string` | URLエンコードされた絵文字文字列 |
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /posts/post_abc123/react/%F0%9F%94%A5 HTTP/1.1
@@ -483,9 +483,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-> **Note:** The emoji must be URL-encoded in the path. For example, `🔥` becomes `%F0%9F%94%A5`.
+> **注意:** 絵文字はパスでURLエンコードする必要があります。例えば、火の絵文字は `%F0%9F%94%A5` になります。
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -495,16 +495,16 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `GET /posts/:id/react/:emoji/users`
 
-Get the list of users who reacted with a specific emoji.
+特定の絵文字でリアクションしたユーザーの一覧を取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `10` | Results per page |
-| `cursor` | `string` | — | Pagination cursor |
+| `limit` | `number` | `10` | ページあたりの結果数 |
+| `cursor` | `string` | -- | ページネーションカーソル |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123/react/%F0%9F%94%A5/users?limit=10 HTTP/1.1
@@ -512,7 +512,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -532,19 +532,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Poll Voting
+## 投票
 
 ### `POST /posts/:id/poll/vote`
 
-Vote on a poll option. This endpoint acts as a **toggle**: posting the same `optionId` again will remove your vote (unvote).
+投票の選択肢に投票します。このエンドポイントは**トグル**として動作し、同じ `optionId` で再度投稿すると投票が取り消されます。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `optionId` | `string` | Yes | ID of the poll option to vote for |
+| `optionId` | `string` | はい | 投票する選択肢のID |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/post_abc123/poll/vote HTTP/1.1
@@ -558,7 +558,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -577,20 +577,20 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Replies
+## リプライ
 
 ### `GET /posts/:id/replies`
 
-Get replies to a post.
+投稿へのリプライを取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `page` | `number` | `1` | Page number |
-| `limit` | `number` | `20` | Results per page |
+| `page` | `number` | `1` | ページ番号 |
+| `limit` | `number` | `20` | ページあたりの結果数 |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123/replies?page=1&limit=20 HTTP/1.1
@@ -598,7 +598,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -626,16 +626,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Client-side filtering:** The client filters out replies where any of the following are true:
-- `isMutedByViewer` is `true`
-- The reply author has been blocked by the viewer
-- The viewer is blocked by the reply author
+**クライアント側フィルタリング:** クライアントは以下の条件に該当するリプライをフィルタリングします:
+- `isMutedByViewer` が `true`
+- リプライの投稿者が閲覧者にブロックされている
+- 閲覧者がリプライの投稿者にブロックされている
 
 ### `GET /posts/:id/reply-targets`
 
-Get the chain of parent posts leading up to a reply (the "reply targets" or conversation thread above).
+リプライに至るまでの親投稿チェーン（「リプライターゲット」または上位の会話スレッド）を取得します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_reply001/reply-targets HTTP/1.1
@@ -643,7 +643,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -660,20 +660,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Likes List
+## いいねリスト
 
 ### `GET /posts/:id/likes`
 
-Get the list of users who liked a post.
+投稿にいいねしたユーザーの一覧を取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `20` | Results per page |
-| `cursor` | `string` | — | Pagination cursor |
+| `limit` | `number` | `20` | ページあたりの結果数 |
+| `cursor` | `string` | -- | ページネーションカーソル |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123/likes?limit=20 HTTP/1.1
@@ -681,7 +681,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -701,20 +701,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Rekarot Users
+## リカロットユーザー
 
 ### `GET /posts/:id/rekarots`
 
-Get the list of users who rekaroted a post, including any comment they added.
+投稿をリカロットしたユーザーの一覧を取得します（追加コメントを含む）。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `20` | Results per page |
-| `cursor` | `string` | — | Pagination cursor |
+| `limit` | `number` | `20` | ページあたりの結果数 |
+| `cursor` | `string` | -- | ページネーションカーソル |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123/rekarots?limit=20 HTTP/1.1
@@ -722,7 +722,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -750,20 +750,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Quote Posts
+## 引用投稿
 
 ### `GET /posts/:id/quotes`
 
-Get posts that quote this post.
+この投稿を引用している投稿を取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
-| `limit` | `number` | `20` | Results per page |
-| `cursor` | `string` | — | Pagination cursor |
+| `limit` | `number` | `20` | ページあたりの結果数 |
+| `cursor` | `string` | -- | ページネーションカーソル |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123/quotes?limit=20 HTTP/1.1
@@ -771,7 +771,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -797,13 +797,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Post Analytics
+## 投稿アナリティクス
 
 ### `GET /posts/:id/analytics`
 
-Get audience analytics for a post. Only available for the post's author.
+投稿のオーディエンスアナリティクスを取得します。投稿者のみ利用可能です。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/post_abc123/analytics HTTP/1.1
@@ -811,7 +811,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -835,37 +835,37 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Fields:**
+**フィールド:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `audience.knownViewerCount` | `number` | Total viewers with known demographics |
-| `audience.genderCounts.MALE` | `number` | Male viewers |
-| `audience.genderCounts.FEMALE` | `number` | Female viewers |
-| `audience.genderCounts.OTHER` | `number` | Other gender viewers |
-| `audience.ageBuckets["13-17"]` | `number` | Viewers aged 13-17 |
-| `audience.ageBuckets["18-24"]` | `number` | Viewers aged 18-24 |
-| `audience.ageBuckets["25-34"]` | `number` | Viewers aged 25-34 |
-| `audience.ageBuckets["35-44"]` | `number` | Viewers aged 35-44 |
-| `audience.ageBuckets["45-54"]` | `number` | Viewers aged 45-54 |
-| `audience.ageBuckets["55+"]` | `number` | Viewers aged 55+ |
-| `audience.ageBuckets["unknown"]` | `number` | Viewers with unknown age |
+| `audience.knownViewerCount` | `number` | 属性情報が判明している閲覧者の合計 |
+| `audience.genderCounts.MALE` | `number` | 男性閲覧者数 |
+| `audience.genderCounts.FEMALE` | `number` | 女性閲覧者数 |
+| `audience.genderCounts.OTHER` | `number` | その他の性別の閲覧者数 |
+| `audience.ageBuckets["13-17"]` | `number` | 13-17歳の閲覧者数 |
+| `audience.ageBuckets["18-24"]` | `number` | 18-24歳の閲覧者数 |
+| `audience.ageBuckets["25-34"]` | `number` | 25-34歳の閲覧者数 |
+| `audience.ageBuckets["35-44"]` | `number` | 35-44歳の閲覧者数 |
+| `audience.ageBuckets["45-54"]` | `number` | 45-54歳の閲覧者数 |
+| `audience.ageBuckets["55+"]` | `number` | 55歳以上の閲覧者数 |
+| `audience.ageBuckets["unknown"]` | `number` | 年齢不明の閲覧者数 |
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `403` | `FORBIDDEN` | You are not the author of this post |
+| `403` | `FORBIDDEN` | この投稿の投稿者ではない |
 
 ---
 
-## Leave Conversation
+## 会話を離脱
 
 ### `POST /posts/:id/conversation/leave`
 
-Mute/leave a conversation thread. You will no longer receive notifications for replies in this thread.
+会話スレッドをミュート/離脱します。このスレッドのリプライ通知を受け取らなくなります。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/post_abc123/conversation/leave HTTP/1.1
@@ -874,7 +874,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -884,19 +884,19 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Pin / Unpin Post
+## ピン留め / ピン解除
 
 ### `PATCH /users/profile/pinned-post`
 
-Pin a post to your profile, or unpin the current pinned post.
+投稿をプロフィールにピン留め、または現在のピン留めを解除します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `postId` | `string \| null` | Yes | Post ID to pin, or `null` to unpin |
+| `postId` | `string \| null` | はい | ピン留めする投稿ID、またはピン解除の場合は `null` |
 
-**Request (pin):**
+**リクエスト（ピン留め）:**
 
 ```http
 PATCH /users/profile/pinned-post HTTP/1.1
@@ -910,7 +910,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Request (unpin):**
+**リクエスト（ピン解除）:**
 
 ```json
 {
@@ -918,7 +918,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -928,23 +928,23 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Batch Views
+## バッチビュー
 
 ### `POST /posts/batch-views`
 
-Report that the user has viewed a batch of posts. The client calls this endpoint automatically.
+ユーザーが投稿のバッチを閲覧したことを報告します。クライアントがこのエンドポイントを自動的に呼び出します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `postIds` | `string[]` | Yes | Array of post IDs that were viewed |
+| `postIds` | `string[]` | はい | 閲覧した投稿IDの配列 |
 
-**Client behavior:**
-- Called every **5 seconds** with accumulated post IDs.
-- A post is counted as "viewed" when it has been visible for at least **1 second** (dwell time) and at least **50% of the post** is within the viewport (visibility threshold).
+**クライアント動作:**
+- 蓄積された投稿IDを**5秒ごと**に送信します。
+- 投稿が少なくとも**1秒間**表示され（滞在時間）、投稿の少なくとも**50%**がビューポート内にある（可視性しきい値）場合に「閲覧済み」とカウントされます。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/batch-views HTTP/1.1
@@ -958,7 +958,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -968,13 +968,13 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Scheduled Posts
+## 予約投稿
 
 ### `GET /posts/scheduled/me`
 
-Get the authenticated user's scheduled (unpublished) posts.
+認証済みユーザーの予約（未公開）投稿を取得します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/scheduled/me HTTP/1.1
@@ -982,7 +982,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -1011,22 +1011,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Scheduled Post Object:**
+**予約投稿オブジェクト:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `string` | Scheduled post ID |
-| `content` | `string` | Post text content |
-| `scheduledFor` | `string` | ISO 8601 timestamp for when the post will be published |
-| `visibility` | `string` | `PUBLIC` or `CIRCLE` |
-| `viewerCircle` | `object \| null` | Circle object if visibility is `CIRCLE` |
-| `pollOptions` | `array \| null` | Array of `{text}` objects if the post includes a poll |
+| `id` | `string` | 予約投稿ID |
+| `content` | `string` | 投稿テキスト内容 |
+| `scheduledFor` | `string` | ISO 8601 投稿が公開される予定のタイムスタンプ |
+| `visibility` | `string` | `PUBLIC` または `CIRCLE` |
+| `viewerCircle` | `object \| null` | 公開範囲が `CIRCLE` の場合のサークルオブジェクト |
+| `pollOptions` | `array \| null` | 投稿に投票が含まれる場合の `{text}` オブジェクトの配列 |
 
 ### `DELETE /posts/scheduled/:id`
 
-Delete a scheduled post before it is published.
+公開前の予約投稿を削除します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /posts/scheduled/post_sched001 HTTP/1.1
@@ -1035,7 +1035,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {

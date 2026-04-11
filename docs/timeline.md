@@ -1,33 +1,33 @@
-# Timeline
+# タイムライン
 
-Complete reference for timeline feeds, recommended posts, list feeds, beta A/B testing, and feed configuration.
+タイムラインフィード、おすすめ投稿、リストフィード、ベータA/Bテスト、フィード設定の完全なリファレンスです。
 
 ---
 
-## Timeline Feed
+## タイムライン Feed
 
 ### `GET /posts/timeline`
 
-Retrieve the user's main timeline (posts from followed users).
+ユーザーのメインタイムライン（フォロー中ユーザーの投稿）を取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | `number` | `1` | Page number (1-indexed) |
 | `limit` | `number` | `12` | Results per page |
 | `mode` | `string` | `latest` | Feed sorting mode (see below) |
 
-**Mode Values:**
+**モード値:**
 
-| Mode | Description |
+| モード | 説明 |
 |------|-------------|
 | `latest` | Chronological order (newest first) |
 | `ranked` | Algorithmically ranked by engagement and relevance |
 | `trending` | Currently trending posts |
 | `following` | Posts from users you follow (alias for the default behavior) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/timeline?page=1&limit=12&mode=latest HTTP/1.1
@@ -35,7 +35,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -112,30 +112,30 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Recommended Feed
+## おすすめフィード
 
 ### `GET /posts/recommended`
 
-Retrieve algorithmically recommended posts. Supports multiple recommendation modes and beta A/B test variants.
+アルゴリズムによるおすすめ投稿を取得します。複数のおすすめモードとベータA/Bテストバリアントをサポートします。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `12` | Results per page |
 | `mode` | `string` | `algorithm` | Recommendation mode (see below) |
 | `page` | `number` | — | Page-based pagination (used with some modes) |
 | `cursor` | `string` | — | Cursor-based pagination (used with some modes) |
 
-**Mode Values:**
+**モード値:**
 
-| Mode | Description |
+| モード | 説明 |
 |------|-------------|
 | `algorithm` | Standard algorithmic recommendations |
 | `latest` | Latest posts from all users (not just following) |
 | `beta` | Beta recommendation algorithm with A/B test variants |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /posts/recommended?limit=12&mode=beta HTTP/1.1
@@ -143,7 +143,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -172,9 +172,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Response Fields:**
+**レスポンスフィールド:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `posts` | `Post[]` | Array of recommended post objects |
 | `pagination` | `object` | Pagination info (`page`, `limit`) |
@@ -182,7 +182,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Beta A/B Test Variants
+## ベータA/Bテストバリアント
 
 When `mode=beta`, users are assigned to one of 5 variants based on their user ID. The assignment formula is:
 
@@ -192,7 +192,7 @@ variant = ["A", "B", "C", "D", "E"][userId % 5]
 
 Each variant uses a different scoring algorithm to rank posts:
 
-| Variant | Strategy | Boost Score | Description |
+| バリアント | 戦略 | ブーストスコア | 説明 |
 |---------|----------|-------------|-------------|
 | **A** | Freshness priority | +22 | Heavily favors recent posts. Newer posts get a significant scoring boost. |
 | **B** | Quality | +8 | Favors posts with high engagement quality (like-to-view ratio, meaningful replies). |
@@ -207,14 +207,14 @@ Each variant uses a different scoring algorithm to rank posts:
 
 Submit user feedback on the beta recommendation algorithm.
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `preference` | `string` | Yes | Either `current` (prefers the standard algorithm) or `beta` (prefers the beta variant) |
 | `variant` | `string` | Yes | The beta variant the user was shown (A-E) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /posts/feedback/beta-survey HTTP/1.1
@@ -229,7 +229,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -239,19 +239,19 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## List Feed
+## リストフィード
 
 ### `GET /social/lists/:id/posts`
 
 Get posts from a specific user list. Returns a single page of results with no pagination support.
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `string` | The list ID |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /social/lists/list_abc123/posts HTTP/1.1
@@ -259,7 +259,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -281,22 +281,22 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-> **Note:** This endpoint returns a **single page** of results. There is no pagination; you receive all available posts in one response.
+> **注意:** This endpoint returns a **single page** of results. There is no pagination; you receive all available posts in one response.
 
 ---
 
-## Tab Structure
+## タブ構造
 
 The client organizes feeds into tabs with the following structure:
 
-### Following Tab
+### フォロー中タブ
 
 | Sub-tab | Endpoint | Mode |
 |---------|----------|------|
 | Latest | `GET /posts/timeline` | `mode=latest` |
 | Ranked | `GET /posts/timeline` | `mode=ranked` |
 
-### Recommended Tab
+### おすすめタブ
 
 | Sub-tab | Endpoint | Mode |
 |---------|----------|------|
@@ -304,7 +304,7 @@ The client organizes feeds into tabs with the following structure:
 | Latest | `GET /posts/recommended` | `mode=latest` |
 | Beta | `GET /posts/recommended` | `mode=beta` |
 
-### List Tab
+### リストタブ
 
 | Selection | Endpoint |
 |-----------|----------|
@@ -312,11 +312,11 @@ The client organizes feeds into tabs with the following structure:
 
 ---
 
-## React Query Configuration
+## React Query設定
 
 The official client uses React Query (TanStack Query) with the following settings for timeline feeds:
 
-| Setting | Value | Description |
+| 設定 | 値 | 説明 |
 |---------|-------|-------------|
 | `refetchInterval` | `30000` (30 seconds) | Automatically refetch the feed every 30 seconds |
 | `staleTime` | `10000` (10 seconds) | Data is considered fresh for 10 seconds after fetch |
@@ -324,11 +324,11 @@ The official client uses React Query (TanStack Query) with the following setting
 
 ---
 
-## Batch Views
+## バッチビュー
 
 The client automatically reports post views as the user scrolls through the timeline:
 
-| Setting | Value | Description |
+| 設定 | 値 | 説明 |
 |---------|-------|-------------|
 | Endpoint | `POST /posts/batch-views` | See [Posts > Batch Views](./posts.md#batch-views) |
 | Interval | Every **5 seconds** | Accumulated post IDs are flushed every 5s |

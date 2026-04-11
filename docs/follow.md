@@ -1,13 +1,13 @@
-# Follow API
+# フォロー API
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) is also supported and may be required for some operations.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> Cookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）もサポートされており、一部の操作で必要な場合があります。
 
 ---
 
-## Table of Contents
+## 目次
 
 - [Follow a User](#follow-a-user)
 - [Unfollow a User](#unfollow-a-user)
@@ -29,9 +29,9 @@
 
 ---
 
-## Follow a User
+## ユーザーをフォロー
 
-Follows the specified user. If the target user has a private account, this sends a follow request instead of immediately following.
+指定したユーザーをフォローします。対象ユーザーが非公開アカウントの場合、即座にフォローする代わりにフォローリクエストが送信されます。
 
 ```
 POST /api/follow/:userId
@@ -43,13 +43,13 @@ POST /api/follow/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the target user |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "フォローしました"}` | Successfully followed the user |
 | 200 | `{"message": "フォローリクエストを送信しました"}` | Target has a private account; a follow request was sent |
@@ -71,9 +71,9 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
-When the client sends a follow request, the UI should:
+クライアントがフォローリクエストを送信した時、UIは以下を行います:
 1. Immediately increment the target user's `followersCount` by 1
 2. Set `isFollowing` to `true` on the user relationship object
 3. Increment the authenticated user's `followingCount` by 1
@@ -82,9 +82,9 @@ When the client sends a follow request, the UI should:
 
 ---
 
-## Unfollow a User
+## フォロー解除
 
-Removes the follow relationship with the specified user.
+指定したユーザーとのフォロー関係を解除します。
 
 ```
 DELETE /api/follow/:userId
@@ -96,13 +96,13 @@ DELETE /api/follow/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the target user |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "フォローを解除しました"}` | Successfully unfollowed |
 | 400 | `{"error": "フォローしていません"}` | Not currently following this user |
@@ -122,7 +122,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Immediately decrement the target user's `followersCount` by 1
 2. Set `isFollowing` to `false`
@@ -131,9 +131,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Block a User
+## ユーザーをブロック
 
-Blocks the specified user. Blocking automatically unfollows both directions (you unfollow them, they unfollow you).
+指定したユーザーをブロックします。ブロックすると双方向のフォローが自動的に解除されます（あなたが相手のフォローを解除し、相手もあなたのフォローを解除）。
 
 ```
 POST /api/follow/block/:userId
@@ -145,13 +145,13 @@ POST /api/follow/block/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the user to block |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ユーザーをブロックしました"}` | Successfully blocked |
 | 400 | `{"error": "自分自身をブロックすることはできません"}` | Attempted to block yourself |
@@ -172,7 +172,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Set `isBlocked` to `true` on the user relationship
 2. Set `isFollowing` to `false` (auto-unfollow)
@@ -183,9 +183,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Unblock a User
+## ブロック解除
 
-Removes the block on the specified user. Does NOT restore any previous follow relationship.
+指定したユーザーのブロックを解除します。以前のフォロー関係は復元されません。
 
 ```
 DELETE /api/follow/block/:userId
@@ -197,13 +197,13 @@ DELETE /api/follow/block/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the user to unblock |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ブロックを解除しました"}` | Successfully unblocked |
 | 400 | `{"error": "ブロックしていません"}` | Not currently blocking this user |
@@ -223,7 +223,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Set `isBlocked` to `false`
 2. Remove the user from the local block list cache
@@ -232,9 +232,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Mute a User
+## ユーザーをミュート
 
-Mutes the specified user. Their posts will be hidden from your timeline but you remain following them (if you were).
+指定したユーザーをミュートします。そのユーザーの投稿はタイムラインから非表示になりますが、フォロー状態は維持されます。
 
 ```
 POST /api/follow/mute/:userId
@@ -246,13 +246,13 @@ POST /api/follow/mute/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the user to mute |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ユーザーをミュートしました"}` | Successfully muted |
 | 400 | `{"error": "自分自身をミュートすることはできません"}` | Attempted to mute yourself |
@@ -273,7 +273,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Set `isMuted` to `true` on the user relationship
 2. Add user to local mute list cache
@@ -282,9 +282,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Unmute a User
+## ミュート解除
 
-Removes the mute on the specified user.
+指定したユーザーのミュートを解除します。
 
 ```
 DELETE /api/follow/mute/:userId
@@ -296,13 +296,13 @@ DELETE /api/follow/mute/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the user to unmute |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ミュートを解除しました"}` | Successfully unmuted |
 | 400 | `{"error": "ミュートしていません"}` | Not currently muting this user |
@@ -322,7 +322,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Set `isMuted` to `false`
 2. Remove user from local mute list cache
@@ -331,9 +331,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Remove a Follower
+## フォロワーを削除
 
-Forcibly removes a user from your followers list. The target user will no longer follow you. They are NOT notified.
+フォロワーリストからユーザーを強制的に削除します。対象ユーザーはあなたをフォローしなくなります。通知はされません。
 
 ```
 DELETE /api/follow/follower/:userId
@@ -345,13 +345,13 @@ DELETE /api/follow/follower/:userId
 |-----------|--------|----------|--------------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the follower to remove |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "フォロワーを削除しました"}` | Successfully removed follower |
 | 400 | `{"error": "このユーザーはフォロワーではありません"}` | The specified user is not your follower |
@@ -371,7 +371,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Decrement your own `followersCount` by 1
 2. Set `isFollowedBy` to `false` for that user
@@ -380,9 +380,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Get Block List
+## ブロックリスト取得
 
-Returns all users you have blocked.
+ブロックしているすべてのユーザーを返します。
 
 ```
 GET /api/follow/block
@@ -390,7 +390,7 @@ GET /api/follow/block
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -406,9 +406,9 @@ None.
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `users` | array | Array of blocked user objects |
 | `users[].id` | number | User ID |
@@ -428,13 +428,13 @@ Authorization: Bearer eyJ...
 }
 ```
 
-> **Note:** The response returns a minimal user object with only `id`, `username`, and `displayName`. It does NOT include `avatarUrl`, `bio`, or other profile fields.
+> **注意:** The response returns a minimal user object with only `id`, `username`, and `displayName`. It does NOT include `avatarUrl`, `bio`, or other profile fields.
 
 ---
 
-## Get Mute List
+## ミュートリスト取得
 
-Returns all users you have muted.
+ミュートしているすべてのユーザーを返します。
 
 ```
 GET /api/follow/mute
@@ -442,7 +442,7 @@ GET /api/follow/mute
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -458,9 +458,9 @@ None.
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `users` | array | Array of muted user objects |
 | `users[].id` | number | User ID |
@@ -482,9 +482,9 @@ Authorization: Bearer eyJ...
 
 ---
 
-## Get Pending Follow Requests
+## 保留中のフォローリクエスト取得
 
-Returns follow requests that you have received and have not yet accepted or rejected. Only relevant if your account is set to private (`isPrivate: true`).
+受信してまだ承認/拒否していないフォローリクエストを返します。アカウントが非公開（`isPrivate: true`）の場合にのみ関係します。
 
 ```
 GET /api/follow/requests/pending
@@ -492,7 +492,7 @@ GET /api/follow/requests/pending
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -518,9 +518,9 @@ None.
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `requests` | array | Array of pending follow request objects |
 | `requests[].id` | number | The follow request ID (used for accept/reject) |
@@ -551,9 +551,9 @@ Authorization: Bearer eyJ...
 
 ---
 
-## Accept Follow Request
+## フォローリクエスト承認
 
-Accepts a pending follow request, allowing the sender to follow you.
+保留中のフォローリクエストを承認し、送信者があなたをフォローできるようにします。
 
 ```
 POST /api/follow/requests/:requestId/accept
@@ -565,13 +565,13 @@ POST /api/follow/requests/:requestId/accept
 |-----------|--------|----------|------------------------------------|
 | `requestId` | number | Yes   | The follow request ID from the pending requests list |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "フォローリクエストを承認しました"}` | Request accepted |
 | 400 | `{"error": "リクエストが見つかりません"}` | Invalid request ID |
@@ -591,7 +591,7 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Remove the request from the local pending requests list
 2. Increment your `followersCount` by 1
@@ -600,9 +600,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Reject Follow Request
+## フォローリクエスト拒否
 
-Rejects a pending follow request. The sender is NOT notified that their request was rejected (it silently disappears from their pending state).
+保留中のフォローリクエストを拒否します。送信者には拒否されたことは通知されません（保留状態から静かに消えます）。
 
 ```
 POST /api/follow/requests/:requestId/reject
@@ -614,13 +614,13 @@ POST /api/follow/requests/:requestId/reject
 |-----------|--------|----------|------------------------------------|
 | `requestId` | number | Yes   | The follow request ID from the pending requests list |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "フォローリクエストを拒否しました"}` | Request rejected |
 | 400 | `{"error": "リクエストが見つかりません"}` | Invalid request ID |
@@ -640,16 +640,16 @@ X-CSRF-Token: abc123
 }
 ```
 
-### Optimistic Update
+### 楽観的更新
 
 1. Remove the request from the local pending requests list
 2. On error, restore the request to the pending list
 
 ---
 
-## Enable Post Notifications
+## 投稿通知を有効化
 
-Enables push notifications for new posts from a specific user you follow.
+フォローしている特定のユーザーの新規投稿に対するプッシュ通知を有効にします。
 
 ```
 POST /api/follow/:userId/post-notify
@@ -661,13 +661,13 @@ POST /api/follow/:userId/post-notify
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the target user |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "投稿通知をオンにしました"}` | Post notifications enabled |
 | 400 | `{"error": "フォローしていません"}` | Not following this user |
@@ -688,9 +688,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Disable Post Notifications
+## 投稿通知を無効化
 
-Disables push notifications for new posts from a specific user.
+特定のユーザーの新規投稿に対するプッシュ通知を無効にします。
 
 ```
 DELETE /api/follow/:userId/post-notify
@@ -702,13 +702,13 @@ DELETE /api/follow/:userId/post-notify
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the target user |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "投稿通知をオフにしました"}` | Post notifications disabled |
 
@@ -728,9 +728,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Hide Rekarots
+## リカロットを非表示
 
-Hides rekarots (reposts) from a specific user in your timeline. You will still see their original posts, but not their rekarots.
+タイムラインで特定のユーザーのリカロット（リポスト）を非表示にします。オリジナルの投稿は表示されますが、リカロットは表示されません。
 
 ```
 POST /api/follow/hide-rekarots/:userId
@@ -742,13 +742,13 @@ POST /api/follow/hide-rekarots/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the target user |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "リカロットを非表示にしました"}` | Rekarots hidden |
 
@@ -768,9 +768,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Unhide Rekarots
+## リカロットの非表示を解除
 
-Restores rekarots from a specific user in your timeline.
+タイムラインで特定のユーザーのリカロットを再表示します。
 
 ```
 DELETE /api/follow/hide-rekarots/:userId
@@ -782,13 +782,13 @@ DELETE /api/follow/hide-rekarots/:userId
 |-----------|--------|----------|---------------------------------|
 | `userId`  | number | Yes      | The numeric ID of the target user |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "リカロットの非表示を解除しました"}` | Rekarots unhidden |
 
@@ -808,11 +808,11 @@ X-CSRF-Token: abc123
 
 ---
 
-## Optimistic Update Logic
+## 楽観的更新ロジック
 
-The Karotter frontend uses optimistic updates for all follow-related operations to provide instant UI feedback. The general pattern is:
+Karotterフロントエンドは、即座のUIフィードバックを提供するためにすべてのフォロー関連操作に楽観的更新を使用しています。一般的なパターンは以下の通りです:
 
-### Pattern
+### パターン
 
 ```
 1. User triggers action (click follow/block/mute button)
@@ -822,9 +822,9 @@ The Karotter frontend uses optimistic updates for all follow-related operations 
 5. On error: revert UI to previous state and show error toast
 ```
 
-### State Fields Affected
+### 影響を受ける状態フィールド
 
-| Action | Fields Changed |
+| アクション | 変更されるフィールド |
 |--------|---------------|
 | Follow | `isFollowing` -> `true`, target `followersCount` +1, self `followingCount` +1 |
 | Follow (private) | `hasPendingRequest` -> `true` |
@@ -841,9 +841,9 @@ The Karotter frontend uses optimistic updates for all follow-related operations 
 | Post Notify On | `postNotify` -> `true` for that user |
 | Post Notify Off | `postNotify` -> `false` for that user |
 
-### Rate Limiting
+### レート制限
 
-All follow endpoints share the default rate limit of **100 requests per 60 seconds**.
+すべてのフォローエンドポイントはデフォルトのレート制限（**60秒あたり100リクエスト**）を共有しています。
 
 ```
 ratelimit-policy: 100;w=60

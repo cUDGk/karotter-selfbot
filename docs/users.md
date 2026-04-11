@@ -1,22 +1,22 @@
-# Users
+# ユーザー
 
-Complete reference for user profiles, followers/following, profile editing, settings, and account management.
+ユーザープロフィール、フォロワー/フォロー中、プロフィール編集、設定、アカウント管理の完全なリファレンスです。
 
 ---
 
-## Get User Profile
+## ユーザープロフィール取得
 
 ### `GET /users/:usernameOrId`
 
-Retrieve a user's public profile by their username or user ID. Includes relationship data relative to the authenticated user.
+ユーザー名またはユーザーIDでユーザーの公開プロフィールを取得します。認証済みユーザーとの関係データを含みます。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `usernameOrId` | `string` | The user's username (e.g. `myusername`) or their unique ID (e.g. `clx1abc2d3ef...`) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /users/myusername HTTP/1.1
@@ -24,7 +24,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -80,9 +80,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**User Object Fields:**
+**ユーザーオブジェクトフィールド:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | `string` | Unique user identifier (CUID format) |
 | `username` | `string` | Unique username (1-15 chars, alphanumeric + underscore) |
@@ -110,9 +110,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 | `isBotAccount` | `boolean` | Whether the user has self-declared as a bot account |
 | `adminForceBot` | `boolean` | Whether an admin has forced the bot label |
 
-**Relationship Fields (relative to the authenticated viewer):**
+**関係フィールド（認証済み閲覧者との相対値）:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `isFollowing` | `boolean` | Whether the viewer follows this user |
 | `isFollowedBy` | `boolean` | Whether this user follows the viewer |
@@ -124,18 +124,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 | `mutualFollowersPreview` | `array` | Small preview array of mutual follower user objects |
 | `pinnedPost` | `Post \| null` | The user's pinned post, or `null` |
 
-**Profile Unavailable Reasons:**
+**プロフィール非表示理由:**
 
 When `profileUnavailableReason` is non-null, the profile content may be hidden from the viewer.
 
-| `profileUnavailableReason` | Description |
+| `profileUnavailableReason` | 説明 |
 |----------------------------|-------------|
 | `FILTERED` | Profile is filtered from the viewer's view |
 | `null` | Profile is fully visible |
 
 The `profileUnavailableDetails` array provides specific reasons:
 
-| Detail | Description |
+| 詳細 | 説明 |
 |--------|-------------|
 | `ADMIN_HIDDEN` | An admin has hidden this profile |
 | `PARODY_FILTERED` | The viewer has parody accounts filtered out |
@@ -145,32 +145,32 @@ The `profileUnavailableDetails` array provides specific reasons:
 
 ---
 
-## User Posts, Replies, Media, Likes
+## ユーザーの投稿、リプライ、メディア、いいね
 
 ### `GET /users/:id/posts`
 
-Get a user's original posts (excluding replies).
+ユーザーのオリジナル投稿（リプライを除く）を取得します。
 
 ### `GET /users/:id/replies`
 
-Get a user's replies.
+ユーザーのリプライを取得します。
 
 ### `GET /users/:id/media`
 
-Get a user's media posts (posts with images or videos).
+ユーザーのメディア投稿（画像や動画を含む投稿）を取得します。
 
 ### `GET /users/:id/likes`
 
-Get posts the user has liked (only available if the user has `showLikedPosts` enabled).
+ユーザーがいいねした投稿を取得します（ユーザーが `showLikedPosts` を有効にしている場合のみ利用可能）。
 
-**Query Parameters (all four endpoints):**
+**クエリパラメータ（4つのエンドポイント共通）:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | `number` | `1` | Page number (1-indexed) |
 | `limit` | `number` | `20` | Results per page |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /users/clx1abc2d3ef4gh5ij6kl7mn8/posts?page=1&limit=20 HTTP/1.1
@@ -178,7 +178,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -207,24 +207,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Followers & Following
+## フォロワー & フォロー中
 
 ### `GET /users/:id/followers`
 
-Get a user's followers list.
+ユーザーのフォロワーリストを取得します。
 
 ### `GET /users/:id/following`
 
-Get the list of users this user follows.
+このユーザーがフォローしているユーザーの一覧を取得します。
 
-**Query Parameters (both endpoints):**
+**クエリパラメータ（両エンドポイント共通）:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `20` | Results per page |
 | `cursor` | `string` | — | Cursor for pagination (from previous response) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /users/clx1abc2d3ef4gh5ij6kl7mn8/followers?limit=20 HTTP/1.1
@@ -232,7 +232,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -262,9 +262,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 > **IMPORTANT: Snake case fields.** The follower/following user objects use **snake_case** for relationship fields (`is_following`, `is_followed_by`, `follow_request_sent`) instead of the camelCase used elsewhere in the API. This is an inconsistency in the server response.
 
-**Follower/Following User Object Fields:**
+**フォロワー/フォロー中ユーザーオブジェクトフィールド:**
 
-| Field | Type | Case | Description |
+| フィールド | 型 | ケース | 説明 |
 |-------|------|------|-------------|
 | `id` | `string` | camelCase | User ID |
 | `username` | `string` | camelCase | Username |
@@ -281,7 +281,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 | `isBotAccount` | `boolean` | camelCase | Bot account flag |
 | `adminForceBot` | `boolean` | camelCase | Admin-forced bot label |
 
-**Pagination:**
+**ページネーション:**
 
 Use cursor-based pagination. Pass the `nextCursor` value from the response as the `cursor` query parameter in the next request. When `nextCursor` is `null` or absent, there are no more results.
 
@@ -289,14 +289,14 @@ Use cursor-based pagination. Pass the `nextCursor` value from the response as th
 
 Get users who follow both you and the specified user ("mutual followers" / "知り合いのフォロワー").
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `20` | Results per page |
 | `cursor` | `string` | — | Cursor for pagination |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /users/clx1abc2d3ef4gh5ij6kl7mn8/mutual-followers?limit=20 HTTP/1.1
@@ -304,7 +304,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -329,15 +329,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## Edit Profile
+## プロフィール編集
 
 ### `PATCH /users/profile`
 
-Update the authenticated user's profile fields. All fields are optional; only include fields you want to change.
+認証済みユーザーのプロフィールフィールドを更新します。すべてのフィールドは任意で、変更したいフィールドのみ含めてください。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Constraints | Description |
+| フィールド | 型 | 制約 | 説明 |
 |-------|------|-------------|-------------|
 | `displayName` | `string` | 1-40 Unicode characters | Display name |
 | `bio` | `string` | 0-200 characters | Biography text |
@@ -348,7 +348,7 @@ Update the authenticated user's profile fields. All fields are optional; only in
 | `birthdayBalloonsEnabled` | `boolean` | — | Enable birthday balloon animation |
 | `gender` | `string` | `MALE`, `FEMALE`, or `OTHER` | Gender |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /users/profile HTTP/1.1
@@ -365,7 +365,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -380,7 +380,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-### Text Sanitization
+### テキストサニタイゼーション
 
 All text fields undergo server-side sanitization:
 
@@ -390,20 +390,20 @@ All text fields undergo server-side sanitization:
 
 ---
 
-## Update Online Status
+## オンラインステータス更新
 
 ### `PATCH /users/status`
 
-Set the user's online status and optional status message.
+ユーザーのオンラインステータスとオプションのステータスメッセージを設定します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Constraints | Description |
+| フィールド | 型 | 制約 | 説明 |
 |-------|------|-------------|-------------|
 | `status` | `string` | `ONLINE`, `OFFLINE`, `DND` | Online status |
 | `statusMessage` | `string` | Max 15 characters | Custom status text |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /users/status HTTP/1.1
@@ -418,7 +418,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -429,19 +429,19 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Profile Images
+## プロフィール画像
 
 ### `POST /profile/avatar`
 
-Upload a new avatar image.
+新しいアバター画像をアップロードします。
 
-**Request:** `multipart/form-data`
+**リクエスト:** `multipart/form-data`
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `avatar` | `File` | Image file (JPEG, PNG, WebP, GIF) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /profile/avatar HTTP/1.1
@@ -458,7 +458,7 @@ Content-Type: image/png
 ------FormBoundary--
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -468,15 +468,15 @@ Content-Type: image/png
 
 ### `POST /profile/header`
 
-Upload a new header/banner image.
+新しいヘッダー/バナー画像をアップロードします。
 
-**Request:** `multipart/form-data`
+**リクエスト:** `multipart/form-data`
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `header` | `File` | Image file (JPEG, PNG, WebP, GIF) |
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -486,20 +486,20 @@ Upload a new header/banner image.
 
 ---
 
-## Change Password
+## パスワード変更
 
 ### `PATCH /users/password`
 
-Change the authenticated user's password.
+認証済みユーザーのパスワードを変更します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `currentPassword` | `string` | Yes | Current password for verification |
 | `newPassword` | `string` | Yes | New password (must pass password policy) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /users/password HTTP/1.1
@@ -514,7 +514,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -522,28 +522,28 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
 | `400` | `WEAK_PASSWORD` | New password fails password policy |
 | `401` | `INVALID_PASSWORD` | Current password is incorrect |
 
 ---
 
-## Change Username
+## ユーザー名変更
 
 ### `PATCH /users/username`
 
-Change the authenticated user's username. Subject to a quota system.
+認証済みユーザーのユーザー名を変更します。クォータシステムの対象です。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Constraints | Description |
+| フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
 | `username` | `string` | Yes | `/^[a-zA-Z0-9_]{1,15}$/` | New username |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /users/username HTTP/1.1
@@ -557,7 +557,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -568,9 +568,9 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
 | `400` | `INVALID_USERNAME` | Does not match regex pattern |
 | `409` | `USERNAME_TAKEN` | Username is already in use |
@@ -578,9 +578,9 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `GET /users/username/quota`
 
-Check how many username changes remain in the current 14-day window.
+現在の14日間ウィンドウで残りのユーザー名変更回数を確認します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /users/username/quota HTTP/1.1
@@ -588,7 +588,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -599,15 +599,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 
 ---
 
-## User Settings
+## ユーザー設定
 
 ### `PATCH /users/settings`
 
-Update user settings. This is a partial update; only include the fields you want to change.
+ユーザー設定を更新します。部分更新のため、変更したいフィールドのみ含めてください。
 
-**Request Body (all fields optional):**
+**リクエストボディ（すべてのフィールド任意）:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `isPrivate` | `boolean` | Make account private (require follow approval) |
 | `showLikedPosts` | `boolean` | Show liked posts tab on profile |
@@ -632,7 +632,7 @@ Update user settings. This is a partial update; only include the fields you want
 | `showBirthday` | `boolean` | Show birthday on profile |
 | `mutedKeywords` | `string[]` | Array of muted keyword strings |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /users/settings HTTP/1.1
@@ -650,7 +650,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -681,23 +681,23 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-> **Note:** When `showReactions` is set to `false`, the server automatically sets `notifyReactions` to `false` as well, regardless of what value was sent for `notifyReactions`.
+> **注意:** When `showReactions` is set to `false`, the server automatically sets `notifyReactions` to `false` as well, regardless of what value was sent for `notifyReactions`.
 
 ---
 
-## Delete Account
+## アカウント削除
 
 ### `DELETE /users/account`
 
-Permanently delete the authenticated user's account. This action is irreversible.
+認証済みユーザーのアカウントを完全に削除します。この操作は元に戻せません。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `password` | `string` | Yes | Current password for confirmation |
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /users/account HTTP/1.1
@@ -711,7 +711,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -721,19 +721,19 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Recommended Users
+## おすすめユーザー
 
 ### `GET /users/recommended`
 
-Get a list of recommended users to follow.
+フォローするおすすめユーザーの一覧を取得します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `3` | Number of recommendations to return |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /users/recommended?limit=3 HTTP/1.1
@@ -741,7 +741,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {

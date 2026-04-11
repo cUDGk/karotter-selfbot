@@ -1,24 +1,24 @@
-# Admin API
+# 管理 API
 
-Complete reference for the Karotter admin panel API. Access requires `user.isAdmin === true`.
+Karotter管理パネルAPIの完全なリファレンスです。アクセスには `user.isAdmin === true` が必要です。
 
 ---
 
-## Overview
+## 概要
 
-### Frontend Access
+### フロントエンドアクセス
 
-The admin panel is accessible at an obfuscated URL:
+管理パネルは難読化されたURLでアクセス可能です:
 
 ```
 https://karotter.com/control-room-x9k2
 ```
 
-This URL is not linked anywhere in the public UI. It is only known to administrators.
+このURLは公開UIのどこにもリンクされていません。管理者のみが知っています。
 
-### API Prefix
+### APIプレフィックス
 
-All admin API endpoints are prefixed with:
+すべての管理APIエンドポイントには以下のプレフィックスが付きます:
 
 ```
 /api/admin
@@ -26,7 +26,7 @@ All admin API endpoints are prefixed with:
 
 For example: `https://api.karotter.com/api/admin/analytics`
 
-### Authentication
+### 認証
 
 Admin endpoints require:
 
@@ -34,15 +34,15 @@ Admin endpoints require:
 2. The authenticated user must have `isAdmin === true`
 3. Standard `x-csrf-token` header for mutating requests
 
-Non-admin users receive `403 Forbidden` on all admin endpoints.
+非管理者ユーザーはすべての管理エンドポイントで `403 Forbidden` を受け取ります。
 
 ---
 
-## Admin Panel Tabs
+## 管理パネルタブ
 
 The admin panel frontend is organized into 8 tabs:
 
-| Tab | Route | Description |
+| タブ | ルート | 説明 |
 |-----|-------|-------------|
 | Dashboard | `/control-room-x9k2` | Analytics overview |
 | Users | `/control-room-x9k2/users` | User management |
@@ -55,13 +55,13 @@ The admin panel frontend is organized into 8 tabs:
 
 ---
 
-## Dashboard
+## ダッシュボード
 
 ### `GET /admin/analytics`
 
-Retrieve platform-wide analytics summary.
+プラットフォーム全体のアナリティクスサマリーを取得します。
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -72,7 +72,7 @@ Retrieve platform-wide analytics summary.
 }
 ```
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `totalUsers` | `number` | Total registered users on the platform |
 | `totalPosts` | `number` | Total posts ever created |
@@ -81,27 +81,27 @@ Retrieve platform-wide analytics summary.
 
 ---
 
-## User Management
+## ユーザー管理
 
 ### `GET /admin/users`
 
-List users with search and cursor-based pagination.
+検索とカーソルベースページネーションでユーザーを一覧表示します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `30` | Number of users per page (max 100) |
 | `search` | `string` | — | Search by username (prefix with `@` to search by exact username) |
 | `cursor` | `string` | — | Pagination cursor from previous response |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /admin/users?limit=30&search=@testuser HTTP/1.1
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -135,9 +135,9 @@ GET /admin/users?limit=30&search=@testuser HTTP/1.1
 }
 ```
 
-**User Object Fields (Admin View):**
+**ユーザーオブジェクトフィールド（管理者ビュー）:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | `number` | User ID |
 | `username` | `string` | Username |
@@ -163,21 +163,21 @@ GET /admin/users?limit=30&search=@testuser HTTP/1.1
 
 ### `PATCH /admin/users/:id/ban`
 
-Ban a user account.
+ユーザーアカウントをBANします。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | User ID to ban |
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `reason` | `string` | Yes | Reason for the ban (stored for audit) |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/users/12345/ban HTTP/1.1
@@ -190,7 +190,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -202,17 +202,17 @@ x-csrf-token: <csrf-token>
 
 ### `PATCH /admin/users/:id/unban`
 
-Unban a previously banned user account.
+以前にBANされたユーザーアカウントのBANを解除します。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | User ID to unban |
 
-**Request Body:** Empty object `{}`
+**リクエストボディ:** Empty object `{}`
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/users/12345/unban HTTP/1.1
@@ -223,7 +223,7 @@ x-csrf-token: <csrf-token>
 {}
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -235,17 +235,17 @@ x-csrf-token: <csrf-token>
 
 ### `PATCH /admin/users/:id/account`
 
-Edit core account fields for a user.
+ユーザーのコアアカウントフィールドを編集します。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | User ID |
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `username` | `string` | No | New username |
 | `displayName` | `string` | No | New display name |
@@ -253,7 +253,7 @@ Edit core account fields for a user.
 | `password` | `string` | No | New password (plain text, server hashes it) |
 | `emailVerified` | `boolean` | No | Override email verification status |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/users/12345/account HTTP/1.1
@@ -269,7 +269,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -278,7 +278,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Notes:**
+**注意:**
 - All fields are optional; only provided fields are updated.
 - Changing the `password` invalidates all existing sessions for that user.
 
@@ -286,23 +286,23 @@ x-csrf-token: <csrf-token>
 
 ### `PATCH /admin/users/:id/official-mark`
 
-Set or update the official verification marks for a user.
+ユーザーの公式認証マークを設定または更新します。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | User ID |
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `officialMark` | `string[]` | Yes | Array of mark color codes. Pass `[]` to remove all marks. |
 
 **Important:** The `officialMark` field is an **array**. A user can have multiple marks simultaneously (e.g., `["BLUE", "PURPLE"]` for a verified admin).
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/users/12345/official-mark HTTP/1.1
@@ -315,7 +315,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -324,7 +324,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Available Mark Colors:**
+**利用可能なマークカラー:**
 
 | Code | Hex | Meaning |
 |------|-----|---------|
@@ -341,17 +341,17 @@ x-csrf-token: <csrf-token>
 
 ### `PATCH /admin/users/:id/flags`
 
-Toggle moderation flags on a user account.
+ユーザーアカウントのモデレーションフラグを切り替えます。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | User ID |
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `isParodyAccount` | `boolean` | No | Self-declared parody flag |
 | `adminForceHidden` | `boolean` | No | Force-hide the user's profile and posts |
@@ -363,7 +363,7 @@ Toggle moderation flags on a user account.
 | `showR18Content` | `boolean` | No | Override user's R18 content preference |
 | `hideProfileFromMinors` | `boolean` | No | Force hide profile from minor accounts |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/users/12345/flags HTTP/1.1
@@ -377,7 +377,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -389,15 +389,15 @@ x-csrf-token: <csrf-token>
 
 ### `DELETE /admin/users/:id`
 
-Permanently delete a user account and all associated data.
+ユーザーアカウントと関連するすべてのデータを完全に削除します。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | User ID to delete |
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /admin/users/12345 HTTP/1.1
@@ -405,7 +405,7 @@ Authorization: Bearer <admin-token>
 x-csrf-token: <csrf-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -417,27 +417,27 @@ x-csrf-token: <csrf-token>
 
 ---
 
-## Post Management
+## 投稿管理
 
 ### `GET /admin/posts`
 
-List posts with search and cursor-based pagination.
+検索とカーソルベースページネーションで投稿を一覧表示します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `30` | Number of posts per page |
 | `search` | `string` | — | Search by post content |
 | `cursor` | `string` | — | Pagination cursor |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /admin/posts?limit=30&search=keyword HTTP/1.1
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -466,9 +466,9 @@ GET /admin/posts?limit=30&search=keyword HTTP/1.1
 }
 ```
 
-**Post Object Fields (Admin View):**
+**投稿オブジェクトフィールド（管理者ビュー）:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | `number` | Post ID |
 | `content` | `string` | Post text content |
@@ -487,22 +487,22 @@ GET /admin/posts?limit=30&search=keyword HTTP/1.1
 
 ### `PATCH /admin/posts/:id/flags`
 
-Toggle moderation flags on a post.
+投稿のモデレーションフラグを切り替えます。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | Post ID |
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `adminForceR18` | `boolean` | No | Force the post to be marked as R18/NSFW |
 | `adminForceHidden` | `boolean` | No | Force-hide the post from all timelines |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/posts/98765/flags HTTP/1.1
@@ -516,7 +516,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -528,15 +528,15 @@ x-csrf-token: <csrf-token>
 
 ### `DELETE /admin/posts/:id`
 
-Permanently delete a post.
+投稿を完全に削除します。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | Post ID to delete |
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /admin/posts/98765 HTTP/1.1
@@ -544,7 +544,7 @@ Authorization: Bearer <admin-token>
 x-csrf-token: <csrf-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -554,20 +554,20 @@ x-csrf-token: <csrf-token>
 
 ---
 
-## Story Management
+## ストーリー管理
 
 ### `GET /admin/stories`
 
-List stories for moderation.
+モデレーション用のストーリーを一覧表示します。
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `30` | Number of stories per page |
 | `cursor` | `string` | — | Pagination cursor |
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -600,22 +600,22 @@ List stories for moderation.
 
 ### `PATCH /admin/stories/:id/flags`
 
-Toggle moderation flags on a story.
+ストーリーのモデレーションフラグを切り替えます。
 
-**Path Parameters:**
+**パスパラメータ:**
 
-| Parameter | Type | Description |
+| Parameter | タイプ | 説明 |
 |-----------|------|-------------|
 | `id` | `number` | Story ID |
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `adminForceR18` | `boolean` | No | Force-flag the story as R18 |
 | `adminForceHidden` | `boolean` | No | Force-hide the story |
 
-**Request:**
+**リクエスト:**
 
 ```http
 PATCH /admin/stories/5678/flags HTTP/1.1
@@ -628,7 +628,7 @@ x-csrf-token: <csrf-token>
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -640,9 +640,9 @@ x-csrf-token: <csrf-token>
 
 ### `DELETE /admin/stories/:id`
 
-Permanently delete a story.
+ストーリーを完全に削除します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /admin/stories/5678 HTTP/1.1
@@ -650,7 +650,7 @@ Authorization: Bearer <admin-token>
 x-csrf-token: <csrf-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -660,29 +660,29 @@ x-csrf-token: <csrf-token>
 
 ---
 
-## Recommendation Testing
+## おすすめアルゴリズムテスト
 
 ### `GET /admin/test-recommend`
 
-Test the recommendation algorithm with full scoring details. This endpoint has an extended timeout due to heavy computation.
+完全なスコアリング詳細でおすすめアルゴリズムをテストします。このエンドポイントは重い計算のためタイムアウトが延長されています。
 
-**Timeout:** 60 seconds
+**タイムアウト:** 60 seconds
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `userId` | `number` | — | Optional: test recommendations for a specific user ID |
 | `limit` | `number` | `30` | Number of recommended posts to return |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /admin/test-recommend?userId=12345&limit=30 HTTP/1.1
 Authorization: Bearer <admin-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -719,9 +719,9 @@ Authorization: Bearer <admin-token>
 }
 ```
 
-**Score Fields:**
+**スコアフィールド:**
 
-| Score | Range | Description |
+| スコア | 範囲 | 説明 |
 |-------|-------|-------------|
 | `engagement` | 0.0 - 1.0 | How much engagement the post has received (likes, reposts, replies) |
 | `freshness` | 0.0 - 1.0 | Time decay score (newer = higher) |
@@ -734,28 +734,28 @@ Authorization: Bearer <admin-token>
 
 ---
 
-## Trending Testing
+## トレンドアルゴリズムテスト
 
 ### `GET /admin/test-trending`
 
-Test the trending algorithm with detailed window statistics.
+詳細なウィンドウ統計でトレンドアルゴリズムをテストします。
 
-**Timeout:** 60 seconds
+**タイムアウト:** 60 seconds
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `30` | Number of trending posts to return |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /admin/test-trending?limit=30 HTTP/1.1
 Authorization: Bearer <admin-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -796,9 +796,9 @@ Authorization: Bearer <admin-token>
 }
 ```
 
-**Window Stats Fields:**
+**ウィンドウ統計フィールド:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `likes1h` | `number` | Likes received in the last 1 hour |
 | `likes6h` | `number` | Likes received in the last 6 hours |
@@ -815,28 +815,28 @@ Authorization: Bearer <admin-token>
 
 ---
 
-## Survey Results
+## アンケート結果
 
 ### `GET /admin/survey-results`
 
-Retrieve aggregated survey/poll results across the platform.
+プラットフォーム全体の集計されたアンケート/投票結果を取得します。
 
-**Timeout:** 30 seconds
+**タイムアウト:** 30 seconds
 
-**Query Parameters:**
+**クエリパラメータ:**
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `limit` | `number` | `10` | Number of surveys to return |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /admin/survey-results?limit=10 HTTP/1.1
 Authorization: Bearer <admin-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -875,20 +875,20 @@ Authorization: Bearer <admin-token>
 
 ---
 
-## Beta Experiment Results
+## ベータ実験結果
 
 ### `GET /admin/beta-experiment`
 
-Retrieve A/B testing experiment results with per-variant statistics.
+バリアント別統計付きのA/Bテスト実験結果を取得します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /admin/beta-experiment HTTP/1.1
 Authorization: Bearer <admin-token>
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -947,9 +947,9 @@ Authorization: Bearer <admin-token>
 }
 ```
 
-**Variant Object Fields:**
+**バリアントオブジェクトフィールド:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `variant` | `string` | Variant identifier: `"A"`, `"B"`, `"C"`, `"D"`, or `"E"` |
 | `label` | `string` | Human-readable description of the variant |
@@ -960,7 +960,7 @@ Authorization: Bearer <admin-token>
 
 ---
 
-## Official Mark Color Reference
+## 公式マークカラーリファレンス
 
 For quick reference, the complete official mark color palette:
 

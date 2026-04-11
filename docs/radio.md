@@ -1,13 +1,13 @@
-# Radio API (Spaces / Live Audio)
+# ラジオ API（スペース / ライブオーディオ）
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) may be required for some operations.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> 一部の操作ではCookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）が必要な場合があります。
 
 ---
 
-## Table of Contents
+## 目次
 
 - [Overview](#overview)
 - [Create a Space](#create-a-space)
@@ -31,25 +31,25 @@
 
 ---
 
-## Overview
+## 概要
 
-Radio (Spaces) is Karotter's live audio feature, similar to Twitter/X Spaces or Clubhouse. Users can create live audio rooms, invite speakers, and interact through real-time voice and text chat.
+ラジオ（スペース）はKarotterのライブオーディオ機能で、Twitter/XスペースやClubhouseに似ています。ユーザーはライブ��ーディオルームを作成し、スピーカーを招待し、リアルタイムの音声とテキストチャットで交流できます。
 
-Audio is transmitted via WebRTC. The server provides TURN/STUN server configurations via the ICE servers endpoint.
+音声はWebRTCを通じて送信されます。サーバーはICEサーバーエンドポイントを通じてTURN/STUNサーバー設定を提供します。
 
 ---
 
-## Create a Space
+## スペースを作成
 
-Creates a new live audio space. The creator automatically becomes the HOST.
+新しいライブオーディオスペースを作成します。作成者は自動的にHOSTになります。
 
 ```
 POST /api/radio
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Constraints | Description |
+| フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
 | `title` | string | Yes | 1-100 characters | The title of the space |
 
@@ -104,9 +104,9 @@ Content-Type: application/json
 
 ---
 
-## Get Active Spaces
+## アクティブなスペース���得
 
-Returns all currently active (live) spaces.
+現在アクティブ（ライブ中）のすべてのスペースを返します。
 
 ```
 GET /api/radio/active
@@ -114,7 +114,7 @@ GET /api/radio/active
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -140,9 +140,9 @@ None.
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `spaces` | Space[] | Array of active space objects |
 | `spaces[].id` | number | Space ID |
@@ -156,9 +156,9 @@ None.
 
 ---
 
-## Get ICE Servers
+## ICEサーバー取得
 
-Returns WebRTC ICE (STUN/TURN) server configurations for establishing audio connections.
+オーディオ接続を確立するためのWebRTC ICE（STUN/TURN）サーバー設定を返します。
 
 ```
 GET /api/radio/ice-servers
@@ -166,7 +166,7 @@ GET /api/radio/ice-servers
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -185,13 +185,13 @@ None.
 }
 ```
 
-> **Note:** TURN credentials are time-limited. Fetch fresh ICE servers before each connection attempt.
+> **注意:** TURN credentials are time-limited. Fetch fresh ICE servers before each connection attempt.
 
 ---
 
-## Get Space Details
+## スペース詳細取得
 
-Returns detailed information about a specific space, including all participants.
+全参加者を含む特定のスペースの詳細情報を返します。
 
 ```
 GET /api/radio/:id
@@ -199,7 +199,7 @@ GET /api/radio/:id
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
@@ -246,16 +246,16 @@ GET /api/radio/:id
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"space": {...}}` | Space details |
 | 404 | `{"error": "スペースが見つかりません"}` | Space not found |
 
 ---
 
-## Join a Space
+## スペースに参加
 
-Joins an active space as a listener.
+アクティブなスペースにリスナーとして参加します。
 
 ```
 POST /api/radio/:id/join
@@ -263,17 +263,17 @@ POST /api/radio/:id/join
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スペースに参加しました", "space": {...}}` | Joined successfully |
 | 400 | `{"error": "既に参加しています"}` | Already in the space |
@@ -290,9 +290,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Leave a Space
+## スペースを退出
 
-Leaves a space you are currently in.
+現在参加しているスペースを退出します。
 
 ```
 POST /api/radio/:id/leave
@@ -300,13 +300,13 @@ POST /api/radio/:id/leave
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Response
 
@@ -316,13 +316,13 @@ None.
 }
 ```
 
-> **Note:** If the HOST leaves without ending the space, host privileges may transfer to another speaker. To properly close a space, use the [End a Space](#end-a-space) endpoint.
+> **注意:** If the HOST leaves without ending the space, host privileges may transfer to another speaker. To properly close a space, use the [End a Space](#end-a-space) endpoint.
 
 ---
 
-## End a Space
+## スペースを終了
 
-Ends a space permanently. Only the HOST can end a space. All participants are disconnected.
+スペースを完全に終了します。HOSTのみスペースを終了できます。すべての参加者が切断されます。
 
 ```
 POST /api/radio/:id/end
@@ -330,26 +330,26 @@ POST /api/radio/:id/end
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スペースを終了しました"}` | Space ended |
 | 403 | `{"error": "権限がありません"}` | Not the host |
 
 ---
 
-## Get Chat Messages
+## チャットメッセージ取得
 
-Returns text chat messages from a space.
+スペースのテキストチャットメッセージを返します。
 
 ```
 GET /api/radio/:id/messages
@@ -357,13 +357,13 @@ GET /api/radio/:id/messages
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
 ### Query Parameters
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number |
 | `limit` | number | 50 | Messages per page |
@@ -391,9 +391,9 @@ GET /api/radio/:id/messages
 
 ---
 
-## Send Chat Message
+## チャットメッセージ送信
 
-Sends a text chat message in a space. Available to all participants (hosts, speakers, and listeners).
+スペースでテキストチャットメッセージを送信します。すべての参加者（ホスト、スピーカー、リスナー）が利用可能です。
 
 ```
 POST /api/radio/:id/messages
@@ -401,13 +401,13 @@ POST /api/radio/:id/messages
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `content` | string | Yes | Message text |
 
@@ -439,9 +439,9 @@ Content-Type: application/json
 
 ---
 
-## Update Space Settings
+## スペース設定更新
 
-Updates the settings of a space. Only the HOST can modify settings.
+スペースの設定を更新します。HOSTのみ設定を変更できます。
 
 ```
 PATCH /api/radio/:id/settings
@@ -449,13 +449,13 @@ PATCH /api/radio/:id/settings
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `title` | string | No | New title (1-100 characters) |
 | `mode` | string | No | Access mode: `"public"`, `"followers"`, `"invite"` |
@@ -478,16 +478,16 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "設定を更新しました", "space": {...}}` | Settings updated |
 | 403 | `{"error": "権限がありません"}` | Not the host |
 
 ---
 
-## Change Participant Role
+## 参加者ロール変更
 
-Changes a participant's role in the space. Only the HOST can change roles.
+スペースでの参加者のロールを変更します。HOSTのみロールを変更できます。
 
 ```
 PATCH /api/radio/:id/participants/:userId/role
@@ -495,14 +495,14 @@ PATCH /api/radio/:id/participants/:userId/role
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 | `userId` | number | Yes | Target participant's user ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `role` | string | Yes | New role: `"HOST"`, `"SPEAKER"`, or `"LISTENER"` |
 
@@ -521,19 +521,19 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ロールを変更しました"}` | Role changed |
 | 403 | `{"error": "権限がありません"}` | Not the host |
 | 404 | `{"error": "参加者が見つかりません"}` | User is not in the space |
 
-> **Note:** Promoting someone to HOST transfers host privileges. The original host becomes a SPEAKER.
+> **注意:** Promoting someone to HOST transfers host privileges. The original host becomes a SPEAKER.
 
 ---
 
-## Mute a Participant
+## 参加者をミュート
 
-Mutes or unmutes a participant. The HOST can mute anyone. Participants can also self-mute.
+参加者をミュート/ミュート解除します。HOSTは誰でもミュートできます。参加者は自分自身をミュートすることもできます。
 
 ```
 PATCH /api/radio/:id/participants/:userId/mute
@@ -541,14 +541,14 @@ PATCH /api/radio/:id/participants/:userId/mute
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 | `userId` | number | Yes | Target participant's user ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `isMuted` | boolean | Yes | `true` to mute, `false` to unmute |
 
@@ -567,16 +567,16 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ミュートを変更しました"}` | Mute state changed |
 | 403 | `{"error": "権限がありません"}` | Not the host (and not self-muting) |
 
 ---
 
-## Invite to Speak
+## スピーカー招待
 
-Sends a speaker invitation to a listener. Only the HOST can invite speakers.
+リスナーにスピーカー招待を送信します。HOSTのみスピーカーを招待できます。
 
 ```
 POST /api/radio/:id/participants/:userId/invite-speaker
@@ -584,18 +584,18 @@ POST /api/radio/:id/participants/:userId/invite-speaker
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 | `userId` | number | Yes | Target listener's user ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スピーカー招待を送信しました"}` | Invitation sent |
 | 400 | `{"error": "既にスピーカーです"}` | User is already a speaker |
@@ -603,9 +603,9 @@ None.
 
 ---
 
-## Cancel Speaker Invite
+## スピーカー招待取消
 
-Cancels a previously sent speaker invitation.
+以前に送信したスピーカー招待をキャンセルします。
 
 ```
 DELETE /api/radio/:id/participants/:userId/invite-speaker
@@ -613,27 +613,27 @@ DELETE /api/radio/:id/participants/:userId/invite-speaker
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 | `userId` | number | Yes | Target user ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スピーカー招待を取り消しました"}` | Invitation cancelled |
 | 403 | `{"error": "権限がありません"}` | Not the host |
 
 ---
 
-## Request to Speak
+## スピーカーリクエスト
 
-Sends a request to the host asking to be promoted to speaker. Available to listeners.
+スピーカーへの昇格をホストにリクエストします。リスナーが利用可能です。
 
 ```
 POST /api/radio/:id/request-speaker
@@ -641,26 +641,26 @@ POST /api/radio/:id/request-speaker
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スピーカーリクエストを送信しました"}` | Request sent |
 | 400 | `{"error": "既にスピーカーです"}` | Already a speaker |
 
 ---
 
-## Accept Speaker Invite
+## スピーカー招待承諾
 
-Accepts a speaker invitation that was sent to you by the host.
+ホストから送信されたスピーカー招待を承諾します。
 
 ```
 POST /api/radio/:id/accept-speaker-invite
@@ -668,36 +668,36 @@ POST /api/radio/:id/accept-speaker-invite
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Space ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スピーカー招待を承諾しました"}` | Accepted, you are now a SPEAKER |
 | 400 | `{"error": "招待が見つかりません"}` | No pending speaker invite |
 
 ---
 
-## Space Modes and Policies
+## スペースモードとポリシー
 
 ### Access Modes (`mode`)
 
-| Mode | Description |
+| モード | 説明 |
 |------|-------------|
 | `public` | Anyone can join and listen |
 | `followers` | Only people who follow the host can join |
 | `invite` | Only explicitly invited users can join |
 
-### Speaker Policies (`speakerPolicy`)
+### スピーカーポリシー (`speakerPolicy`)
 
-| Policy | Description |
+| ポリシー | 説明 |
 |--------|-------------|
 | `everyone` | All participants can request to speak and are auto-approved |
 | `following` | Only users the host follows can request to speak |
@@ -716,15 +716,15 @@ None.
 
 ---
 
-## Participant Roles
+## 参加者ロール
 
-| Role | Permissions |
+| ロール | 権限 |
 |------|------------|
 | `HOST` | Full control: end space, change settings, manage roles, mute anyone, invite speakers |
 | `SPEAKER` | Can speak (audio), send chat messages, self-mute |
 | `LISTENER` | Can listen to audio, send chat messages, request to speak |
 
-### Role Hierarchy
+### ロール階層
 
 ```
 HOST > SPEAKER > LISTENER
@@ -736,9 +736,9 @@ HOST > SPEAKER > LISTENER
 
 ---
 
-## Rate Limiting
+## レート制限
 
-All radio endpoints share the default rate limit:
+すべてのラジオエンドポイントはデフォルトのレート制限を共有しています:
 
 ```
 ratelimit-policy: 100;w=60

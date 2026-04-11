@@ -1,13 +1,13 @@
-# Boards API (Bulletin Boards)
+# 掲示板 API
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) may be required for some operations.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> 一部の操作ではCookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）が必要な場合があります。
 
 ---
 
-## Table of Contents
+## 目次
 
 - [Overview](#overview)
 - [List Boards](#list-boards)
@@ -36,15 +36,15 @@
 
 ---
 
-## Overview
+## 概要
 
-Boards is Karotter's bulletin board (BBS) feature. Users create topic boards with optional age restrictions, then post threads and replies. Boards support real-time updates via Server-Sent Events (SSE), image attachments, and rich content parsing (cross-references, URLs, hashtags, mentions).
+掲示板はKarotterのBBS機能です。ユーザーはオプションの年齢制限付きトピック掲示板を作成し、スレッドやリプライを投稿します。掲示板はServer-Sent Events (SSE)によるリアルタイム更新、画像添付、リッチコンテンツパース（クロスリファレンス、URL、ハッシュタグ、メンション）をサポートしています。
 
 ---
 
-## List Boards
+## 掲示板一覧
 
-Returns all available boards.
+利用可能なすべての掲示板を返します。
 
 ```
 GET /api/boards
@@ -52,7 +52,7 @@ GET /api/boards
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -89,9 +89,9 @@ None.
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `boards` | Board[] | Array of board objects |
 | `boards[].id` | number | Board ID |
@@ -107,17 +107,17 @@ None.
 
 ---
 
-## Create a Board
+## 掲示板作成
 
-Creates a new bulletin board.
+新しい掲示板を作成します。
 
 ```
 POST /api/boards
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Constraints | Description |
+| フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
 | `title` | string | Yes | - | Board title |
 | `slug` | string | No | URL-safe characters | URL slug (auto-generated from title if omitted) |
@@ -162,16 +162,16 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"board": {...}}` | Board created |
 | 400 | `{"error": "..."}` | Validation error (duplicate slug, invalid age, etc.) |
 
 ---
 
-## Get Board Details
+## 掲示板詳細取得
 
-Returns board information along with its threads.
+スレッドとともに掲示板情報を返します。
 
 ```
 GET /api/boards/:slug
@@ -179,13 +179,13 @@ GET /api/boards/:slug
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 
 ### Query Parameters
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number for threads |
 | `limit` | number | 20 | Threads per page |
@@ -227,7 +227,7 @@ GET /api/boards/:slug
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"board": {...}, "threads": [...]}` | Board and threads |
 | 401 | `{"error": "ログインが必要です"}` | Not logged in (age-gated board) |
@@ -236,9 +236,9 @@ GET /api/boards/:slug
 
 ---
 
-## Delete a Board
+## 掲示板削除
 
-Deletes a board and all its threads and replies. Only the board creator can delete it.
+掲示板とそのすべてのスレッド、リプライを削除します��掲示板の作成者のみ削除可能です。
 
 ```
 DELETE /api/boards/:slug
@@ -246,13 +246,13 @@ DELETE /api/boards/:slug
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "掲示板を削除しました"}` | Board deleted |
 | 403 | `{"error": "権限がありません"}` | Not the board creator |
@@ -260,9 +260,9 @@ DELETE /api/boards/:slug
 
 ---
 
-## Create a Thread
+## スレッド作成
 
-Creates a new thread in a board. Uses `multipart/form-data` for image support.
+掲示板に新しいスレッドを作成します。画像サポートのため `multipart/form-data` を使用します。
 
 ```
 POST /api/boards/:slug/threads
@@ -270,13 +270,13 @@ POST /api/boards/:slug/threads
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 
-### Request Body (FormData)
+### リクエストボディ (FormData)
 
-| Field | Type | Required | Constraints | Description |
+| フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
 | `title` | string | Yes | - | Thread title |
 | `content` | string | Yes | - | Thread body text |
@@ -314,7 +314,7 @@ Content-Type: image/png
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"thread": {...}}` | Thread created |
 | 400 | `{"error": "..."}` | Validation error |
@@ -323,9 +323,9 @@ Content-Type: image/png
 
 ---
 
-## Get Thread Details
+## スレッド詳細取得
 
-Returns thread information along with all replies.
+すべてのリプライとともにスレッド情報を返します。
 
 ```
 GET /api/boards/:slug/threads/:id
@@ -333,7 +333,7 @@ GET /api/boards/:slug/threads/:id
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
@@ -394,9 +394,9 @@ GET /api/boards/:slug/threads/:id
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `board` | object | Minimal board info |
 | `thread` | Thread | Full thread object |
@@ -404,9 +404,9 @@ GET /api/boards/:slug/threads/:id
 
 ---
 
-## Delete a Thread
+## スレッド削除
 
-Deletes a thread and all its replies. Can be done by the thread author or the board creator.
+スレッドとそのすべてのリプライを削除します。スレッドの投稿者または掲示板の作成者が実行可能です。
 
 ```
 DELETE /api/boards/:slug/threads/:id
@@ -414,14 +414,14 @@ DELETE /api/boards/:slug/threads/:id
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スレッドを削除しました"}` | Thread deleted |
 | 403 | `{"error": "権限がありません"}` | Not the thread author or board creator |
@@ -429,9 +429,9 @@ DELETE /api/boards/:slug/threads/:id
 
 ---
 
-## Post a Reply
+## リプライ投稿
 
-Posts a reply to a thread. Uses `multipart/form-data` for image support.
+スレッドにリプライを投稿します。画像サポートのため `multipart/form-data` を使用します。
 
 ```
 POST /api/boards/:slug/threads/:id/replies
@@ -439,14 +439,14 @@ POST /api/boards/:slug/threads/:id/replies
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
 
-### Request Body (FormData)
+### リクエストボディ (FormData)
 
-| Field | Type | Required | Constraints | Description |
+| フィールド | 型 | 必須 | 制約 | 説明 |
 |-------|------|----------|-------------|-------------|
 | `content` | string | Yes | - | Reply text |
 | `images` | File[] | No | Maximum 4 files | Image attachments |
@@ -489,7 +489,7 @@ Check out https://typescriptlang.org #typescript @tsdev
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"reply": {...}}` | Reply posted |
 | 400 | `{"error": "..."}` | Validation error |
@@ -499,9 +499,9 @@ Check out https://typescriptlang.org #typescript @tsdev
 
 ---
 
-## Follow a Board
+## 掲示板をフォロー
 
-Follows a board to receive updates when new threads are posted.
+掲示板をフォローし、新しいスレッドが投稿された時に更新を受け取ります。
 
 ```
 POST /api/boards/:slug/follow
@@ -509,26 +509,26 @@ POST /api/boards/:slug/follow
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "掲示板をフォローしました"}` | Board followed |
 | 400 | `{"error": "既にフォローしています"}` | Already following |
 
 ---
 
-## Unfollow a Board
+## 掲示板のフォロー解除
 
-Unfollows a board.
+掲示板のフォローを解除します。
 
 ```
 DELETE /api/boards/:slug/follow
@@ -536,21 +536,21 @@ DELETE /api/boards/:slug/follow
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "掲示板のフォローを解除しました"}` | Board unfollowed |
 
 ---
 
-## Get Following Boards
+## フォロー中の掲示板取得
 
-Returns boards you are currently following.
+現在フォロー中の掲示板を返します。
 
 ```
 GET /api/boards/following
@@ -558,7 +558,7 @@ GET /api/boards/following
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -581,9 +581,9 @@ None.
 
 ---
 
-## Follow a Thread
+## スレッドをフォロー
 
-Follows a specific thread to receive notifications when new replies are posted.
+特定のスレッドをフォローし、新しいリプライが投稿された時に通知を受け取ります。
 
 ```
 POST /api/boards/:slug/threads/:id/follow
@@ -591,27 +591,27 @@ POST /api/boards/:slug/threads/:id/follow
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スレッドをフォローしました"}` | Thread followed |
 | 400 | `{"error": "既にフォローしています"}` | Already following |
 
 ---
 
-## Unfollow a Thread
+## スレッドのフォロー解除
 
-Unfollows a thread.
+スレッドのフォローを解除します。
 
 ```
 DELETE /api/boards/:slug/threads/:id/follow
@@ -619,22 +619,22 @@ DELETE /api/boards/:slug/threads/:id/follow
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "スレッドのフォローを解除しました"}` | Thread unfollowed |
 
 ---
 
-## React to a Thread
+## スレッドにリアクション
 
-Adds an emoji reaction to a thread's original post.
+スレッドのオリジナル投稿に絵文字リアクションを追加します。
 
 ```
 POST /api/boards/:slug/threads/:id/reactions
@@ -642,14 +642,14 @@ POST /api/boards/:slug/threads/:id/reactions
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `emoji` | string | Yes | Emoji text (max 32 characters) |
 
@@ -668,16 +668,16 @@ Content-Type: application/json
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "リアクションしました"}` | Reaction added |
 | 400 | `{"error": "既にリアクションしています"}` | Already reacted with this emoji |
 
 ---
 
-## React to a Reply
+## リプライにリアクション
 
-Adds an emoji reaction to a board reply.
+掲示板のリプライに絵文字リアクションを追加します。
 
 ```
 POST /api/boards/:slug/replies/:replyId/reactions
@@ -685,29 +685,29 @@ POST /api/boards/:slug/replies/:replyId/reactions
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `replyId` | number | Yes | Reply ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `emoji` | string | Yes | Emoji text (max 32 characters) |
 
 ### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "リアクションしました"}` | Reaction added |
 | 400 | `{"error": "既にリアクションしています"}` | Already reacted with this emoji |
 
 ---
 
-## Get Reaction Users (Thread)
+## リアクションユーザー取得（スレッド）
 
-Returns users who reacted to a thread with a specific emoji.
+特定の絵文字でスレッドにリアクションしたユーザーを返します。
 
 ```
 GET /api/boards/:slug/threads/:id/reactions/:emoji/users
@@ -715,7 +715,7 @@ GET /api/boards/:slug/threads/:id/reactions/:emoji/users
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `id` | number | Yes | Thread ID |
@@ -738,9 +738,9 @@ GET /api/boards/:slug/threads/:id/reactions/:emoji/users
 
 ---
 
-## Get Reaction Users (Reply)
+## リアクションユーザー取得（リプライ）
 
-Returns users who reacted to a reply with a specific emoji.
+特定の絵文字でリプライにリアクションしたユーザーを返します。
 
 ```
 GET /api/boards/:slug/replies/:replyId/reactions/:emoji/users
@@ -748,7 +748,7 @@ GET /api/boards/:slug/replies/:replyId/reactions/:emoji/users
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 | `replyId` | number | Yes | Reply ID |
@@ -771,9 +771,9 @@ GET /api/boards/:slug/replies/:replyId/reactions/:emoji/users
 
 ---
 
-## Server-Sent Events (SSE)
+## サーバー送信イベント (SSE)
 
-Boards support real-time updates via Server-Sent Events. Connect to the stream endpoint to receive live updates when new threads or replies are posted.
+掲示板はServer-Sent Eventsによるリアルタイム更新をサポートしています。ストリームエンドポイントに接続して、新しいスレッドやリプライが投稿された時にライブ更新を受信します。
 
 ```
 GET /api/boards/:slug/stream
@@ -781,13 +781,13 @@ GET /api/boards/:slug/stream
 
 ### Path Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `slug` | string | Yes | Board slug |
 
 ### Event Types
 
-| Event Name | Payload | Description |
+| イベント名 | ペイロード | 説明 |
 |------------|---------|-------------|
 | `board-update` | JSON object | New thread or reply was posted |
 
@@ -824,11 +824,11 @@ event: board-update
 data: {"type":"new-reply","threadId":101,"reply":{"id":504,"replyNumber":4,"content":"New reply!"}}
 ```
 
-> **Note:** SSE connections require authentication. The connection will be closed if the token expires.
+> **注意:** SSE connections require authentication. The connection will be closed if the token expires.
 
 ---
 
-## Content Parsing
+## コンテンツパース
 
 Board thread and reply content supports several inline formatting and linking conventions.
 
@@ -841,7 +841,7 @@ Reference other replies by their reply number. The frontend renders these as cli
 >>0 refers to the original thread post
 ```
 
-| Pattern | Description |
+| パターン | 説明 |
 |---------|-------------|
 | `>>0` | Reference to the thread's original post |
 | `>>1` | Reference to reply number 1 |
@@ -881,7 +881,7 @@ I wrote more about this here: >>1
 
 ---
 
-## Age Gate
+## 年齢制限
 
 Boards support age-restricted access via the `minimumAge` field.
 
@@ -896,7 +896,7 @@ Boards support age-restricted access via the `minimumAge` field.
 
 ### Age Range
 
-| Property | Value |
+| プロパティ | 値 |
 |----------|-------|
 | Minimum allowed `minimumAge` | 13 |
 | Maximum allowed `minimumAge` | 99 |
@@ -907,7 +907,7 @@ Age is calculated from the user's `birthday` field (ISO 8601 date) in their prof
 
 ---
 
-## Object Reference: Board
+## オブジェクトリファレンス: Board
 
 Full Board object structure.
 
@@ -927,9 +927,9 @@ Full Board object structure.
 }
 ```
 
-### Board Field Reference
+### Board（掲示板） Field Reference
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Board ID |
 | `title` | string | Board title |
@@ -944,7 +944,7 @@ Full Board object structure.
 
 ---
 
-## Object Reference: Thread
+## オブジェクトリファレンス: Thread
 
 Full Thread object structure.
 
@@ -966,9 +966,9 @@ Full Thread object structure.
 }
 ```
 
-### Thread Field Reference
+### Thread（スレッド） Field Reference
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Thread ID |
 | `title` | string | Thread title |
@@ -985,7 +985,7 @@ Full Thread object structure.
 
 ---
 
-## Object Reference: Reply
+## オブジェクトリファレンス: Reply
 
 Full Reply object structure.
 
@@ -1007,7 +1007,7 @@ Full Reply object structure.
 
 ### Reply Field Reference
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Reply ID (database primary key) |
 | `replyNumber` | number | Sequential reply number within the thread (1-indexed) |
@@ -1022,9 +1022,9 @@ Full Reply object structure.
 
 ---
 
-## Rate Limiting
+## レート制限
 
-All board endpoints share the default rate limit:
+すべての掲示板エンドポイントはデフォルトのレート制限を共有しています:
 
 ```
 ratelimit-policy: 100;w=60

@@ -25,22 +25,22 @@ Karotterの全APIエンドポイントを機能ごとにまとめたドキュメ
 
 | ドキュメント | 内容 |
 |------------|------|
-| [Authentication](docs/authentication.md) | ログイン、新規登録、CSRF、トークンリフレッシュ、セッション、マルチアカウント |
-| [Users](docs/users.md) | プロフィール、設定、アバター/ヘッダー画像、アカウント管理 |
-| [Posts](docs/posts.md) | 投稿の作成/編集/削除、いいね、リカロット、ブックマーク、リアクション、投票、アナリティクス |
-| [Timeline](docs/timeline.md) | タイムライン、おすすめアルゴリズム、A/Bテストバリアント |
-| [Search](docs/search.md) | 投稿・ユーザー・ハッシュタグ検索、トレンド、ディスカバー |
-| [Follow](docs/follow.md) | フォロー/アンフォロー、ブロック、ミュート、フォローリクエスト |
+| [認証](docs/authentication.md) | ログイン、新規登録、CSRF、トークンリフレッシュ、セッション、マルチアカウント |
+| [ユーザー](docs/users.md) | プロフィール、設定、アバター/ヘッダー画像、アカウント管理 |
+| [投稿](docs/posts.md) | 投稿の作成/編集/削除、いいね、リカロット、ブックマーク、リアクション、投票、アナリティクス |
+| [タイムライン](docs/timeline.md) | タイムライン、おすすめアルゴリズム、A/Bテストバリアント |
+| [検索](docs/search.md) | 投稿・ユーザー・ハッシュタグ検索、トレンド、ディスカバー |
+| [フォロー](docs/follow.md) | フォロー/アンフォロー、ブロック、ミュート、フォローリクエスト |
 | [DM](docs/dm.md) | ダイレクトメッセージ、グループチャット、添付ファイル、投票、通話 |
-| [Notifications](docs/notifications.md) | 通知タイプ、プッシュ通知 (FCM)、未読数 |
-| [Social](docs/social.md) | サークル、リスト、ストーリー、匿名質問、リンクプレビュー |
-| [Radio](docs/radio.md) | スペース (音声通話)、WebRTC、スピーカー管理 |
-| [Draw Chat](docs/draw.md) | 絵チャ (共同お絵かき)、レイヤー、ストローク |
-| [Boards](docs/boards.md) | 掲示板、スレッド、リプライ、SSE |
+| [通知](docs/notifications.md) | 通知タイプ、プッシュ通知 (FCM)、未読数 |
+| [ソーシャル](docs/social.md) | サークル、リスト、ストーリー、匿名質問、リンクプレビュー |
+| [ラジオ](docs/radio.md) | スペース (音声通話)、WebRTC、スピーカー管理 |
+| [絵チャ](docs/draw.md) | 絵チャ (共同お絵かき)、レイヤー、ストローク |
+| [掲示板](docs/boards.md) | 掲示板、スレッド、リプライ、SSE |
 | [Socket.IO](docs/socketio.md) | リアルタイムイベント (DM、通話、絵チャ、スペース、通知) |
-| [Data Models](docs/models.md) | 全オブジェクトの型定義 |
-| [Admin](docs/admin.md) | 管理パネル、モデレーション、アナリティクス |
-| [Constants](docs/constants.md) | Enum、フラグ、localStorageキー一覧 |
+| [データモデル](docs/models.md) | 全オブジェクトの型定義 |
+| [管理](docs/admin.md) | 管理パネル、モデレーション、アナリティクス |
+| [定数](docs/constants.md) | Enum、フラグ、localStorageキー一覧 |
 
 ### Python ライブラリ (`python/`)
 

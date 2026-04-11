@@ -1,13 +1,13 @@
-# Social API (Circles, Lists, Stories)
+# ソーシャル API（サークル、リスト、ストーリー）
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) may be required for some operations.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> 一部の操作ではCookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）が必要な場合があります。
 
 ---
 
-## Table of Contents
+## 目次
 
 - [Circles](#circles)
   - [List Circles](#list-circles)
@@ -45,21 +45,21 @@
 
 ---
 
-## Circles
+## サークル
 
-Circles are private groups of followers. They are used for controlling post visibility (posts can be restricted to a specific circle) and reply permissions.
+サークルはフォロワーの非公開グループです。投稿の公開範囲の制御（投稿を特定のサークルに制限可能）とリプライ権限に使用されます。
 
-### List Circles
+### サークル一覧
 
-Returns all circles created by the authenticated user.
+認証済みユーザーが作成したすべてのサークルを返します。
 
 ```
 GET /api/social/circles
 ```
 
-#### Query Parameters
+#### クエリパラメータ
 
-None.
+なし。
 
 #### Response
 
@@ -86,9 +86,9 @@ None.
 }
 ```
 
-#### Response Fields
+#### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `circles` | Circle[] | Array of circle objects |
 | `circles[].id` | number | Circle ID |
@@ -101,17 +101,17 @@ None.
 
 ---
 
-### Create a Circle
+### サークル作成
 
-Creates a new circle.
+新しいサークルを作成します。
 
 ```
 POST /api/social/circles
 ```
 
-#### Request Body
+#### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `name` | string | Yes | Circle name |
 
@@ -144,23 +144,23 @@ Content-Type: application/json
 
 ---
 
-### Delete a Circle
+### サークル削除
 
-Deletes a circle. Only the creator can delete it. Posts previously visible to this circle become inaccessible to those members (they revert to author-only visibility).
+サークルを削除します。作成者のみ削除可能です。このサークルに表示されていた投稿はメンバーからアクセスできなくなります（投稿者のみ表示に戻ります）。
 
 ```
 DELETE /api/social/circles/:id
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Circle ID |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "サークルを削除しました"}` | Successfully deleted |
 | 403 | `{"error": "権限がありません"}` | Not the circle creator |
@@ -168,23 +168,23 @@ DELETE /api/social/circles/:id
 
 ---
 
-### Add Circle Member
+### サークルメンバー追加
 
-Adds a user to a circle.
+サークルにユーザーを追加します。
 
 ```
 POST /api/social/circles/:id/members
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Circle ID |
 
-#### Request Body
+#### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `userId` | number | Yes | User ID to add |
 
@@ -203,7 +203,7 @@ Content-Type: application/json
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メンバーを追加しました"}` | Member added |
 | 400 | `{"error": "既にメンバーです"}` | Already a member |
@@ -211,24 +211,24 @@ Content-Type: application/json
 
 ---
 
-### Remove Circle Member
+### サークルメンバー削除
 
-Removes a user from a circle.
+サークルからユーザーを削除します。
 
 ```
 DELETE /api/social/circles/:id/members/:userId
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Circle ID |
 | `userId` | number | Yes | User ID to remove |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メンバーを削除しました"}` | Member removed |
 | 403 | `{"error": "権限がありません"}` | Not the circle creator |
@@ -236,21 +236,21 @@ DELETE /api/social/circles/:id/members/:userId
 
 ---
 
-## Lists
+## リスト
 
-Lists are curated collections of users. You can view a combined timeline of posts from all members of a list. Lists are similar to Twitter/X lists.
+リストはキュレーションされたユーザーコレクションです。リストの全メンバーの投稿を統合したタイムラインを表示できます。Twitter/Xのリストに似ています。
 
-### List All Lists
+### リスト一覧
 
-Returns all lists created by the authenticated user.
+認証済みユーザーが作成したすべてのリストを返します。
 
 ```
 GET /api/social/lists
 ```
 
-#### Query Parameters
+#### クエリパラメータ
 
-None.
+なし。
 
 #### Response
 
@@ -271,9 +271,9 @@ None.
 }
 ```
 
-#### Response Fields
+#### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `lists` | List[] | Array of list objects |
 | `lists[].id` | number | List ID |
@@ -287,17 +287,17 @@ None.
 
 ---
 
-### Create a List
+### リスト作成
 
-Creates a new list.
+新しいリストを作成します。
 
 ```
 POST /api/social/lists
 ```
 
-#### Request Body
+#### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `name` | string | Yes | List name |
 | `description` | string | No | List description |
@@ -336,23 +336,23 @@ Content-Type: application/json
 
 ---
 
-### Delete a List
+### リスト削除
 
-Deletes a list. Only the creator can delete it.
+リストを削除します。作成者のみ削除可能です。
 
 ```
 DELETE /api/social/lists/:id
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | List ID |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "リストを削除しました"}` | Successfully deleted |
 | 403 | `{"error": "権限がありません"}` | Not the list creator |
@@ -360,23 +360,23 @@ DELETE /api/social/lists/:id
 
 ---
 
-### Get List Posts
+### リストの投稿取得
 
-Returns a timeline of posts from all members of a list.
+リストの全メンバーの投稿のタイムラインを返します。
 
 ```
 GET /api/social/lists/:id/posts
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | List ID |
 
-#### Query Parameters
+#### クエリパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number |
 | `limit` | number | 15 | Posts per page |
@@ -405,36 +405,36 @@ GET /api/social/lists/:id/posts
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"posts": [...], "pagination": {...}}` | Posts retrieved |
 | 404 | `{"error": "リストが見つかりません"}` | List not found |
 
 ---
 
-### Add List Member
+### リストメンバー追加
 
-Adds a user to a list.
+リストにユーザーを追加します。
 
 ```
 POST /api/social/lists/:id/members
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | List ID |
 
-#### Request Body
+#### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `userId` | number | Yes | User ID to add |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メンバーを追加しました"}` | Member added |
 | 400 | `{"error": "既にメンバーです"}` | Already a member |
@@ -442,24 +442,24 @@ POST /api/social/lists/:id/members
 
 ---
 
-### Remove List Member
+### リストメンバー削除
 
-Removes a user from a list.
+リストからユーザーを削除します。
 
 ```
 DELETE /api/social/lists/:id/members/:userId
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | List ID |
 | `userId` | number | Yes | User ID to remove |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メンバーを削除しました"}` | Member removed |
 | 403 | `{"error": "権限がありません"}` | Not the list creator |
@@ -467,21 +467,21 @@ DELETE /api/social/lists/:id/members/:userId
 
 ---
 
-## Stories
+## ストーリー
 
-Stories are ephemeral media posts that expire after 24 hours. They appear at the top of the timeline in a carousel.
+ストーリーは24時間後に消える一時的なメディア投稿です。タイムライン上部のカルーセルに表示されます。
 
-### Get All Stories
+### 全ストーリー取得
 
-Returns stories from users you follow, ordered by recency.
+フォローしているユーザーのストーリーを新しい順で返します。
 
 ```
 GET /api/social/stories
 ```
 
-#### Query Parameters
+#### クエリパラメータ
 
-None.
+なし。
 
 #### Response
 
@@ -533,17 +533,17 @@ None.
 
 ---
 
-### Create a Story
+### ストーリー作成
 
-Creates a new story. Uses `multipart/form-data` encoding for file upload.
+新しいストーリーを作成します。ファイルアップロードのため `multipart/form-data` エンコーディングを使用します。
 
 ```
 POST /api/social/stories
 ```
 
-#### Request Body (FormData)
+#### リクエストボディ (FormData)
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `media` | File | Yes | Image or video file |
 | `caption` | string | No | Caption text |
@@ -594,17 +594,17 @@ PUBLIC
 
 ---
 
-### Get User Stories
+### ユーザーのストーリー取得
 
-Returns all active (non-expired) stories from a specific user.
+特定のユーザーのすべてのアクティブ（未期限切れ）ストーリーを返します。
 
 ```
 GET /api/social/stories/user/:userId
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `userId` | number | Yes | User ID |
 
@@ -634,23 +634,23 @@ GET /api/social/stories/user/:userId
 
 ---
 
-### Get Story Viewers
+### ストーリー閲覧者取得
 
-Returns users who have viewed a story. Only accessible by the story author.
+ストーリーを閲覧したユーザーを返します。ストーリーの投稿者のみアクセス可能です。
 
 ```
 GET /api/social/stories/:id/viewers
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"viewers": [...]}` | List of viewers |
 | 403 | `{"error": "権限がありません"}` | Not the story author |
@@ -674,17 +674,17 @@ GET /api/social/stories/:id/viewers
 
 ---
 
-### Get Story Comments
+### ストーリーコメント取得
 
-Returns comments on a story.
+ストーリーのコメントを返します。
 
 ```
 GET /api/social/stories/:id/comments
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
@@ -711,23 +711,23 @@ GET /api/social/stories/:id/comments
 
 ---
 
-### Record Story View
+### ストーリー閲覧記録
 
-Records that the authenticated user has viewed a story.
+認証済みユーザーがストーリーを閲覧したことを記録します。
 
 ```
 POST /api/social/stories/:id/views
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
-#### Request Body
+#### リクエストボディ
 
-None.
+なし。
 
 #### Response
 
@@ -739,30 +739,30 @@ None.
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "閲覧を記録しました"}` | View recorded |
 | 404 | `{"error": "ストーリーが見つかりません"}` | Story not found or expired |
 
 ---
 
-### Comment on a Story
+### ストーリーにコメント
 
-Adds a comment to a story.
+ストーリーにコメントを追加します。
 
 ```
 POST /api/social/stories/:id/comments
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
-#### Request Body
+#### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `content` | string | Yes | Comment text |
 
@@ -781,23 +781,23 @@ Content-Type: application/json
 
 ---
 
-### Like a Story
+### ストーリーにいいね
 
-Likes a story.
+ストーリーにいいねします。
 
 ```
 POST /api/social/stories/:id/like
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
-#### Request Body
+#### リクエストボディ
 
-None.
+なし。
 
 #### Response
 
@@ -809,23 +809,23 @@ None.
 
 ---
 
-### Unlike a Story
+### ストーリーのいいね取消
 
-Removes a like from a story.
+ストーリーのいいねを取り消します。
 
 ```
 DELETE /api/social/stories/:id/like
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
-#### Request Body
+#### リクエストボディ
 
-None.
+なし。
 
 #### Response
 
@@ -837,23 +837,23 @@ None.
 
 ---
 
-### Delete a Story
+### ストーリー削除
 
-Deletes a story. Only the story author can delete it.
+ストーリーを削除します。ストーリーの投稿者のみ削除可能です。
 
 ```
 DELETE /api/social/stories/:id
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Story ID |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "ストーリーを削除しました"}` | Deleted |
 | 403 | `{"error": "権限がありません"}` | Not the story author |
@@ -861,11 +861,11 @@ DELETE /api/social/stories/:id
 
 ---
 
-### Story Visibility
+### Story（ストーリー） Visibility
 
 Stories support three visibility levels:
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
 | `PUBLIC` | Visible to all users |
 | `FOLLOWERS` | Visible only to your followers |
@@ -921,9 +921,9 @@ Full Story object structure.
 }
 ```
 
-### Story Field Reference
+### Story（ストーリー） Field Reference
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Story ID |
 | `authorId` | number | Author's user ID |
@@ -951,21 +951,21 @@ Full Story object structure.
 
 ---
 
-## Anonymous Questions
+## 匿名質問
 
-Anonymous questions allow users to receive and answer questions from other users. Questions are sent anonymously and appear in the recipient's inbox.
+匿名質問は、ユーザーが他のユーザーから匿名で質問を受け取り回答できる機能です。質問は匿名で送信され、受信者の受信箱に表示されます。
 
-### Get Question Inbox
+### 質問受信箱取得
 
-Returns all questions received by the authenticated user.
+認証済みユーザーが受信したすべての質問を返します。
 
 ```
 GET /api/social/questions/inbox
 ```
 
-#### Query Parameters
+#### クエリパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number |
 | `limit` | number | 20 | Questions per page |
@@ -991,23 +991,23 @@ GET /api/social/questions/inbox
 
 ---
 
-### Send a Question
+### 質問を送信
 
-Sends an anonymous question to a user.
+ユーザーに匿名質問を送信します。
 
 ```
 POST /api/social/questions/:username
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `username` | string | Yes | Target user's username |
 
-#### Request Body
+#### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `content` | string | Yes | Question text |
 
@@ -1026,7 +1026,7 @@ Content-Type: application/json
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "質問を送信しました"}` | Question sent |
 | 400 | `{"error": "..."}` | Validation error |
@@ -1034,23 +1034,23 @@ Content-Type: application/json
 
 ---
 
-### Delete a Question
+### 質問を削除
 
-Deletes a question from your inbox.
+受信箱から質問を削除します。
 
 ```
 DELETE /api/social/questions/:id
 ```
 
-#### Path Parameters
+#### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Question ID |
 
 #### Responses
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "質問を削除しました"}` | Question deleted |
 | 403 | `{"error": "権限がありません"}` | Not the question recipient |
@@ -1058,19 +1058,19 @@ DELETE /api/social/questions/:id
 
 ---
 
-## Link Preview
+## リンクプレビュー
 
-### Get Link Preview
+### リンクプレビュー取得
 
-Fetches Open Graph (OGP) metadata for a given URL.
+指定URLのOpen Graph (OGP) メタデータを取得します。
 
 ```
 GET /api/social/link-preview
 ```
 
-#### Query Parameters
+#### クエリパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `url` | string | Yes | The URL to fetch preview data for |
 
@@ -1095,9 +1095,9 @@ Authorization: Bearer eyJ...
 }
 ```
 
-#### Response Fields
+#### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `preview.url` | string | The canonical URL |
 | `preview.title` | string \| null | Page title from OGP or `<title>` tag |
@@ -1107,29 +1107,29 @@ Authorization: Bearer eyJ...
 
 ---
 
-### Get Link Preview Image
+### リンクプレビュー取得 Image
 
-Proxies the OGP image for a URL. Used by the frontend to display link preview thumbnails without CORS issues.
+URLのOGP画像をプロキシします。フロントエンドがCORS問題なしでリンクプレビューサムネイルを表示するために使用されます。
 
 ```
 GET /api/social/link-preview-image
 ```
 
-#### Query Parameters
+#### クエリパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `url` | string | Yes | The URL of the image to proxy |
 
 #### Response
 
-Returns the image binary data with the appropriate `Content-Type` header.
+適切な `Content-Type` ヘッダーとともに画像バイナリデータを返します。
 
 ---
 
-## Rate Limiting
+## レート制限
 
-All social endpoints share the default rate limit:
+すべてのソーシャルエンドポイントはデフォルトのレート制限を共有しています:
 
 ```
 ratelimit-policy: 100;w=60

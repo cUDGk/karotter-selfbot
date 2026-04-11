@@ -1,25 +1,25 @@
-# Constants and Enums
+# 定数とEnum
 
-Complete reference for all enums, constants, magic strings, and configuration values used throughout the Karotter platform.
+Karotterプラットフォーム全体で使用されるすべてのEnum、定数、マジック文字列、設定値の完全なリファレンスです。
 
 ---
 
-## Official Mark Colors
+## 公式マークカラー
 
-Verification badge colors that can be assigned to users by administrators. A user may have multiple marks simultaneously.
+管理者によってユーザーに割り当てることができる認証バッジカラーです。ユーザーは同時に複数のマークを持つことができます。
 
-| Code | Hex | RGB | Japanese Label | Description |
+| Code | Hex | RGB | Japanese Label | 説明 |
 |------|-----|-----|----------------|-------------|
-| `BLUE` | `#1d9bf0` | `rgb(29, 155, 240)` | 本人確認 | Verified individual identity |
-| `YELLOW` | `#f8c500` | `rgb(248, 197, 0)` | 団体・企業 | Organization or company |
-| `ORANGE` | `#ff7a00` | `rgb(255, 122, 0)` | オレンジ | Special designation |
-| `PURPLE` | `#8b5cf6` | `rgb(139, 92, 246)` | 運営 | Platform staff / administrator |
-| `GRAY` | `#9ca3af` | `rgb(156, 163, 175)` | 政府・公的機関 | Government / official body |
-| `BLACK` | `#111827` | `rgb(17, 24, 39)` | ブラック | Special designation |
-| `RED` | `#ef4444` | `rgb(239, 68, 68)` | レッド | Special designation |
-| `GREEN` | `#22c55e` | `rgb(34, 197, 94)` | グリーン | Special designation |
+| `BLUE` | `#1d9bf0` | `rgb(29, 155, 240)` | 本人確認 | 本人確認済みの個人 |
+| `YELLOW` | `#f8c500` | `rgb(248, 197, 0)` | 団体・企業 | 団体または企業 |
+| `ORANGE` | `#ff7a00` | `rgb(255, 122, 0)` | オレンジ | 特別な指定 |
+| `PURPLE` | `#8b5cf6` | `rgb(139, 92, 246)` | 運営 | プラットフォームスタッフ / 管理者 |
+| `GRAY` | `#9ca3af` | `rgb(156, 163, 175)` | 政府・公的機関 | 政府 / 公的機関 |
+| `BLACK` | `#111827` | `rgb(17, 24, 39)` | ブラック | 特別な指定 |
+| `RED` | `#ef4444` | `rgb(239, 68, 68)` | レッド | 特別な指定 |
+| `GREEN` | `#22c55e` | `rgb(34, 197, 94)` | グリーン | 特別な指定 |
 
-**Type:** `string[]` (array -- users can hold multiple marks)
+**型:** `string[]` (配列 -- ユーザーは複数のマークを保持可能)
 
 ```ts
 const OFFICIAL_MARK_COLORS = ["BLUE", "YELLOW", "ORANGE", "PURPLE", "GRAY", "BLACK", "RED", "GREEN"] as const;
@@ -28,15 +28,15 @@ type OfficialMarkColor = typeof OFFICIAL_MARK_COLORS[number];
 
 ---
 
-## Gender
+## 性別
 
-User gender selection, required during registration.
+ユーザーの性別選択。登録時に必須です。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `MALE` | Male |
-| `FEMALE` | Female |
-| `OTHER` | Other / prefer not to say |
+| `MALE` | 男性 |
+| `FEMALE` | 女性 |
+| `OTHER` | その他 / 回答しない |
 
 ```ts
 type Gender = "MALE" | "FEMALE" | "OTHER";
@@ -44,14 +44,14 @@ type Gender = "MALE" | "FEMALE" | "OTHER";
 
 ---
 
-## Post Visibility
+## Post（投稿） Visibility
 
-Controls who can see a post.
+投稿の表示可能なユーザーを制御します。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `PUBLIC` | Visible to everyone, appears in timelines and search |
-| `CIRCLE` | Visible only to members of the specified circle |
+| `PUBLIC` | 全員に表示、タイムラインと検索に表示される |
+| `CIRCLE` | 指定したサークルのメンバーのみに表示 |
 
 ```ts
 type PostVisibility = "PUBLIC" | "CIRCLE";
@@ -59,16 +59,16 @@ type PostVisibility = "PUBLIC" | "CIRCLE";
 
 ---
 
-## Reply Restriction
+## リプライ制限
 
-Controls who can reply to a post.
+投稿にリプライ可能なユーザーを制御します。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `EVERYONE` | Anyone can reply |
-| `FOLLOWING` | Only users the author follows can reply |
-| `MENTIONED` | Only users mentioned in the post can reply |
-| `CIRCLE` | Only members of the specified circle can reply (requires `replyCircleId`) |
+| `EVERYONE` | 誰でもリプライ可能 |
+| `FOLLOWING` | 投稿者がフォローしているユーザーのみリプライ可能 |
+| `MENTIONED` | 投稿内でメンションされたユーザーのみリプライ可能 |
+| `CIRCLE` | 指定したサークルのメンバーのみリプライ可能（`replyCircleId` が必要） |
 
 ```ts
 type ReplyRestriction = "EVERYONE" | "FOLLOWING" | "MENTIONED" | "CIRCLE";
@@ -76,15 +76,15 @@ type ReplyRestriction = "EVERYONE" | "FOLLOWING" | "MENTIONED" | "CIRCLE";
 
 ---
 
-## Online Status
+## オンラインステータス
 
-User's current online status, displayed to others based on privacy settings.
+ユーザーの現在のオンライ��ステータス。プライバシ���設定に基づいて他のユーザーに表示されます。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `ONLINE` | Currently active on the platform |
-| `OFFLINE` | Not currently active |
-| `DND` | Do Not Disturb -- online but does not want to be contacted |
+| `ONLINE` | 現在プラットフォーム上でアクティブ |
+| `OFFLINE` | 現在アクティブではない |
+| `DND` | 取り込み中 -- オンラインだが連絡を受けたくない状態 |
 
 ```ts
 type OnlineStatus = "ONLINE" | "OFFLINE" | "DND";
@@ -92,14 +92,14 @@ type OnlineStatus = "ONLINE" | "OFFLINE" | "DND";
 
 ---
 
-## Online Status Visibility
+## オンラインステータス Visibility
 
-Controls who can see the user's online status.
+ユーザーのオンラインステータスを閲覧可能なユーザーを制御します。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `PUBLIC` | Everyone can see the online status |
-| `PRIVATE` | Only the user themselves can see the status |
+| `PUBLIC` | 全員がオンラインステータスを閲覧可能 |
+| `PRIVATE` | 本人のみステータスを閲覧可能 |
 
 ```ts
 type OnlineStatusVisibility = "PUBLIC" | "PRIVATE";
@@ -107,14 +107,14 @@ type OnlineStatusVisibility = "PUBLIC" | "PRIVATE";
 
 ---
 
-## Birthday Visibility
+## 誕生日の公開範囲
 
-Controls who can see the user's birthday.
+ユーザーの誕生日を閲覧可能なユーザーを制御します。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `PUBLIC` | Everyone can see the birthday on the profile |
-| `PRIVATE` | Only the user can see their own birthday |
+| `PUBLIC` | 全員がプロフィール上の誕生日を閲覧可能 |
+| `PRIVATE` | 本人のみ自分の誕生日を閲覧可能 |
 
 ```ts
 type BirthdayVisibility = "PUBLIC" | "PRIVATE";
@@ -122,15 +122,15 @@ type BirthdayVisibility = "PUBLIC" | "PRIVATE";
 
 ---
 
-## DM Request Policy
+## DMリクエストポリシー
 
-Controls who can send direct messages to the user without a prior mutual follow.
+事前の相互フォローなしにユーザーにダイレクトメッセージを送信可能なユーザーを制御します。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `EVERYONE` | Anyone can send a DM (may appear as a request if not following) |
-| `FOLLOWING` | Only people the user follows can DM directly |
-| `CIRCLE` | Only members of the user's circle can DM directly |
+| `EVERYONE` | 誰でもDMを送信可能（フォローしていない場合はリクエストとして表示される場合あり） |
+| `FOLLOWING` | ユーザーがフォローしている人のみ直接DM可能 |
+| `CIRCLE` | ユーザーのサークルのメンバーのみ直接DM可能 |
 
 ```ts
 type DmRequestPolicy = "EVERYONE" | "FOLLOWING" | "CIRCLE";
@@ -138,23 +138,23 @@ type DmRequestPolicy = "EVERYONE" | "FOLLOWING" | "CIRCLE";
 
 ---
 
-## Notification Types
+## 通知タイプ
 
-All possible notification types in the system.
+システム内のすべての通知タイプです。
 
-| Value | Description | Typical Trigger |
+| 値 | 説明 | 主なトリガー |
 |-------|-------------|-----------------|
-| `FOLLOW` | Someone followed you | `POST /api/follow/:userId` |
-| `FOLLOW_REQUEST` | Someone requested to follow you | Following a private account |
-| `LIKE` | Someone liked your post | `POST /api/posts/:id/like` |
-| `REPLY` | Someone replied to your post | Creating a post with `parentId` |
-| `MENTION` | Someone mentioned you in a post | `@username` in post content |
-| `REKAROT` | Someone reposted your post | `POST /api/posts/:id/rekarot` |
-| `REACTION` | Someone reacted to your post | `POST /api/posts/:id/react` |
-| `DM` | New direct message received | New message in a DM group |
-| `QUOTE` | Someone quoted your post | Creating a post with `quotedPostId` |
-| `REPORT_UPDATE` | Update on a report you filed | Admin reviews your report |
-| `SYSTEM` | System notification | Platform announcements, maintenance |
+| `FOLLOW` | フォローされた | `POST /api/follow/:userId` |
+| `FOLLOW_REQUEST` | フォローリクエストを受けた | 非公開アカウントへのフォロー |
+| `LIKE` | 投稿がいいねされた | `POST /api/posts/:id/like` |
+| `REPLY` | 投稿にリプライされた | `parentId` 付きの投稿作成 |
+| `MENTION` | 投稿内でメンションされた | 投稿内容に `@username` |
+| `REKAROT` | 投稿がリカロットされた | `POST /api/posts/:id/rekarot` |
+| `REACTION` | 投稿にリアクションされた | `POST /api/posts/:id/react` |
+| `DM` | 新しいダイレクトメッセージを受信 | DMグループ内の新メッセージ |
+| `QUOTE` | 投稿が引用された | `quotedPostId` 付きの投稿作成 |
+| `REPORT_UPDATE` | 報告の更新 | 管理者による報告のレビュー |
+| `SYSTEM` | システム通知 | プラットフォームのお知らせ、メンテナンス |
 
 ```ts
 type NotificationType =
@@ -173,15 +173,15 @@ type NotificationType =
 
 ---
 
-## Space (Radio) Roles
+## スペース（ラジオ）ロール
 
-Roles within a live audio room (radio/space).
+ライブ音声ルーム（ラジオ/スペース）内のロールです。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `HOST` | Room creator; can manage speakers, end the room |
-| `SPEAKER` | Can broadcast audio to all participants |
-| `LISTENER` | Can only listen; must request to become a speaker |
+| `HOST` | ルーム作成者。スピーカーの管理やルームの終了が可能 |
+| `SPEAKER` | 全参加者に音声を配信可能 |
+| `LISTENER` | 聴取のみ可能。スピーカーになるにはリクエストが必要 |
 
 ```ts
 type SpaceRole = "HOST" | "SPEAKER" | "LISTENER";
@@ -189,15 +189,15 @@ type SpaceRole = "HOST" | "SPEAKER" | "LISTENER";
 
 ---
 
-## Space Modes
+## スペースモード
 
-Visibility/access modes for radio rooms.
+ラジオルームの公開範囲/アクセスモードです。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `public` | Anyone can join the room |
-| `followers` | Only the host's followers can join |
-| `invite` | Only explicitly invited users can join |
+| `public` | 誰でもルームに参加可能 |
+| `followers` | ホストのフォロワーのみ参加可能 |
+| `invite` | 明示的に招待されたユーザーのみ参加可能 |
 
 ```ts
 type SpaceMode = "public" | "followers" | "invite";
@@ -205,15 +205,15 @@ type SpaceMode = "public" | "followers" | "invite";
 
 ---
 
-## Speaker Policies
+## スピーカーポリシー
 
-Controls who can become a speaker in a radio room.
+ラジオルームでスピーカーになれるユーザーを制御します。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `following` | Only users the host follows can request to speak |
-| `everyone` | Any participant can request to speak |
-| `invited` | Only users explicitly invited as speakers can speak |
+| `following` | ホストがフォローしているユーザーのみスピーカーリクエスト可能 |
+| `everyone` | 全参加者がスピーカーリクエスト可能 |
+| `invited` | スピーカーとして明示的に招待されたユーザーのみ発言可能 |
 
 ```ts
 type SpeakerPolicy = "following" | "everyone" | "invited";
@@ -221,14 +221,14 @@ type SpeakerPolicy = "following" | "everyone" | "invited";
 
 ---
 
-## DM System Message Types
+## DMシステムメッセージタイプ
 
-Types for system-generated messages within DM groups.
+DMグループ内のシステム生成メッセージのタイプです。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `MEMBER_JOINED` | A user was added to the group |
-| `MEMBER_LEFT` | A user left the group |
+| `MEMBER_JOINED` | ユーザーがグループに追加された |
+| `MEMBER_LEFT` | ユーザーがグループを退出した |
 
 ```ts
 type DmSystemMessageType = "MEMBER_JOINED" | "MEMBER_LEFT";
@@ -236,19 +236,19 @@ type DmSystemMessageType = "MEMBER_JOINED" | "MEMBER_LEFT";
 
 ---
 
-## Contact Form Categories
+## お問い合わせフォームカテゴリ
 
-Categories for the contact/support form.
+お問い合わせ/サポートフォームのカテゴリです。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `general` | General inquiry |
-| `legal` | Legal matter |
-| `privacy` | Privacy concern or data request |
-| `rights` | Intellectual property / rights issue |
-| `safety` | Safety concern (harassment, threats) |
-| `bug` | Bug report |
-| `business` | Business inquiry / partnership |
+| `general` | 一般的なお問い合わせ |
+| `legal` | 法的な事項 |
+| `privacy` | プライバシーに関する懸念またはデータリクエスト |
+| `rights` | 知的財産 / 権利に関する問題 |
+| `safety` | 安全に関する懸念（嫌がらせ、脅迫） |
+| `bug` | バグ報告 |
+| `business` | ビジネスに関するお問い合わせ / 提携 |
 
 ```ts
 type ContactCategory = "general" | "legal" | "privacy" | "rights" | "safety" | "bug" | "business";
@@ -256,53 +256,53 @@ type ContactCategory = "general" | "legal" | "privacy" | "rights" | "safety" | "
 
 ---
 
-## Admin Flags
+## 管理フラグ
 
-### User Admin Flags
+### ユーザー管理フラグ
 
-Boolean flags that administrators can set on user accounts.
+管理者がユーザーアカウントに設定できるブールフラグです。
 
-| Flag | Description |
+| フラグ | 説明 |
 |------|-------------|
-| `adminForceHidden` | Hide the user's profile and all posts from public view |
-| `adminForceParody` | Display a "parody account" label regardless of user's own setting |
-| `adminForceBot` | Display a "bot account" label regardless of user's own setting |
+| `adminForceHidden` | ユーザーのプロフィールと全投稿を公開ビューから非表示にする |
+| `adminForceParody` | ユーザー自身の設定に関わらず「パロディアカウント」ラベルを表示する |
+| `adminForceBot` | ユーザー自身の設定に関わらず「Botアカウント」ラベルを表示する |
 
-### Post Admin Flags
+### Post（投稿）管理フラグ
 
-Boolean flags that administrators can set on individual posts.
+管理者が個別の投稿に設定できるブールフラグです。
 
-| Flag | Description |
+| フラグ | 説明 |
 |------|-------------|
-| `adminForceR18` | Force the post to be treated as R18/NSFW content |
-| `adminForceHidden` | Hide the post from all timelines and search results |
+| `adminForceR18` | 投稿を強制的にR18/NSFWコンテンツとして扱う |
+| `adminForceHidden` | 投稿を全タイムラインと検索結果から非表示にする |
 
-### Story Admin Flags
+### Story（ストーリー）管理フラグ
 
-Boolean flags that administrators can set on stories.
+管理者がストーリーに設定できるブールフラグです。
 
-| Flag | Description |
+| フラグ | 説明 |
 |------|-------------|
-| `adminForceR18` | Force the story to be treated as R18/NSFW content |
-| `adminForceHidden` | Hide the story from all users |
+| `adminForceR18` | ストーリーを強制的にR18/NSFWコンテンツとして扱う |
+| `adminForceHidden` | ストーリーを全ユーザーから非表示にする |
 
 ---
 
-## Profile Unavailable Reasons
+## プロフィール非表示理由
 
-Reasons why a user's profile may not be viewable.
+ユーザーのプロフィールが閲覧できない理由です。
 
-| Reason | Description |
+| 理由 | 説明 |
 |--------|-------------|
-| `BANNED` | The user has been banned from the platform |
-| `SUSPENDED` | The user's account is temporarily suspended |
-| `DEACTIVATED` | The user has deactivated their own account |
-| `PRIVATE` | The user's account is private and you do not follow them |
-| `BLOCKED` | The user has blocked you |
-| `BLOCKED_BY_YOU` | You have blocked the user |
-| `ADMIN_HIDDEN` | An administrator has hidden the user's profile (`adminForceHidden`) |
-| `NOT_FOUND` | The user does not exist |
-| `MINOR_RESTRICTED` | The profile is hidden from minor accounts (`hideProfileFromMinors`) |
+| `BANNED` | ユーザーがプラットフォームからBANされている |
+| `SUSPENDED` | ユーザーのアカウントが一時的に凍結されている |
+| `DEACTIVATED` | ユーザーが自分のアカウントを無効化した |
+| `PRIVATE` | ユーザーのアカウントが非公開で、あなたはフォローしていない |
+| `BLOCKED` | ユーザーにブロックされている |
+| `BLOCKED_BY_YOU` | あなたがユーザーをブロックしている |
+| `ADMIN_HIDDEN` | 管理者がユーザーのプロフィールを非表示にした（`adminForceHidden`） |
+| `NOT_FOUND` | ユーザーが存在しない |
+| `MINOR_RESTRICTED` | 未成年アカウントからプロフィールが非表示になっている（`hideProfileFromMinors`） |
 
 ```ts
 type ProfileUnavailableReason =
@@ -319,21 +319,21 @@ type ProfileUnavailableReason =
 
 ---
 
-## Call Settings Defaults
+## 通話設定デフォルト
 
-Default configuration values for voice/video calls.
+音声/ビデオ通話のデフォルト設定値です。
 
-| Setting | Default Value | Description |
+| 設定 | デフォルト値 | 説明 |
 |---------|---------------|-------------|
-| Audio codec | `opus` | Preferred audio codec |
-| Video codec | `VP8` | Preferred video codec |
-| Max bitrate (audio) | `64000` bps | Maximum audio bitrate |
-| Max bitrate (video) | `1500000` bps | Maximum video bitrate |
-| ICE transport policy | `all` | Use all available ICE candidates |
-| Bundle policy | `max-bundle` | Bundle all media on a single transport |
-| RTCP mux policy | `require` | Require RTCP multiplexing |
+| 音声コーデック | `opus` | 優先音声コーデック |
+| 映像コーデック | `VP8` | 優先映像コーデック |
+| 最大ビットレート（音声） | `64000` bps | 音声の最大ビットレート |
+| 最大ビットレート（映像） | `1500000` bps | 映像の最大ビットレート |
+| ICEトランスポートポリシー | `all` | 利用可能な全ICE候補を使用 |
+| バンドルポリシー | `max-bundle` | 全メディアを単一トランスポートにバンドル |
+| RTCPマルチプレックスポリシー | `require` | RTCPマルチプレキシングを必須にする |
 
-### STUN/TURN Server Configuration
+### STUN/TURNサーバー設定
 
 ```ts
 const ICE_SERVERS = [
@@ -344,15 +344,15 @@ const ICE_SERVERS = [
 
 ---
 
-## Client Type
+## クライアントタイプ
 
-Platform identifiers sent in the `x-client-type` header.
+`x-client-type` ヘッダーで送信されるプラットフォーム識別子です。
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
-| `web` | Web browser client |
-| `ios` | iOS native app |
-| `android` | Android native app |
+| `web` | Webブラウザクライアント |
+| `ios` | iOSネイティブアプリ |
+| `android` | Androidネイティブアプリ |
 
 ```ts
 type ClientType = "web" | "ios" | "android";
@@ -360,143 +360,143 @@ type ClientType = "web" | "ios" | "android";
 
 ---
 
-## localStorage Keys
+## localStorageキー
 
-All `localStorage` keys used by the Karotter web client. All keys are prefixed with `karotter:`.
+Karotter Webクライアントで使用される全ての `localStorage` キーです。全てのキーには `karotter:` プレフィックスが付きます。
 
-| Key | Type | Description |
+| Key | タイプ | 説明 |
 |-----|------|-------------|
-| `karotter:token` | `string` | Current JWT access token |
-| `karotter:refreshToken` | `string` | Current refresh token |
-| `karotter:csrfToken` | `string` | Current CSRF token |
-| `karotter:deviceId` | `string` | UUID v4 device identifier (generated once, persisted) |
-| `karotter:sessionId` | `string` | Current session ID |
-| `karotter:userId` | `string` | Current user's ID |
-| `karotter:username` | `string` | Current user's username |
-| `karotter:accounts` | `string` (JSON) | Serialized array of `Account` objects for multi-account support |
-| `karotter:active-account-id` | `string` | ID of the currently active account |
-| `karotter:activeAccountIndex` | `string` (number) | Index of the active account in the accounts array |
-| `karotter:theme` | `string` | UI theme: `"light"`, `"dark"`, or `"system"` |
-| `karotter:accentColor` | `string` | Accent color hex code |
-| `karotter:fontSize` | `string` (number) | Font size preference |
-| `karotter:language` | `string` | UI language code (e.g. `"ja"`, `"en"`) |
-| `karotter:sidebarCollapsed` | `string` (boolean) | Whether the sidebar is collapsed |
-| `karotter:notificationPermission` | `string` | Browser notification permission state |
-| `karotter:lastNotificationCheck` | `string` (ISO date) | Timestamp of last notification poll |
-| `karotter:drafts` | `string` (JSON) | Saved post drafts |
-| `karotter:recentSearches` | `string` (JSON) | Array of recent search queries |
-| `karotter:recentEmojis` | `string` (JSON) | Array of recently used emoji |
-| `karotter:mutedKeywords` | `string` (JSON) | Local cache of muted keywords |
-| `karotter:timelineMode` | `string` | Timeline display mode: `"latest"`, `"recommend"` |
-| `karotter:autoplayVideos` | `string` (boolean) | Whether to autoplay videos in timeline |
-| `karotter:reduceMotion` | `string` (boolean) | Whether to reduce UI animations |
-| `karotter:contentWarningExpanded` | `string` (boolean) | Whether spoiler/CW content is expanded by default |
-| `karotter:showR18Content` | `string` (boolean) | Local cache of R18 content preference |
-| `karotter:betaExperimentVariant` | `string` | Assigned A/B test variant (A-E) |
-| `karotter:onboardingCompleted` | `string` (boolean) | Whether onboarding flow has been completed |
-| `karotter:cookieConsent` | `string` (boolean) | Whether the user accepted the cookie banner |
-| `karotter:dmEncryptionKey` | `string` | Client-side encryption key for E2E encrypted DMs |
-| `karotter:callSettings` | `string` (JSON) | Saved call audio/video preferences |
-| `karotter:drawToolSettings` | `string` (JSON) | Last-used draw tool configuration (color, width, tool) |
+| `karotter:token` | `string` | 現在のJWTアクセストークン |
+| `karotter:refreshToken` | `string` | 現在のリフレッシュトークン |
+| `karotter:csrfToken` | `string` | 現在のCSRFトークン |
+| `karotter:deviceId` | `string` | UUID v4デバイス識別子（一度生成され永続化） |
+| `karotter:sessionId` | `string` | 現在のセッションID |
+| `karotter:userId` | `string` | 現在のユーザーのID |
+| `karotter:username` | `string` | 現在のユーザーのユーザー名 |
+| `karotter:accounts` | `string` (JSON) | マルチアカウント対応の `Account` オブジェクトのシリアライズ配列 |
+| `karotter:active-account-id` | `string` | 現在アクティブなアカウントのID |
+| `karotter:activeAccountIndex` | `string` (number) | アカウント配列内のアクティブアカウントのインデックス |
+| `karotter:theme` | `string` | UIテーマ: `"light"`, `"dark"`, または `"system"` |
+| `karotter:accentColor` | `string` | アクセントカラーの16進コード |
+| `karotter:fontSize` | `string` (number) | フォントサイズの設定 |
+| `karotter:language` | `string` | UI言語コード（例: `"ja"`, `"en"`） |
+| `karotter:sidebarCollapsed` | `string` (boolean) | サイドバーが折りたたまれているかどうか |
+| `karotter:notificationPermission` | `string` | ブラウザ通知の許可状態 |
+| `karotter:lastNotificationCheck` | `string` (ISO date) | 最後の通知ポーリングのタイムスタンプ |
+| `karotter:drafts` | `string` (JSON) | 保存された投稿の下書き |
+| `karotter:recentSearches` | `string` (JSON) | 最近の検索クエリの配列 |
+| `karotter:recentEmojis` | `string` (JSON) | 最近使用した絵文字の配列 |
+| `karotter:mutedKeywords` | `string` (JSON) | ミュートキーワードのローカルキャッシュ |
+| `karotter:timelineMode` | `string` | タイムライン表示モード: `"latest"`, `"recommend"` |
+| `karotter:autoplayVideos` | `string` (boolean) | タイムラインで動画を自動再生するかどうか |
+| `karotter:reduceMotion` | `string` (boolean) | UIアニメーションを軽減するかどうか |
+| `karotter:contentWarningExpanded` | `string` (boolean) | ネタバレ/CWコンテンツをデフォルトで展開するかどうか |
+| `karotter:showR18Content` | `string` (boolean) | R18コンテンツ設定のローカルキャッシュ |
+| `karotter:betaExperimentVariant` | `string` | 割り当てられたA/Bテストバリアント（A-E） |
+| `karotter:onboardingCompleted` | `string` (boolean) | オンボーディングフローが完了したかどうか |
+| `karotter:cookieConsent` | `string` (boolean) | ユーザーがCookieバナーに同意したかどうか |
+| `karotter:dmEncryptionKey` | `string` | E2E暗号化DM用のクライアント側暗号化キー |
+| `karotter:callSettings` | `string` (JSON) | 保存された通話の音声/映像設定 |
+| `karotter:drawToolSettings` | `string` (JSON) | 最後に使用したお絵かきツールの設定（色、太さ、ツール） |
 
 ---
 
-## Native Preferences Keys
+## ネイティブ設定キー
 
-Keys used by the native (iOS/Android) apps, stored in platform-specific secure storage (Keychain / SharedPreferences).
+ネイティブ（iOS/Android）アプリで使用されるキーです。プラットフォーム固有のセキュアストレージ（Keychain / SharedPreferences）に保存されます。
 
-| Key | Type | Description |
+| Key | タイプ | 説明 |
 |-----|------|-------------|
-| `karotter_native_accessToken` | `string` | JWT access token (stored securely) |
-| `karotter_native_refreshToken` | `string` | Refresh token (stored securely) |
-| `karotter_native_deviceId` | `string` | Device UUID |
-| `karotter_native_active_account_id` | `string` | ID of the currently active account |
-| `karotter_native_sessionId` | `string` | Current session ID |
-| `karotter_native_userId` | `string` | Current user ID |
-| `karotter_native_biometricEnabled` | `boolean` | Whether biometric unlock is enabled |
-| `karotter_native_pushToken` | `string` | Firebase/APNs push notification token |
-| `karotter_native_pushEnabled` | `boolean` | Whether push notifications are enabled |
-| `karotter_native_accounts` | `string` (JSON) | Multi-account data (encrypted) |
-| `karotter_native_lastSyncTimestamp` | `string` (ISO date) | Last data sync timestamp |
-| `karotter_native_offlineCache` | `boolean` | Whether offline caching is enabled |
-| `karotter_native_dataUsage` | `string` | Data usage mode: `"wifi_only"`, `"always"`, `"never"` |
-| `karotter_native_videoQuality` | `string` | Preferred video quality: `"auto"`, `"low"`, `"medium"`, `"high"` |
-| `karotter_native_autoDownloadMedia` | `boolean` | Whether to auto-download media attachments |
-| `karotter_native_hapticFeedback` | `boolean` | Whether haptic feedback is enabled |
-| `karotter_native_appBadgeCount` | `number` | Current app badge number |
+| `karotter_native_accessToken` | `string` | JWTアクセストークン（セキュアに保存） |
+| `karotter_native_refreshToken` | `string` | リフレッシュトークン（セキュアに保存） |
+| `karotter_native_deviceId` | `string` | デバイスUUID |
+| `karotter_native_active_account_id` | `string` | 現在アクティブなアカウントのID |
+| `karotter_native_sessionId` | `string` | 現在のセッションID |
+| `karotter_native_userId` | `string` | 現在のユーザーID |
+| `karotter_native_biometricEnabled` | `boolean` | 生体認証ロック解除が有効かどうか |
+| `karotter_native_pushToken` | `string` | Firebase/APNsプッシュ通知トークン |
+| `karotter_native_pushEnabled` | `boolean` | プッシュ通知が有効かどうか |
+| `karotter_native_accounts` | `string` (JSON) | マルチアカウントデータ（暗号化済み） |
+| `karotter_native_lastSyncTimestamp` | `string` (ISO date) | 最終データ同期のタイムスタンプ |
+| `karotter_native_offlineCache` | `boolean` | オフラインキャッシュが有効かどうか |
+| `karotter_native_dataUsage` | `string` | データ使用モード: `"wifi_only"`, `"always"`, `"never"` |
+| `karotter_native_videoQuality` | `string` | 優先動画品質: `"auto"`, `"low"`, `"medium"`, `"high"` |
+| `karotter_native_autoDownloadMedia` | `boolean` | メディア添付ファイルを自動ダウンロードするかどうか |
+| `karotter_native_hapticFeedback` | `boolean` | 触覚フィードバックが有効かどうか |
+| `karotter_native_appBadgeCount` | `number` | 現在のアプリバッジ数 |
 
 ---
 
-## HTTP Status Codes
+## HTTPステータスコード
 
-Common status codes returned by the API and their meanings in context.
+APIが返す一般的なステータスコードとその意味です。
 
-| Status | Meaning |
+| ステータス | 意味 |
 |--------|---------|
-| `200` | Success |
-| `201` | Created (new resource) |
-| `400` | Bad request (validation error, invalid parameters) |
-| `401` | Unauthorized (token expired or missing) -- triggers auto-refresh |
-| `403` | Forbidden (CSRF invalid, banned, insufficient permissions) |
-| `404` | Not found (resource does not exist or route does not exist) |
-| `409` | Conflict (duplicate resource, e.g. username/email taken) |
-| `429` | Too many requests (rate limited) |
-| `500` | Internal server error |
+| `200` | 成功 |
+| `201` | 作成済み（新しいリソース） |
+| `400` | 不正なリクエスト（バリデーションエラー、無効なパラメータ） |
+| `401` | 未認証（トークン期限切れまたは欠落） -- 自動リフレッシュをトリガー |
+| `403` | 禁止（CSRF無効、BAN済み、権限不足） |
+| `404` | 見つからない（リソースまたはルートが存在しない） |
+| `409` | 競合（リソースの重複、例: ユーザー名/メールアドレスが使用済み） |
+| `429` | リクエスト過多（レート制限） |
+| `500` | 内部サーバーエラー |
 
 ---
 
-## Rate Limits
+## レート制限
 
-Known rate limit windows.
+既知のレート制限ウィンドウです。
 
-| Endpoint / Action | Limit | Window |
+| エンドポイント / アクション | 制限 | ウィンドウ |
 |-------------------|-------|--------|
-| Login attempts | 5 | per 15 minutes |
-| Registration | 3 | per hour |
-| Email verification resend | 1 | per 10 minutes (600s cooldown) |
-| Post creation | 30 | per hour |
-| DM messages | 60 | per minute |
-| Reactions | 30 | per minute |
-| Follow/Unfollow | 30 | per hour |
-| General API | 300 | per minute |
+| ログイン試行 | 5 | 15分あたり |
+| 登録 | 3 | 1時間あたり |
+| メール認証の再送信 | 1 | 10分あたり（600秒クールダウン） |
+| 投稿作成 | 30 | 1時間あたり |
+| DMメッセージ | 60 | 1分あたり |
+| リアクション | 30 | 1分あたり |
+| フォロー/フォロー解除 | 30 | 1時間あたり |
+| 一般API | 300 | 1分あたり |
 
 ---
 
-## Media Constraints
+## メディア制約
 
-| Constraint | Value |
+| 制約 | 値 |
 |------------|-------|
-| Max images per post | 4 |
-| Max video per post | 1 |
-| Images and videos cannot be mixed | N/A |
-| Max image file size | 10 MB |
-| Max video file size | 100 MB |
-| Supported image formats | JPEG, PNG, GIF, WebP |
-| Supported video formats | MP4, WebM |
-| Draw canvas size | 2560 x 2560 px |
-| Draw layer payload max | ~5 MB (all layers combined) |
-| Reaction emoji max length | 32 characters |
-| Username max length | 15 characters |
-| Username pattern | `/^[a-zA-Z0-9_]{1,15}$/` |
-| Password length | 8-72 characters |
-| Max accounts per device | 5 |
-| Post field name for media | `media` |
-| DM field name for media | `attachments` |
+| 1投稿あたりの最大画像数 | 4 |
+| 1投稿あたりの最大動画数 | 1 |
+| 画像と動画の混在は不可 | N/A |
+| 最大画像ファイルサイズ | 10 MB |
+| 最大動画ファイルサイズ | 100 MB |
+| 対応画像フォーマット | JPEG, PNG, GIF, WebP |
+| 対応動画フォーマット | MP4, WebM |
+| お絵かきキャンバスサイズ | 2560 x 2560 px |
+| お絵かきレイヤーペイロード上限 | 約5 MB（全レイヤー合計） |
+| リアクション絵文字の最大長 | 32文字 |
+| ユーザー名の最大長 | 15文字 |
+| ユーザー名パターン | `/^[a-zA-Z0-9_]{1,15}$/` |
+| パスワード長 | 8-72文字 |
+| 1デバイスあたりの最大アカウント数 | 5 |
+| 投稿のメディアフィールド名 | `media` |
+| DMのメディアフィールド名 | `attachments` |
 
 ---
 
-## API Base URLs
+## APIベースURL
 
-| Priority | Domain | Notes |
+| 優先度 | ドメイン | 備考 |
 |----------|--------|-------|
-| Primary | `https://api.karotter.com/api` | Main API endpoint |
-| Failover 1 | `https://api.karotter.jp/api` | Japanese domain failover |
-| Failover 2 | `https://api.karotter.net/api` | .net domain failover |
-| Failover 3 | `https://apikarotter.karon.jp/api` | Legacy domain failover |
+| プライマリ | `https://api.karotter.com/api` | メインAPIエンドポイント |
+| フェイルオーバー1 | `https://api.karotter.jp/api` | 日本ドメインフェイルオーバー |
+| フェイルオーバー2 | `https://api.karotter.net/api` | .netドメインフェイルオーバー |
+| フェイルオーバー3 | `https://apikarotter.karon.jp/api` | レガシードメインフェイルオーバー |
 
-### CDN / Media URLs
+### CDN / メディアURL
 
-Media URLs in API responses are relative paths. Construct full URLs:
+APIレスポンス内のメディアURLは相対パスです。完全なURLは以下のように構築します:
 
 ```
 Full URL = "https://karotter.com" + mediaUrl
@@ -506,10 +506,10 @@ Full URL = "https://karotter.com" + mediaUrl
 
 ## Cloudflare Turnstile
 
-Used for bot protection on registration.
+登録時のBot対策に使用されます。
 
-| Property | Value |
+| プロパティ | 値 |
 |----------|-------|
-| Sitekey | `0x4AAAAAACujb-w-3YVWR1zA` |
-| Required on | `POST /api/auth/register` |
-| Field name | `turnstileToken` |
+| サイトキー | `0x4AAAAAACujb-w-3YVWR1zA` |
+| 必須エンドポイント | `POST /api/auth/register` |
+| フィールド名 | `turnstileToken` |

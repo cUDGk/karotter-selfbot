@@ -1,40 +1,40 @@
-# Direct Messages (DM) API
+# ダイレクトメッセージ (DM) API
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) may be required for some operations.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> 一部の操作ではCookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）が必要な場合があります。
 
 ---
 
-## Table of Contents
+## 目次
 
-- [Age Gate](#age-gate)
-- [Start a DM](#start-a-dm)
-- [List DM Groups](#list-dm-groups)
-- [Create a Group DM](#create-a-group-dm)
-- [Get Messages](#get-messages)
-- [Send a Message](#send-a-message)
-- [Mark as Read](#mark-as-read)
-- [Clear DM History](#clear-dm-history)
-- [Leave Group](#leave-group)
-- [Add Group Member](#add-group-member)
-- [Remove Group Member](#remove-group-member)
-- [Accept Message Request](#accept-message-request)
-- [Reject Message Request](#reject-message-request)
-- [Delete a Message](#delete-a-message)
-- [Edit a Message](#edit-a-message)
-- [React to a Message](#react-to-a-message)
-- [Vote on a Poll](#vote-on-a-poll)
-- [Calls](#calls)
-- [Object Reference: DmMessage](#object-reference-dmmessage)
-- [Object Reference: DMGroup](#object-reference-dmgroup)
+- [年齢制限](#age-gate)
+- [DMを開始](#start-a-dm)
+- [DMグループ一覧](#list-dm-groups)
+- [グループDMの作成](#create-a-group-dm)
+- [メッセージ取得](#get-messages)
+- [メッセージ送信](#send-a-message)
+- [既読にする](#mark-as-read)
+- [DM履歴を削除](#clear-dm-history)
+- [グループを退出](#leave-group)
+- [グループメンバー追加](#add-group-member)
+- [グループメンバー削除](#remove-group-member)
+- [メッセージリクエスト承認](#accept-message-request)
+- [メッセージリクエスト拒否](#reject-message-request)
+- [メッセージ削除](#delete-a-message)
+- [メッセージ編集](#edit-a-message)
+- [メッセージにリアクション](#react-to-a-message)
+- [投票に投票](#vote-on-a-poll)
+- [通話](#calls)
+- [オブジェクトリファレンス: DmMessage](#object-reference-dmmessage)
+- [オブジェクトリファレンス: DMGroup](#object-reference-dmgroup)
 
 ---
 
-## Age Gate
+## 年齢制限
 
-DM functionality is restricted to users aged **13 or older**. Accounts registered with a birthday indicating they are under 13 cannot access any DM endpoint. Attempting to do so returns:
+DM機能は**13歳以上**のユーザーに制限されています。13歳未満を示す生年月日で登録されたアカウントは、DMエンドポイントにアクセスできません。アクセスを試みると以下が返されます:
 
 ```json
 {
@@ -44,30 +44,30 @@ DM functionality is restricted to users aged **13 or older**. Accounts registere
 
 ---
 
-## Start a DM
+## DMを開始
 
-Starts or retrieves a 1-on-1 DM conversation with a target user. If a DM group already exists between you and the target, it returns the existing group.
+対象ユーザーとの1対1のDM会話を開始または取得します。あなたと対象の間にDMグループが既に存在する場合、既存のグループを返します。
 
 ```
 POST /api/dm/start
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `targetUserId` | number | Yes | The numeric ID of the user to DM |
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"group": {...}}` | DM group created or retrieved |
 | 400 | `{"error": "自分自身にDMを送ることはできません"}` | Attempted to DM yourself |
 | 403 | `{"error": "メールアドレスの確認が必要です", "code": "EMAIL_NOT_VERIFIED"}` | Email not verified (required for DMing non-followers) |
 | 403 | `{"error": "このユーザーにDMを送ることはできません"}` | Target has DMs disabled or has blocked you |
 
-### Example
+### 例
 
 ```http
 POST /api/dm/start HTTP/1.1
@@ -94,26 +94,26 @@ Content-Type: application/json
 }
 ```
 
-> **Note:** If the target user's `dmRequestPolicy` is `"FOLLOWERS"` and you don't follow them, the DM will be created as a **message request**. The recipient must accept it before they see your messages.
+> **注意:** If the target user's `dmRequestPolicy` is `"FOLLOWERS"` and you don't follow them, the DM will be created as a **message request**. The recipient must accept it before they see your messages.
 
 ---
 
-## List DM Groups
+## DMグループ一覧
 
-Returns a paginated list of all your DM conversations (both 1-on-1 and group DMs).
+すべてのDM会話（1対1とグループDMの両方）のページネーション付きリストを返します。
 
 ```
 GET /api/dm/groups
 ```
 
-### Query Parameters
+### クエリパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number (1-indexed) |
 | `limit` | number | 30 | Number of groups per page (max 30) |
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -163,9 +163,9 @@ GET /api/dm/groups
 }
 ```
 
-### Response Fields
+### レスポンス Fields
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `groups` | DMGroup[] | Array of DM group objects |
 | `pagination.page` | number | Current page |
@@ -173,23 +173,23 @@ GET /api/dm/groups
 
 ---
 
-## Create a Group DM
+## グループDMの作成
 
-Creates a new group DM with multiple users.
+複数ユーザーで新しいグループDMを作成します。
 
 ```
 POST /api/dm/groups
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `userIds` | number[] | Yes | Array of user IDs to include (minimum 2) |
 | `name` | string | Yes | Group name |
 | `isGroup` | boolean | Yes | Must be `true` |
 
-### Example
+### 例
 
 ```http
 POST /api/dm/groups HTTP/1.1
@@ -204,9 +204,9 @@ Content-Type: application/json
 }
 ```
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"group": {...}}` | Group created |
 | 400 | `{"error": "..."}` | Validation error (e.g., too few users) |
@@ -214,28 +214,28 @@ Content-Type: application/json
 
 ---
 
-## Get Messages
+## メッセージ取得
 
-Returns a paginated list of messages in a DM group, ordered newest-first.
+DMグループのメッセージのページネーション付きリストを新しい順で返します。
 
 ```
 GET /api/dm/groups/:id/messages
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Query Parameters
+### クエリパラメータ
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number (1-indexed) |
 | `limit` | number | 50 | Messages per page (max 50) |
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -280,9 +280,9 @@ GET /api/dm/groups/:id/messages
 }
 ```
 
-### Pagination Fields
+### ページネーションフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `pagination.page` | number | Current page number |
 | `pagination.limit` | number | Items per page |
@@ -291,23 +291,23 @@ GET /api/dm/groups/:id/messages
 
 ---
 
-## Send a Message
+## メッセージ送信
 
-Sends a message to a DM group. Uses `multipart/form-data` encoding.
+DMグループにメッセージを送信します。`multipart/form-data` エンコーディングを使用します。
 
 ```
 POST /api/dm/groups/:id/messages
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body (FormData)
+### リクエストボディ (FormData)
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `content` | string | No* | Text content of the message |
 | `attachments` | File[] | No* | Image/video file(s). Append multiple files with the same field name `attachments` |
@@ -322,9 +322,9 @@ POST /api/dm/groups/:id/messages
 
 > **CRITICAL:** The file field name is `attachments`, NOT `media`. Using `media` will result in a 500 error. This differs from the post creation endpoint which uses `media`.
 
-### Poll Rules
+### 投票ルール
 
-| Rule | Constraint |
+| ルール | 制約 |
 |------|-----------|
 | Minimum options | 2 |
 | Maximum options | 4 |
@@ -332,7 +332,7 @@ POST /api/dm/groups/:id/messages
 | Allowed durations (hours) | 1, 6, 12, 24, 48, 72, 168 |
 | Combined with attachments | **Not allowed** - sending a poll with attachments will fail |
 
-### Example: Text Message
+### 例: Text Message
 
 ```http
 POST /api/dm/groups/487/messages HTTP/1.1
@@ -347,7 +347,7 @@ Hello, how are you?
 ------FormBoundary--
 ```
 
-### Example: Message with Attachments
+### 例: Message with Attachments
 
 ```http
 POST /api/dm/groups/487/messages HTTP/1.1
@@ -384,7 +384,7 @@ Content-Disposition: form-data; name="attachmentR18Flags"
 ------FormBoundary--
 ```
 
-### Example: Message with Poll
+### 例: Message with Poll
 
 ```http
 POST /api/dm/groups/487/messages HTTP/1.1
@@ -407,7 +407,7 @@ Content-Disposition: form-data; name="pollDurationHours"
 ------FormBoundary--
 ```
 
-### Example: Reply
+### 例: Reply
 
 ```http
 POST /api/dm/groups/487/messages HTTP/1.1
@@ -426,9 +426,9 @@ Content-Disposition: form-data; name="replyToId"
 ------FormBoundary--
 ```
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": {...}}` | Message sent successfully |
 | 400 | `{"error": "..."}` | Validation error |
@@ -436,25 +436,25 @@ Content-Disposition: form-data; name="replyToId"
 
 ---
 
-## Mark as Read
+## 既読にする
 
-Marks all messages in a DM group as read up to the current time.
+DMグループのすべてのメッセージを現在時刻まで既読にします。
 
 ```
 POST /api/dm/groups/:id/read
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -465,7 +465,7 @@ None.
 
 ---
 
-## Clear DM History
+## DM履歴を削除
 
 Removes the DM group from **your** DM list. The other participant(s) still see the conversation. This is a **destructive operation** -- the conversation disappears from your view.
 
@@ -473,17 +473,17 @@ Removes the DM group from **your** DM list. The other participant(s) still see t
 POST /api/dm/groups/:id/clear
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -491,93 +491,93 @@ None.
 }
 ```
 
-> **Warning:** This is irreversible from the API. The conversation will reappear if the other user sends a new message.
+> **警告:** This is irreversible from the API. The conversation will reappear if the other user sends a new message.
 
 ---
 
-## Leave Group
+## グループを退出
 
-Leaves a group DM. Only works for group DMs (`isGroup: true`).
+グループDMを退出します。グループDM（`isGroup: true`）でのみ機能します。
 
 ```
 POST /api/dm/groups/:id/leave
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "グループから退出しました"}` | Successfully left |
 | 400 | `{"error": "退出できません。履歴削除を利用してください"}` | Cannot leave a 1-on-1 DM; use clear instead |
 
-> **Note:** For 1-on-1 DMs, you cannot "leave". Use `POST /dm/groups/:id/clear` instead.
+> **注意:** For 1-on-1 DMs, you cannot "leave". Use `POST /dm/groups/:id/clear` instead.
 
 ---
 
-## Add Group Member
+## グループメンバー追加
 
-Adds a user to a group DM. Requires email verification.
+グループDMにユーザーを追加します。メール認証が必要です。
 
 ```
 POST /api/dm/groups/:id/members
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `userId` | number | Yes | User ID to add |
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メンバーを追加しました"}` | Member added |
 | 403 | `{"error": "メールアドレスの確認が必要です", "code": "EMAIL_NOT_VERIFIED"}` | Email not verified |
 
 ---
 
-## Remove Group Member
+## グループメンバー削除
 
-Removes a user from a group DM. Requires admin privileges in the group.
+グループDMからユーザーを削除します。グループの管理者権限が必要です。
 
 ```
 DELETE /api/dm/groups/:id/members/:userId
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 | `userId` | number | Yes | User ID to remove |
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メンバーを削除しました"}` | Member removed |
 | 403 | `{"error": "権限がありません"}` | Not a group admin |
 
 ---
 
-## Accept Message Request
+## メッセージリクエスト承認
 
 Accepts a DM message request from a user you don't follow.
 
@@ -585,17 +585,17 @@ Accepts a DM message request from a user you don't follow.
 POST /api/dm/groups/:id/request/accept
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -607,7 +607,7 @@ After accepting, `canSend` becomes `true` and messages flow normally.
 
 ---
 
-## Reject Message Request
+## メッセージリクエスト拒否
 
 Rejects a DM message request. The conversation is removed from your list.
 
@@ -615,17 +615,17 @@ Rejects a DM message request. The conversation is removed from your list.
 POST /api/dm/groups/:id/request/reject
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | DM group ID |
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
-### Response
+### レスポンス
 
 ```json
 {
@@ -635,7 +635,7 @@ None.
 
 ---
 
-## Delete a Message
+## メッセージ削除
 
 Deletes one of your own messages. You can only delete messages you sent.
 
@@ -643,25 +643,25 @@ Deletes one of your own messages. You can only delete messages you sent.
 DELETE /api/dm/messages/:id
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Message ID |
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "メッセージを削除しました"}` | Deleted |
 | 403 | `{"error": "権限がありません"}` | Not your message |
 | 404 | `{"error": "メッセージが見つかりません"}` | Message not found |
 
-> **Note:** Deleted messages remain in the conversation with `isDeleted: true` and `content` cleared. They are not physically removed.
+> **注意:** Deleted messages remain in the conversation with `isDeleted: true` and `content` cleared. They are not physically removed.
 
 ---
 
-## Edit a Message
+## メッセージ編集
 
 Edits the text content of one of your own messages.
 
@@ -669,28 +669,28 @@ Edits the text content of one of your own messages.
 PATCH /api/dm/messages/:id
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Message ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `content` | string | Yes | New text content |
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": {...}}` | Edited message object |
 | 400 | `{"error": "暗号化メッセージは編集できません"}` | Cannot edit encrypted messages |
 | 400 | `{"error": "システムメッセージは編集できません"}` | Cannot edit system messages |
 | 403 | `{"error": "権限がありません"}` | Not your message |
 
-### Restrictions
+### 制限事項
 
 - **Encrypted messages** (`isEncrypted: true`) cannot be edited
 - **System messages** (`systemType` is not null, e.g., `MEMBER_JOINED`, `MEMBER_LEFT`) cannot be edited
@@ -698,7 +698,7 @@ PATCH /api/dm/messages/:id
 
 ---
 
-## React to a Message
+## メッセージにリアクション
 
 Adds an emoji reaction to a DM message.
 
@@ -706,26 +706,26 @@ Adds an emoji reaction to a DM message.
 POST /api/dm/messages/:id/reactions
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Message ID |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `emoji` | string | Yes | Emoji text (max 32 characters) |
 
-### Responses
+### レスポンス一覧
 
-| Status | Body | Description |
+| ステータス | ボディ | 説明 |
 |--------|------|-------------|
 | 200 | `{"message": "リアクションしました"}` | Reaction added |
 | 400 | `{"error": "既にこの絵文字でリアクションしています"}` | Already reacted with this emoji |
 
-### Example
+### 例
 
 ```http
 POST /api/dm/messages/4831/reactions HTTP/1.1
@@ -740,7 +740,7 @@ Content-Type: application/json
 
 ---
 
-## Vote on a Poll
+## 投票に投票
 
 Votes on a poll within a DM message. This is a **toggle** -- calling it again with the same `optionId` removes your vote.
 
@@ -748,19 +748,19 @@ Votes on a poll within a DM message. This is a **toggle** -- calling it again wi
 POST /api/dm/messages/:id/poll/vote
 ```
 
-### Path Parameters
+### パスパラメータ
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `id` | number | Yes | Message ID containing the poll |
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `optionId` | number | Yes | The poll option ID to vote for |
 
-### Example
+### 例
 
 ```http
 POST /api/dm/messages/5001/poll/vote HTTP/1.1
@@ -775,11 +775,11 @@ Content-Type: application/json
 
 ---
 
-## Calls
+## 通話
 
 DM groups support voice/video calls with WebRTC.
 
-### Start a Call
+### 通話を開始
 
 ```
 POST /api/dm/groups/:id/call/start
@@ -787,7 +787,7 @@ POST /api/dm/groups/:id/call/start
 
 Starts a new call in the DM group. Returns call information including ICE server configuration.
 
-### Join a Call
+### 通話に参加
 
 ```
 POST /api/dm/groups/:id/call/join
@@ -795,7 +795,7 @@ POST /api/dm/groups/:id/call/join
 
 Joins an existing active call in the DM group.
 
-### Leave a Call
+### 通話を退出
 
 ```
 POST /api/dm/groups/:id/call/leave
@@ -803,18 +803,18 @@ POST /api/dm/groups/:id/call/leave
 
 Leaves the current call. If you are the last participant, the call ends automatically.
 
-### Socket.IO Events for Calls
+### Socket.IOイベント for Calls
 
-| Event | Direction | Payload | Description |
+| イベント | 方向 | ペイロード | 説明 |
 |-------|-----------|---------|-------------|
 | `voice:offer` | emit | `{groupId, sdp}` | Send WebRTC offer |
 | `voice:answer` | emit | `{groupId, sdp}` | Send WebRTC answer |
 | `voice:ice-candidate` | emit | `{groupId, candidate}` | Send ICE candidate |
 | `voice:hangup` | emit | `{groupId}` | Hang up |
 
-### Socket.IO Events for DM
+### Socket.IOイベント for DM
 
-| Event | Direction | Payload | Description |
+| イベント | 方向 | ペイロード | 説明 |
 |-------|-----------|---------|-------------|
 | `joinDM` | emit | `{groupId}` | Join DM room for real-time updates |
 | `leaveDM` | emit | `{groupId}` | Leave DM room |
@@ -824,7 +824,7 @@ Leaves the current call. If you are the last participant, the call ends automati
 
 ---
 
-## Object Reference: DmMessage
+## オブジェクトリファレンス: DmMessage
 
 The complete DmMessage object returned by message endpoints.
 
@@ -868,9 +868,9 @@ The complete DmMessage object returned by message endpoints.
 }
 ```
 
-### DmMessage Field Reference
+### DmMessageフィールドリファレンス
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Unique message ID |
 | `groupId` | number | ID of the DM group this message belongs to |
@@ -919,7 +919,7 @@ In some contexts, attachments may be returned as an `attachmentMeta` array inste
 
 ---
 
-## Object Reference: DMGroup
+## オブジェクトリファレンス: DMGroup
 
 The complete DMGroup object returned by group endpoints.
 
@@ -963,9 +963,9 @@ The complete DMGroup object returned by group endpoints.
 }
 ```
 
-### DMGroup Field Reference
+### DMGroupフィールドリファレンス
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Unique group ID |
 | `name` | string \| null | Group name (null for 1-on-1 DMs) |
@@ -993,9 +993,9 @@ The complete DMGroup object returned by group endpoints.
 | `canSend` | boolean | Whether you can send messages in this group |
 | `sendDisabledReason` | string \| null | Reason why sending is disabled, if applicable |
 
-### Message Request Status Values
+### メッセージリクエストステータス値
 
-| Value | Description |
+| 値 | 説明 |
 |-------|-------------|
 | `PENDING` | Request sent but not yet reviewed |
 | `ACCEPTED` | Request accepted, normal messaging |
@@ -1004,9 +1004,9 @@ The complete DMGroup object returned by group endpoints.
 
 ---
 
-## Rate Limiting
+## レート制限
 
-All DM endpoints share the default rate limit:
+すべてのDMエンドポイントはデフォルトのレート制限を共有しています:
 
 ```
 ratelimit-policy: 100;w=60

@@ -1,13 +1,13 @@
-# Notifications API
+# 通知 API
 
-> **Base URL:** `https://karotter.com/api`
+> **ベースURL:** `https://karotter.com/api`
 >
-> All endpoints require authentication via `Authorization: Bearer {token}` header and `X-CSRF-Token` header.
-> Cookie-based authentication (`karotter_at`, `karotter_rt`, `karotter_csrf`) is required for most notification endpoints.
+> すべてのエンドポイントは `Authorization: Bearer {token}` ヘッダーと `X-CSRF-Token` ヘッダーによる認証が必要です。
+> ほとんどの通知エンドポイントではCookieベース認証（`karotter_at`, `karotter_rt`, `karotter_csrf`）が必要です。
 
 ---
 
-## Table of Contents
+## 目次
 
 - [List Notifications](#list-notifications)
 - [Get Unread Count](#get-unread-count)
@@ -21,9 +21,9 @@
 
 ---
 
-## List Notifications
+## 通知一覧
 
-Returns a paginated list of notifications for the authenticated user. Notifications are grouped by type and context (e.g., multiple likes on the same post are merged into one notification).
+認証済みユーザーの通知のページネーション付きリストを返します。通知はタイプとコンテキストでグループ化されます（例: 同じ投稿への複数のいいねは1つの通知にまとめられます）。
 
 ```
 GET /api/notifications
@@ -31,7 +31,7 @@ GET /api/notifications
 
 ### Query Parameters
 
-| Parameter | Type | Default | Description |
+| パラメータ | 型 | デフォルト | 説明 |
 |-----------|------|---------|-------------|
 | `page` | number | 1 | Page number (1-indexed) |
 | `limit` | number | 15 | Notifications per page |
@@ -98,9 +98,9 @@ GET /api/notifications
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `notifications` | Notification[] | Array of notification objects |
 | `pagination.page` | number | Current page |
@@ -110,9 +110,9 @@ GET /api/notifications
 
 ---
 
-## Get Unread Count
+## 未読数取得
 
-Returns the number of unread notifications.
+未読通知数を返します。
 
 ```
 GET /api/notifications/unread/count
@@ -120,7 +120,7 @@ GET /api/notifications/unread/count
 
 ### Query Parameters
 
-None.
+なし。
 
 ### Response
 
@@ -130,9 +130,9 @@ None.
 }
 ```
 
-### Response Fields
+### レスポンスフィールド
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `count` | number | Number of unread notifications |
 
@@ -151,17 +151,17 @@ Authorization: Bearer eyJ...
 
 ---
 
-## Mark All as Read
+## すべて既読にする
 
-Marks all notifications as read for the authenticated user.
+認証済みユーザーのすべての通知を既読にします。
 
 ```
 PATCH /api/notifications/read-all
 ```
 
-### Request Body
+### リクエストボディ
 
-None.
+なし。
 
 ### Response
 
@@ -181,9 +181,9 @@ X-CSRF-Token: abc123
 
 ---
 
-## Get Grouped Posts
+## グループ化された投稿を取得
 
-Returns posts associated with a set of notification IDs. Used when a notification group contains multiple posts (e.g., "5 people liked your posts").
+通知IDセットに関連する投稿を返します。通知グループが複数の投稿を含む場合��使用されます（例: "5人があなたの投稿にいいねしました"）。
 
 ```
 GET /api/notifications/grouped-posts
@@ -191,7 +191,7 @@ GET /api/notifications/grouped-posts
 
 ### Query Parameters
 
-| Parameter | Type | Required | Description |
+| パラメータ | 型 | 必須 | 説明 |
 |-----------|------|----------|-------------|
 | `notificationIds` | string | Yes | Comma-separated list of notification IDs |
 
@@ -237,17 +237,17 @@ Authorization: Bearer eyJ...
 
 ---
 
-## Register Push Notifications
+## プッシュ通知登録
 
-Registers a device for Firebase Cloud Messaging (FCM) push notifications.
+Firebase Cloud Messaging (FCM) プッシュ通知用のデバイスを登録します。
 
 ```
 POST /api/notifications/push/register
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `token` | string | Yes | FCM device token |
 | `platform` | string | Yes | Platform identifier (e.g., `"web"`) |
@@ -287,17 +287,17 @@ Content-Type: application/json
 
 ---
 
-## Unregister Push Notifications
+## プッシュ通知解除
 
-Removes a device from push notification delivery.
+プッシュ通知配信からデバイスを削除します。
 
 ```
 POST /api/notifications/push/unregister
 ```
 
-### Request Body
+### リクエストボディ
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
 | `token` | string | No* | FCM device token |
 | `deviceId` | string | No* | Device identifier |
@@ -328,7 +328,7 @@ Content-Type: application/json
 
 ---
 
-## Firebase Configuration
+## Firebase設定
 
 Karotter uses Firebase Cloud Messaging for push notifications. Below is the public Firebase configuration used by the web client.
 
@@ -361,9 +361,9 @@ const token = await getToken(messaging, { vapidKey });
 
 ---
 
-## Notification Types
+## 通知タイプ
 
-| Type | Description | Has `post`? | Has `actor`? |
+| タイプ | 説明 | Has `post`? | Has `actor`? |
 |------|-------------|------------|-------------|
 | `FOLLOW` | Someone followed you | No | Yes |
 | `FOLLOW_REQUEST` | Someone sent a follow request (private account) | No | Yes |
@@ -377,7 +377,7 @@ const token = await getToken(messaging, { vapidKey });
 | `REPORT_UPDATE` | Update on a report you filed | No | No |
 | `SYSTEM` | System-generated notification | No | No |
 
-### Notification Grouping
+### 通知のグルーピング
 
 Notifications of the same type targeting the same post within a time window are grouped together. For example, if 5 people like the same post, you receive one notification with:
 
@@ -386,16 +386,16 @@ Notifications of the same type targeting the same post within a time window are 
 - `postCount: 1`
 - `notificationIds: [id1, id2, id3, id4, id5]`
 
-### Context Fields
+### コンテキストフィールド
 
-| Field | Values | Description |
+| フィールド | 値 | 説明 |
 |-------|--------|-------------|
 | `likeContext` | `"OWN_POST"`, `"REKAROTED_POST"`, `"OTHER"` | Whether the liked post is your original post or a post you rekarotted |
 | `rekarotContext` | `"OWN_POST"`, `"OTHER"` | Whether the rekarotted post is your own |
 
 ---
 
-## Object Reference: Notification
+## オブジェクトリファレンス: Notification
 
 Full Notification object structure.
 
@@ -472,9 +472,9 @@ Full Notification object structure.
 }
 ```
 
-### Notification Field Reference
+### 通知フィールドリファレンス
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Primary notification ID |
 | `groupKey` | string | Grouping key in format `TYPE:postId:timestamp` |
@@ -495,9 +495,9 @@ Full Notification object structure.
 | `createdAt` | string | ISO 8601 creation timestamp |
 | `notificationIds` | number[] | All notification IDs in this group (for use with grouped-posts endpoint) |
 
-### PostBrief (Notification Context)
+### Post（投稿）Brief（通知コンテキスト）
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
 | `id` | number | Post ID |
 | `content` | string | Post text content |
@@ -511,9 +511,9 @@ Full Notification object structure.
 
 ---
 
-## Rate Limiting
+## レート制限
 
-All notification endpoints share the default rate limit:
+すべての通知エンドポイントはデフォルトのレート制限を共有しています:
 
 ```
 ratelimit-policy: 100;w=60

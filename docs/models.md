@@ -1,115 +1,115 @@
-# Data Models
+# データモデル
 
-Complete reference for all data model definitions used in the Karotter API. Every field, its type, and its purpose are documented.
+Karotter APIで使用されるすべてのデータモデル定義の完全なリファレンスです。すべてのフィールド、型、目的が文書化されています。
 
 ---
 
-## Post
+## Post（投稿）
 
-Represents a single post ("karot") on the platform.
+プラットフォーム上の1つの投稿（"カロート"）を表します。
 
 ```ts
 interface Post {
-  id: number;                              // Unique post identifier
-  content: string;                         // Post text content (may contain mentions, hashtags)
-  createdAt: string;                       // ISO 8601 timestamp of creation
-  parentId: number | null;                 // ID of parent post if this is a reply, null otherwise
+  id: number;                              // 一意の投稿識別子
+  content: string;                         // 投稿テキスト（メンション、ハッシュタグを含む場合あり）
+  createdAt: string;                       // ISO 8601形式の作成日時
+  parentId: number | null;                 // リプライの場合は親投稿のID、それ以外はnull
 
-  // Author information (embedded subset of User)
+  // 投稿者情報（Userの埋め込みサブセット）
   author: {
     id: number;
     username: string;
     displayName: string;
     avatarUrl: string | null;
     isPrivate: boolean;
-    officialMark: string[];                // Array of mark color codes, e.g. ["BLUE"], or empty
+    officialMark: string[];                // マークカラーコードの配列（例: ["BLUE"]）、空の場合もあり
     isParodyAccount: boolean;
-    adminForceParody: boolean;             // Admin-forced parody label
+    adminForceParody: boolean;             // 管理者による強制パロディラベル
     isBotAccount: boolean;
-    adminForceBot: boolean;                // Admin-forced bot label
+    adminForceBot: boolean;                // 管理者による強制Botラベル
   };
 
-  // Media attachments
-  mediaUrls: string[];                     // Relative paths, e.g. ["/uploads/posts/uuid.jpg"]
-  mediaAlts: string[];                     // Alt text for each media item
-  mediaWidths: number[];                   // Width in pixels for each media item
-  mediaHeights: number[];                  // Height in pixels for each media item
-  mediaSpoilerFlags: boolean[];            // Whether each media is marked as spoiler
-  mediaR18Flags: boolean[];                // Whether each media is marked as R18/NSFW
+  // メディア添付
+  mediaUrls: string[];                     // 相対パス（例: ["/uploads/posts/uuid.jpg"]）
+  mediaAlts: string[];                     // 各メディアの代替テキスト
+  mediaWidths: number[];                   // 各メディアの幅（ピクセル）
+  mediaHeights: number[];                  // 各メディアの高さ（ピクセル）
+  mediaSpoilerFlags: boolean[];            // 各メディアがスポイラー指定かどうか
+  mediaR18Flags: boolean[];                // 各メディアがR18/NSFW指定かどうか
 
-  // Engagement counts
+  // エンゲージメント数
   likesCount: number;
-  rekarotsCount: number;                   // Repost count
+  rekarotsCount: number;                   // リポスト数
   repliesCount: number;
   bookmarksCount: number;
-  quoteUsersCount: number;                 // Number of users who quoted this post
+  quoteUsersCount: number;                 // この投稿を引用したユーザー数
   viewsCount: number;
 
-  // Viewer's interaction state
-  liked: boolean;                          // Whether the authenticated user liked this post
-  rekaroted: boolean;                      // Whether the authenticated user reposted this
-  bookmarked: boolean;                     // Whether the authenticated user bookmarked this
+  // 閲覧者のインタラクション状態
+  liked: boolean;                          // 認証ユーザーがこの投稿をいいねしたか
+  rekaroted: boolean;                      // 認証ユーザーがこの投稿をリポストしたか
+  bookmarked: boolean;                     // 認証ユーザーがこの投稿をブックマークしたか
 
-  // Interaction permissions
-  canInteract: boolean;                    // Whether the viewer can like/react/reply
-  canQuote: boolean;                       // Whether the viewer can quote this post
+  // インタラクション権限
+  canInteract: boolean;                    // 閲覧者がいいね/リアクション/リプライできるか
+  canQuote: boolean;                       // 閲覧者がこの投稿を引用できるか
 
-  // Reactions (emoji reactions beyond simple likes)
+  // リアクション（単純ないいね以外の絵文字リアクション）
   reactionSummary: Array<{
-    emoji: string;                         // The emoji text (up to 32 characters)
-    count: number;                         // Total reaction count for this emoji
-    reacted: boolean;                      // Whether the authenticated user reacted with this emoji
+    emoji: string;                         // 絵文字テキスト（最大32文字）
+    count: number;                         // この絵文字の合計リアクション数
+    reacted: boolean;                      // 認証ユーザーがこの絵文字でリアクションしたか
   }>;
 
-  // Reply context
+  // リプライコンテキスト
   replyToUsers: Array<{
     id: number;
     username: string;
   }>;
 
-  // Reply restriction settings
-  replyRestriction: "EVERYONE"             // Anyone can reply
-                  | "FOLLOWING"            // Only users the author follows
-                  | "MENTIONED"            // Only users mentioned in the post
-                  | "CIRCLE";              // Only members of the specified circle
-  replyCircleId: number | null;            // Circle ID if replyRestriction is "CIRCLE"
+  // リプライ制限設定
+  replyRestriction: "EVERYONE"             // 誰でもリプライ可能
+                  | "FOLLOWING"            // 投稿者がフォローしているユーザーのみ
+                  | "MENTIONED"            // 投稿内でメンションされたユーザーのみ
+                  | "CIRCLE";              // 指定サークルのメンバーのみ
+  replyCircleId: number | null;            // replyRestrictionが"CIRCLE"の場合のサークルID
 
-  // Visibility settings
-  visibility: "PUBLIC"                     // Visible to everyone
-            | "CIRCLE";                    // Visible only to circle members
-  viewerCircle: {                          // Present if visibility is "CIRCLE" and viewer is a member
+  // 公開範囲設定
+  visibility: "PUBLIC"                     // 全員に公開
+            | "CIRCLE";                    // サークルメンバーのみに公開
+  viewerCircle: {                          // visibilityが"CIRCLE"で閲覧者がメンバーの場合に存在
     id: number;
     name: string;
   } | null;
 
-  // Quoted post (embedded, recursive)
-  quotedPost: Post | null;                 // The post being quoted, if any (same Post structure)
+  // 引用投稿（埋め込み、再帰的）
+  quotedPost: Post | null;                 // 引用している投稿（同じPost構造）、なければnull
 
-  // Poll data
+  // アンケートデータ
   poll: {
     options: Array<{
-      id: number;                          // Option identifier
-      text: string;                        // Option text
-      percentage: number;                  // Vote percentage (0-100)
-      votedByMe: boolean;                  // Whether the authenticated user voted for this option
+      id: number;                          // 選択肢の識別子
+      text: string;                        // 選択肢のテキスト
+      percentage: number;                  // 投票割合（0-100）
+      votedByMe: boolean;                  // 認証ユーザーがこの選択肢に投票したか
     }>;
     totalVotes: number;
     isExpired: boolean;
-    expiresAt: string;                     // ISO 8601 timestamp
+    expiresAt: string;                     // ISO 8601形式のタイムスタンプ
   } | null;
 
-  // Moderation / block state
-  isMutedByViewer: boolean;                // Whether the viewer has muted this post's author
-  hasBlockedAuthor: boolean;               // Whether the viewer has blocked the author
-  isBlockedByAuthor: boolean;              // Whether the author has blocked the viewer
+  // モデレーション / ブロック状態
+  isMutedByViewer: boolean;                // 閲覧者がこの投稿の作者をミュートしているか
+  hasBlockedAuthor: boolean;               // 閲覧者が作者をブロックしているか
+  isBlockedByAuthor: boolean;              // 作者が閲覧者をブロックしているか
 
-  // Miscellaneous
-  itemId: number | null;                   // Associated item ID (for shop/marketplace integration)
-  type: string;                            // Post type identifier
+  // その他
+  itemId: number | null;                   // 関連アイテムID（ショップ/マーケットプレイス連携用）
+  type: string;                            // 投稿タイプ識別子
 }
 ```
 
-### Media URL Resolution
+### メディアURL解決
 
 Media URLs in `mediaUrls` are relative paths. To construct the full URL:
 
@@ -118,73 +118,73 @@ Full URL = "https://karotter.com" + mediaUrl
 Example:  "https://karotter.com/uploads/posts/abc123.jpg"
 ```
 
-### Reaction Limit
+### リアクション制限
 
 The `emoji` field in reactions accepts any string up to **32 characters**. This is enforced server-side and cannot be bypassed.
 
 ---
 
-## User (Full Profile)
+## User（完全プロフィール）
 
 The complete user object returned by `GET /api/auth/me` and profile endpoints. Note that `email` is only returned by `/api/auth/me`.
 
 ```ts
 interface User {
-  id: number;                              // Unique user identifier
-  username: string;                        // Unique username (1-15 chars, /^[a-zA-Z0-9_]{1,15}$/)
-  displayName: string;                     // Display name (may contain any characters)
-  email: string;                           // Email address (only from /auth/me)
-  avatarUrl: string | null;                // Avatar image URL, or null for default
-  avatarFrameId: string | null;            // ID of equipped avatar frame decoration
-  headerUrl: string | null;                // Profile header/banner image URL
-  bio: string;                             // Profile bio/description text
-  birthday: string;                        // Date of birth in "YYYY-MM-DD" format
-  birthdayVisibility: "PRIVATE"            // Only the user can see
-                    | "PUBLIC";            // Everyone can see
-  birthdayBalloonsEnabled: boolean;        // Show balloon animation on birthday
+  id: number;                              // 一意のユーザー識別子
+  username: string;                        // 一意のユーザー名（1-15文字、/^[a-zA-Z0-9_]{1,15}$/）
+  displayName: string;                     // 表示名（任意の文字を含む可能性あり）
+  email: string;                           // メールアドレス（/auth/meからのみ取得可能）
+  avatarUrl: string | null;                // アバター画像URL、デフォルトの場合はnull
+  avatarFrameId: string | null;            // 装着中のアバターフレームデコレーションID
+  headerUrl: string | null;                // プロフィールヘッダー/バナー画像URL
+  bio: string;                             // プロフィール自己紹介テキスト
+  birthday: string;                        // 生年月日（"YYYY-MM-DD"形式）
+  birthdayVisibility: "PRIVATE"            // 本人のみ閲覧可能
+                    | "PUBLIC";            // 全員が閲覧可能
+  birthdayBalloonsEnabled: boolean;        // 誕生日にバルーンアニメーションを表示するか
   gender: "MALE" | "FEMALE" | "OTHER";
-  officialMark: string[];                  // Array of mark color codes (e.g. ["BLUE", "PURPLE"])
-  isBotAccount: boolean;                   // Self-declared bot account
-  isParodyAccount: boolean;                // Self-declared parody account
-  adminForceHidden: boolean;               // Admin-forced profile hiding
-  adminForceBot: boolean;                  // Admin-forced bot label
-  adminForceParody: boolean;               // Admin-forced parody label
-  location: string;                        // User-provided location string
-  websiteUrl: string;                      // User-provided website URL
+  officialMark: string[];                  // マークカラーコードの配列（例: ["BLUE", "PURPLE"]）
+  isBotAccount: boolean;                   // 自己申告のBotアカウント
+  isParodyAccount: boolean;                // 自己申告のパロディアカウント
+  adminForceHidden: boolean;               // 管理者による強制プロフィール非表示
+  adminForceBot: boolean;                  // 管理者による強制Botラベル
+  adminForceParody: boolean;               // 管理者による強制パロディラベル
+  location: string;                        // ユーザーが設定した所在地
+  websiteUrl: string;                      // ユーザーが設定したWebサイトURL
 
-  // Follower/following counts
+  // フォロワー/フォロー数
   followersCount: number;
   followingCount: number;
   postsCount: number;
 
-  // Privacy settings
-  isPrivate: boolean;                      // Protected account (followers-only)
-  isBanned: boolean;                       // Whether the user is banned
-  isAdmin: boolean;                        // Whether the user has admin privileges
-  isRestricted: boolean;                   // Whether the user is restricted (limited functionality)
+  // プライバシー設定
+  isPrivate: boolean;                      // 非公開アカウント（フォロワー限定）
+  isBanned: boolean;                       // ユーザーがBANされているか
+  isAdmin: boolean;                        // ユーザーが管理者権限を持っているか
+  isRestricted: boolean;                   // ユーザーが制限されているか（機能制限あり）
 
-  // Online status
+  // オンラインステータス
   onlineStatus: "ONLINE" | "OFFLINE" | "DND";
-  statusMessage: string;                   // Custom status message text
-  onlineStatusVisibility: "PUBLIC"         // Anyone can see status
-                        | "PRIVATE";       // Only the user can see
-  showOnlineStatus: boolean;               // Master toggle for online status visibility
+  statusMessage: string;                   // カスタムステータスメッセージ
+  onlineStatusVisibility: "PUBLIC"         // 誰でもステータスを閲覧可能
+                        | "PRIVATE";       // 本人のみ閲覧可能
+  showOnlineStatus: boolean;               // オンラインステータス表示のマスタートグル
 
-  // Account verification
+  // アカウント認証
   emailVerified: boolean;
 
-  // Privacy preferences
-  showLikedPosts: boolean;                 // Show liked posts on profile
-  showReadReceipts: boolean;               // Show read receipts in DMs
-  directMessagesEnabled: boolean;          // Whether DMs are enabled at all
-  dmRequestPolicy: "EVERYONE"              // Anyone can DM
-                 | "FOLLOWING"             // Only people you follow
-                 | "CIRCLE";              // Only circle members
+  // プライバシー設定
+  showLikedPosts: boolean;                 // プロフィールにいいねした投稿を表示するか
+  showReadReceipts: boolean;               // DMで既読を表示するか
+  directMessagesEnabled: boolean;          // DMが有効かどうか
+  dmRequestPolicy: "EVERYONE"              // 誰でもDM可能
+                 | "FOLLOWING"             // フォローしている人のみ
+                 | "CIRCLE";              // サークルメンバーのみ
 
-  // Content filtering
-  mutedKeywords: string[];                 // List of muted keywords
+  // コンテンツフィルタリング
+  mutedKeywords: string[];                 // ミュートキーワードのリスト
 
-  // Notification preferences (all boolean)
+  // 通知設定（すべてboolean）
   notifyLikes: boolean;
   notifyReplies: boolean;
   notifyMentions: boolean;
@@ -196,20 +196,20 @@ interface User {
   notifyDMs: boolean;
   notifySystem: boolean;
 
-  // Display preferences (all boolean)
-  showBotAccounts: boolean;                // Show posts from bot accounts in timeline
-  showHiddenPosts: boolean;                // Show admin-hidden posts
-  showR18Content: boolean;                 // Show NSFW/R18 content
+  // 表示設定（すべてboolean）
+  showBotAccounts: boolean;                // タイムラインにBotアカウントの投稿を表示するか
+  showHiddenPosts: boolean;                // 管理者が非表示にした投稿を表示するか
+  showR18Content: boolean;                 // NSFW/R18コンテンツを表示するか
 
-  // Safety
-  hideProfileFromMinors: boolean;          // Hide this profile from users flagged as minors
+  // セーフティ
+  hideProfileFromMinors: boolean;          // 未成年フラグのあるユーザーからプロフィールを非表示にするか
 
-  // Timestamps
-  createdAt: string;                       // ISO 8601 account creation timestamp
+  // タイムスタンプ
+  createdAt: string;                       // ISO 8601形式のアカウント作成日時
 }
 ```
 
-### User (Compact / Embedded)
+### User（コンパクト / 埋め込み）
 
 When a user is embedded within other objects (e.g., `Post.author`, notification actors), a subset of fields is used:
 
@@ -230,85 +230,85 @@ interface UserCompact {
 
 ---
 
-## Notification
+## Notification（通知）
 
 Represents a notification for the authenticated user. Notifications may be grouped (e.g., multiple likes on the same post).
 
 ```ts
 interface Notification {
-  id: number;                              // Unique notification identifier
-  type: "FOLLOW"                           // Someone followed you
-      | "FOLLOW_REQUEST"                   // Someone requested to follow you (private account)
-      | "LIKE"                             // Someone liked your post
-      | "REPLY"                            // Someone replied to your post
-      | "MENTION"                          // Someone mentioned you in a post
-      | "REKAROT"                          // Someone reposted your post
-      | "REACTION"                         // Someone reacted to your post with an emoji
-      | "DM"                               // New direct message
-      | "QUOTE"                            // Someone quoted your post
-      | "REPORT_UPDATE"                    // Update on a report you filed
-      | "SYSTEM";                          // System notification
-  createdAt: string;                       // ISO 8601 timestamp
-  isRead: boolean;                         // Whether the notification has been read
-  message: string | null;                  // Human-readable message (for SYSTEM type)
+  id: number;                              // 一意の通知識別子
+  type: "FOLLOW"                           // 誰かにフォローされた
+      | "FOLLOW_REQUEST"                   // 誰かにフォローリクエストされた（非公開アカウント）
+      | "LIKE"                             // 誰かに投稿をいいねされた
+      | "REPLY"                            // 誰かに投稿にリプライされた
+      | "MENTION"                          // 誰かに投稿内でメンションされた
+      | "REKAROT"                          // 誰かに投稿をリポストされた
+      | "REACTION"                         // 誰かに投稿に絵文字リアクションされた
+      | "DM"                               // 新着ダイレクトメッセージ
+      | "QUOTE"                            // 誰かに投稿を引用された
+      | "REPORT_UPDATE"                    // 提出した通報の更新
+      | "SYSTEM";                          // システム通知
+  createdAt: string;                       // ISO 8601形式のタイムスタンプ
+  isRead: boolean;                         // 通知が既読かどうか
+  message: string | null;                  // 人間が読めるメッセージ（SYSTEMタイプ用）
 
-  // Like/rekarot context for grouped notifications
-  likeContext: "REKAROTED_POST" | null;    // Indicates the like was on a post you reposted
-  rekarotContext: "OWN_POST" | null;       // Indicates the rekarot was of your own post
+  // グループ化通知のいいね/リカロットコンテキスト
+  likeContext: "REKAROTED_POST" | null;    // リポストした投稿へのいいねであることを示す
+  rekarotContext: "OWN_POST" | null;       // 自分の投稿のリポストであることを示す
 
-  // Actor information (who triggered the notification)
-  actor: UserCompact | null;               // Primary actor (most recent)
-  actors: UserCompact[];                   // All actors (for grouped notifications)
-  actorCount: number;                      // Total number of actors (may exceed actors array length)
+  // アクター情報（通知を発生させたユーザー）
+  actor: UserCompact | null;               // 主要アクター（最新）
+  actors: UserCompact[];                   // 全アクター（グループ化通知用）
+  actorCount: number;                      // アクターの合計数（actors配列の長さを超える場合あり）
 
-  // Associated post(s)
-  post: Post | null;                       // Primary associated post
-  posts: Post[];                           // All associated posts (for grouped notifications)
-  postId: number | null;                   // Primary post ID
-  postCount: number;                       // Total number of associated posts
+  // 関連投稿
+  post: Post | null;                       // 主要な関連投稿
+  posts: Post[];                           // 全関連投稿（グループ化通知用）
+  postId: number | null;                   // 主要な投稿ID
+  postCount: number;                       // 関連投稿の合計数
 
-  // Grouping
-  notificationIds: number[];               // IDs of all notifications grouped into this one
+  // グループ化
+  notificationIds: number[];               // この通知にグループ化された全通知のID
 }
 ```
 
 ---
 
-## DM Message
+## DM Message（DMメッセージ）
 
 Represents a single message within a DM group conversation.
 
 ```ts
 interface DmMessage {
-  id: number;                              // Unique message identifier
-  groupId: string;                         // ID of the DM group this message belongs to
-  senderId: number;                        // User ID of the sender
-  replyToId: number | null;                // ID of the message being replied to, or null
-  content: string;                         // Message text content
-  encryptedContent: string | null;         // Encrypted content (if encryption is enabled)
-  isEncrypted: boolean;                    // Whether the message is end-to-end encrypted
+  id: number;                              // 一意のメッセージ識別子
+  groupId: string;                         // このメッセージが属するDMグループのID
+  senderId: number;                        // 送信者のユーザーID
+  replyToId: number | null;                // 返信先メッセージのID、またはnull
+  content: string;                         // メッセージテキスト
+  encryptedContent: string | null;         // 暗号化されたコンテンツ（暗号化が有効な場合）
+  isEncrypted: boolean;                    // メッセージがエンドツーエンド暗号化されているか
 
-  // System messages (e.g., "User joined the group")
-  systemType: "MEMBER_JOINED"              // A member was added
-             | "MEMBER_LEFT"              // A member left
-             | null;                       // Not a system message
-  systemMeta: object | null;               // Additional metadata for system messages
-  systemActorId: number | null;            // User who triggered the system event
+  // システムメッセージ（例: 「ユーザーがグループに参加しました」）
+  systemType: "MEMBER_JOINED"              // メンバーが追加された
+             | "MEMBER_LEFT"              // メンバーが退出した
+             | null;                       // システムメッセージではない
+  systemMeta: object | null;               // システムメッセージの追加メタデータ
+  systemActorId: number | null;            // システムイベントを発生させたユーザー
 
-  // Attachments
-  attachmentUrls: string[];                // URLs of attached files/images
-  attachmentTypes: string[];               // MIME types or type identifiers (e.g. "image", "video")
-  attachmentAlts: string[];                // Alt text for each attachment
-  attachmentSpoilerFlags: boolean[];       // Whether each attachment is a spoiler
-  attachmentR18Flags: boolean[];           // Whether each attachment is R18/NSFW
+  // 添付ファイル
+  attachmentUrls: string[];                // 添付ファイル/画像のURL
+  attachmentTypes: string[];               // MIMEタイプまたはタイプ識別子（例: "image", "video"）
+  attachmentAlts: string[];                // 各添付ファイルの代替テキスト
+  attachmentSpoilerFlags: boolean[];       // 各添付ファイルがスポイラーかどうか
+  attachmentR18Flags: boolean[];           // 各添付ファイルがR18/NSFWかどうか
 
-  // State
-  isDeleted: boolean;                      // Whether the message has been deleted (tombstone)
-  editedAt: string | null;                 // ISO 8601 timestamp of last edit, or null
-  createdAt: string;                       // ISO 8601 timestamp of creation
-  updatedAt: string;                       // ISO 8601 timestamp of last update
+  // 状態
+  isDeleted: boolean;                      // メッセージが削除されたか（トゥームストーン）
+  editedAt: string | null;                 // ISO 8601形式の最終編集日時、またはnull
+  createdAt: string;                       // ISO 8601形式の作成日時
+  updatedAt: string;                       // ISO 8601形式の最終更新日時
 
-  // Embedded objects
+  // 埋め込みオブジェクト
   sender: {
     id: number;
     username: string;
@@ -316,13 +316,13 @@ interface DmMessage {
     avatarUrl: string | null;
     officialMark: string[];
   };
-  replyTo: DmMessage | null;              // The message being replied to (nested)
+  replyTo: DmMessage | null;              // 返信先メッセージ（ネスト）
   reactions: Array<{
     emoji: string;
     userId: number;
   }>;
 
-  // Poll (if the message contains a poll)
+  // アンケート（メッセージにアンケートが含まれる場合）
   poll: {
     options: Array<{
       id: number;
@@ -339,19 +339,19 @@ interface DmMessage {
 
 ---
 
-## DM Group
+## DM Group（DMグループ）
 
 Represents a DM group conversation (1-on-1 or group chat).
 
 ```ts
 interface DMGroup {
-  id: string;                              // Unique group identifier (CUID or UUID)
-  name: string | null;                     // Group name (null for 1-on-1 DMs)
-  isGroup: boolean;                        // true for group chats, false for 1-on-1
-  ownerId: number | null;                  // User ID of the group owner (null for 1-on-1)
-  iconUrl: string | null;                  // Custom group icon URL
+  id: string;                              // 一意のグループ識別子（CUIDまたはUUID）
+  name: string | null;                     // グループ名（1対1のDMではnull）
+  isGroup: boolean;                        // グループチャットならtrue、1対1ならfalse
+  ownerId: number | null;                  // グループオーナーのユーザーID（1対1ではnull）
+  iconUrl: string | null;                  // カスタムグループアイコンURL
 
-  // Members
+  // メンバー
   members: Array<{
     userId: number;
     username: string;
@@ -362,7 +362,7 @@ interface DMGroup {
     joinedAt: string;
   }>;
 
-  // Last message preview
+  // 最新メッセージプレビュー
   lastMessage: {
     id: number;
     content: string;
@@ -372,22 +372,22 @@ interface DMGroup {
     isDeleted: boolean;
   } | null;
 
-  // Read state
-  unreadCount: number;                     // Number of unread messages for the viewer
-  lastReadMessageId: number | null;        // Last message ID the viewer has read
+  // 既読状態
+  unreadCount: number;                     // 閲覧者の未読メッセージ数
+  lastReadMessageId: number | null;        // 閲覧者が最後に読んだメッセージID
 
-  // DM request state (for non-mutual follows)
-  isRequest: boolean;                      // Whether this is a pending DM request
-  requestStatus: "pending"                 // Awaiting acceptance
-               | "accepted"               // Request accepted
-               | "declined"               // Request declined
-               | null;                    // Not a request
+  // DMリクエスト状態（相互フォローでない場合）
+  isRequest: boolean;                      // 保留中のDMリクエストかどうか
+  requestStatus: "pending"                 // 承認待ち
+               | "accepted"               // リクエスト承認済み
+               | "declined"               // リクエスト拒否済み
+               | null;                    // リクエストではない
 
-  // Settings
-  isMuted: boolean;                        // Whether the viewer has muted this group
-  isPinned: boolean;                       // Whether the viewer has pinned this group
+  // 設定
+  isMuted: boolean;                        // 閲覧者がこのグループをミュートしているか
+  isPinned: boolean;                       // 閲覧者がこのグループをピン留めしているか
 
-  // Active call state
+  // アクティブ通話状態
   activeCall: {
     callId: string;
     startedAt: string;
@@ -397,7 +397,7 @@ interface DMGroup {
     }>;
   } | null;
 
-  // Timestamps
+  // タイムスタンプ
   createdAt: string;
   updatedAt: string;
 }
@@ -405,35 +405,35 @@ interface DMGroup {
 
 ---
 
-## Draw Room
+## Draw Room（絵チャルーム）
 
 Represents a collaborative drawing room.
 
 ```ts
 interface DrawRoom {
-  id: string;                              // Unique room identifier
-  name: string;                            // Room name
-  ownerId: number;                         // User ID of the room creator
-  ownerUsername: string;                    // Username of the room creator
-  maxParticipants: number;                 // Maximum number of concurrent participants
+  id: string;                              // 一意のルーム識別子
+  name: string;                            // ルーム名
+  ownerId: number;                         // ルーム作成者のユーザーID
+  ownerUsername: string;                    // ルーム作成者のユーザー名
+  maxParticipants: number;                 // 最大同時参加者数
 
-  // Current participants
+  // 現在の参加者
   participants: Array<{
     userId: number;
     username: string;
     displayName: string;
     avatarUrl: string | null;
   }>;
-  participantCount: number;                // Current number of participants
+  participantCount: number;                // 現在の参加者数
 
-  // Layer data
-  layers: DrawLayer[];                     // All layers in the room
+  // レイヤーデータ
+  layers: DrawLayer[];                     // ルーム内の全レイヤー
 
-  // Settings
-  isPublic: boolean;                       // Whether the room is publicly listed
-  allowAnonymous: boolean;                 // Whether non-authenticated users can join
+  // 設定
+  isPublic: boolean;                       // ルームが公開リストに載っているか
+  allowAnonymous: boolean;                 // 未認証ユーザーが参加できるか
 
-  // Timestamps
+  // タイムスタンプ
   createdAt: string;
   updatedAt: string;
 }
@@ -441,44 +441,44 @@ interface DrawRoom {
 
 ---
 
-## Draw Layer
+## Draw Layer（絵チャレイヤー）
 
 Represents a single layer within a draw room canvas.
 
 ```ts
 interface DrawLayer {
-  id: string;                              // Unique layer identifier
-  name: string;                            // Layer name (e.g. "Layer 1", "Background")
-  order: number;                           // Z-order (0 = bottom)
-  visible: boolean;                        // Whether the layer is visible
-  opacity: number;                         // Layer opacity (0.0 - 1.0)
-  dataUrl: string;                         // Full image data as data URI
+  id: string;                              // 一意のレイヤー識別子
+  name: string;                            // レイヤー名（例: "Layer 1", "Background"）
+  order: number;                           // Z順序（0 = 最背面）
+  visible: boolean;                        // レイヤーが表示されているか
+  opacity: number;                         // レイヤーの不透明度（0.0 - 1.0）
+  dataUrl: string;                         // 完全な画像データ（data URI形式）
                                            // "data:image/png;base64,iVBOR..."
-  lockedBy: number | null;                 // User ID who locked this layer, or null
+  lockedBy: number | null;                 // このレイヤーをロックしたユーザーID、またはnull
 }
 ```
 
 ---
 
-## Board
+## Board（掲示板）
 
 Represents a topic board (community board / forum-like feature).
 
 ```ts
 interface Board {
-  id: number;                              // Unique board identifier
-  title: string;                           // Board title
-  slug: string;                            // URL-friendly slug (used in all board URLs)
-  description: string | null;              // Board description
-  minimumAge: number;                      // Minimum age to access (13-99)
-  threadCount: number;                     // Total number of threads
-  replyCount: number;                      // Total number of replies across all threads
-  lastPostAt: string | null;               // ISO 8601 timestamp of most recent activity
+  id: number;                              // 一意の掲示板識別子
+  title: string;                           // 掲示板タイトル
+  slug: string;                            // URLフレンドリーなスラッグ（全掲示板URLで使用）
+  description: string | null;              // 掲示板の説明
+  minimumAge: number;                      // アクセスに必要な最低年齢（13-99）
+  threadCount: number;                     // スレッドの合計数
+  replyCount: number;                      // 全スレッドのリプライ合計数
+  lastPostAt: string | null;              // ISO 8601形式の最新アクティビティ日時
   creator: {
-    id: number;                            // Creator's user ID
+    id: number;                            // 作成者のユーザーID
   };
 
-  // Timestamps
+  // タイムスタンプ
   createdAt: string;
   updatedAt: string;
 }
@@ -486,69 +486,69 @@ interface Board {
 
 ---
 
-## Thread
+## Thread（スレッド）
 
 Represents a thread within a board.
 
 ```ts
 interface Thread {
-  id: number;                              // Unique thread identifier
-  boardId: number;                         // ID of the parent board
-  title: string;                           // Thread title
-  content: string;                         // Thread body content
-  author: UserCompact;                     // Thread author (compact user object)
+  id: number;                              // 一意のスレッド識別子
+  boardId: number;                         // 親掲示板のID
+  title: string;                           // スレッドタイトル
+  content: string;                         // スレッド本文
+  author: UserCompact;                     // スレッド作成者（コンパクトユーザーオブジェクト）
 
-  // Media
+  // メディア
   mediaUrls: string[];
   mediaAlts: string[];
   mediaWidths: number[];
   mediaHeights: number[];
 
-  // Engagement
+  // エンゲージメント
   repliesCount: number;
   viewsCount: number;
   likesCount: number;
-  liked: boolean;                          // Whether the viewer liked this thread
+  liked: boolean;                          // 閲覧者がこのスレッドをいいねしたか
 
-  // State
-  isPinned: boolean;                       // Whether the thread is pinned
-  isLocked: boolean;                       // Whether replies are disabled
-  isArchived: boolean;                     // Whether the thread is archived
+  // 状態
+  isPinned: boolean;                       // スレッドがピン留めされているか
+  isLocked: boolean;                       // リプライが無効化されているか
+  isArchived: boolean;                     // スレッドがアーカイブされているか
 
-  // Timestamps
+  // タイムスタンプ
   createdAt: string;
   updatedAt: string;
-  lastActivityAt: string;                  // Timestamp of the most recent reply
+  lastActivityAt: string;                  // 最新リプライのタイムスタンプ
 }
 ```
 
 ---
 
-## Reply (Board Thread Reply)
+## Reply（掲示板スレッドリプライ）
 
 Represents a reply within a board thread. Not to be confused with post replies.
 
 ```ts
 interface Reply {
-  id: number;                              // Unique reply identifier
-  threadId: number;                        // ID of the parent thread
-  content: string;                         // Reply text content
-  author: UserCompact;                     // Reply author
-  parentReplyId: number | null;            // ID of the reply being replied to (nested replies)
+  id: number;                              // 一意のリプライ識別子
+  threadId: number;                        // 親スレッドのID
+  content: string;                         // リプライテキスト
+  author: UserCompact;                     // リプライ投稿者
+  parentReplyId: number | null;            // 返信先リプライのID（ネストされたリプライ）
 
-  // Media
+  // メディア
   mediaUrls: string[];
   mediaAlts: string[];
 
-  // Engagement
+  // エンゲージメント
   likesCount: number;
   liked: boolean;
 
-  // State
+  // 状態
   isDeleted: boolean;
   editedAt: string | null;
 
-  // Timestamps
+  // タイムスタンプ
   createdAt: string;
   updatedAt: string;
 }
@@ -556,115 +556,115 @@ interface Reply {
 
 ---
 
-## Session
+## Session（セッション）
 
 Represents an active login session on a device.
 
 ```ts
 interface Session {
-  id: string;                              // Unique session identifier (e.g. "sess_abc123")
-  deviceId: string;                        // UUID of the device
-  deviceName: string;                      // Human-readable device name (e.g. "Chrome on Windows")
-  clientType: "web" | "ios" | "android";   // Platform type
-  isCurrent: boolean;                      // Whether this is the session making the request
-  createdAt: string;                       // ISO 8601 session creation timestamp
-  lastUsedAt: string;                      // ISO 8601 last activity timestamp
-  expiresAt: string;                       // ISO 8601 session expiration timestamp
+  id: string;                              // 一意のセッション識別子（例: "sess_abc123"）
+  deviceId: string;                        // デバイスのUUID
+  deviceName: string;                      // 人間が読めるデバイス名（例: "Chrome on Windows"）
+  clientType: "web" | "ios" | "android";   // プラットフォームタイプ
+  isCurrent: boolean;                      // このセッションがリクエスト元かどうか
+  createdAt: string;                       // ISO 8601形式のセッション作成日時
+  lastUsedAt: string;                      // ISO 8601形式の最終アクティビティ日時
+  expiresAt: string;                       // ISO 8601形式のセッション有効期限
 }
 ```
 
 ---
 
-## Account (Multi-Account)
+## Account（マルチアカウント）
 
 Represents a stored account entry for multi-account support. Up to 5 accounts can be stored per device.
 
 ```ts
 interface Account {
-  userId: string;                          // User ID (CUID format)
-  username: string;                        // Username
-  displayName: string;                     // Display name
-  avatarUrl: string | null;                // Avatar URL
-  sessionId: string;                       // Session ID for this account
-  accessToken: string;                     // Current JWT access token
-  refreshToken: string;                    // Current refresh token
-  deviceId: string;                        // Device ID used for this session
-  isActive: boolean;                       // Whether this is the currently active account
-  unreadNotifications: number;             // Badge count for notifications
-  unreadMessages: number;                  // Badge count for DMs
-  lastSwitchedAt: string;                  // ISO 8601 timestamp of last switch to this account
+  userId: string;                          // ユーザーID（CUID形式）
+  username: string;                        // ユーザー名
+  displayName: string;                     // 表示名
+  avatarUrl: string | null;                // アバターURL
+  sessionId: string;                       // このアカウントのセッションID
+  accessToken: string;                     // 現在のJWTアクセストークン
+  refreshToken: string;                    // 現在のリフレッシュトークン
+  deviceId: string;                        // このセッションで使用するデバイスID
+  isActive: boolean;                       // 現在アクティブなアカウントかどうか
+  unreadNotifications: number;             // 通知のバッジカウント
+  unreadMessages: number;                  // DMのバッジカウント
+  lastSwitchedAt: string;                  // ISO 8601形式のこのアカウントへの最終切替日時
 }
 ```
 
 ---
 
-## Pagination
+## ページネーション
 
 Most list endpoints use cursor-based pagination.
 
-### Cursor-Based Pagination
+### カーソルベースページネーション
 
 ```ts
 interface CursorPagination {
-  hasNext: boolean;                        // Whether more results exist
-  nextCursor: string | null;               // Cursor to pass as ?cursor= for the next page
-  total: number;                           // Total count (not always present)
+  hasNext: boolean;                        // さらに結果が存在するか
+  nextCursor: string | null;               // 次のページ取得時に?cursor=で渡すカーソル
+  total: number;                           // 合計数（常に含まれるとは限らない）
 }
 ```
 
-### Page-Based Pagination
+### ページベースページネーション
 
 Some older endpoints use traditional page-based pagination.
 
 ```ts
 interface PagePagination {
-  page: number;                            // Current page number (1-indexed)
-  limit: number;                           // Items per page
-  total: number;                           // Total number of items
-  pages: number;                           // Total number of pages
+  page: number;                            // 現在のページ番号（1始まり）
+  limit: number;                           // 1ページあたりのアイテム数
+  total: number;                           // アイテムの合計数
+  pages: number;                           // ページの合計数
 }
 ```
 
 ---
 
-## Story
+## Story（ストーリー）
 
 Represents a temporary story (disappearing post, similar to Instagram Stories).
 
 ```ts
 interface Story {
-  id: number;                              // Unique story identifier
-  author: UserCompact;                     // Story author
-  mediaUrl: string;                        // Story media URL (image or video)
-  mediaType: "image" | "video";            // Type of media
-  caption: string | null;                  // Optional caption text
-  viewsCount: number;                      // Number of views
+  id: number;                              // 一意のストーリー識別子
+  author: UserCompact;                     // ストーリー投稿者
+  mediaUrl: string;                        // ストーリーメディアURL（画像または動画）
+  mediaType: "image" | "video";            // メディアの種類
+  caption: string | null;                  // 任意のキャプションテキスト
+  viewsCount: number;                      // 閲覧数
 
-  // Viewer state
-  viewed: boolean;                         // Whether the authenticated user has viewed this
+  // 閲覧者の状態
+  viewed: boolean;                         // 認証ユーザーがこのストーリーを閲覧済みか
 
-  // Admin flags
+  // 管理者フラグ
   adminForceR18: boolean;
   adminForceHidden: boolean;
 
-  // Timestamps
+  // タイムスタンプ
   createdAt: string;                       // ISO 8601
-  expiresAt: string;                       // ISO 8601 (typically 24 hours after creation)
+  expiresAt: string;                       // ISO 8601（通常、作成から24時間後）
 }
 ```
 
 ---
 
-## Circle
+## Circle（サークル）
 
 Represents a user-defined circle for restricting post visibility and reply permissions.
 
 ```ts
 interface Circle {
-  id: number;                              // Unique circle identifier
-  name: string;                            // Circle name
-  ownerId: number;                         // User ID of the circle creator
-  memberCount: number;                     // Number of members in the circle
+  id: number;                              // 一意のサークル識別子
+  name: string;                            // サークル名
+  ownerId: number;                         // サークル作成者のユーザーID
+  memberCount: number;                     // サークルのメンバー数
   members: Array<{
     id: number;
     username: string;
@@ -678,20 +678,20 @@ interface Circle {
 
 ---
 
-## Report
+## Report（通報）
 
 Represents a user-filed report against content or a user.
 
 ```ts
 interface Report {
   id: number;
-  reporterId: number;                      // User who filed the report
+  reporterId: number;                      // 通報を提出したユーザー
   targetType: "post" | "user" | "story" | "dm_message";
-  targetId: number | string;               // ID of the reported content
-  reason: string;                          // Report reason category
-  details: string;                         // Additional details provided by reporter
+  targetId: number | string;               // 通報されたコンテンツのID
+  reason: string;                          // 通報理由カテゴリ
+  details: string;                         // 通報者が提供した追加詳細
   status: "pending" | "reviewed" | "resolved" | "dismissed";
-  adminNotes: string | null;               // Notes from admin review
+  adminNotes: string | null;               // 管理者レビューからのメモ
   createdAt: string;
   updatedAt: string;
 }
@@ -699,41 +699,41 @@ interface Report {
 
 ---
 
-## Survey (Poll on Posts)
+## Survey（投稿の投票）
 
 Represents a poll attached to a post.
 
 ```ts
 interface Survey {
-  postId: number;                          // The post this poll is attached to
-  isActive: boolean;                       // Whether voting is still open
+  postId: number;                          // このアンケートが添付された投稿
+  isActive: boolean;                       // 投票がまだ受付中かどうか
   totalVotes: number;
-  satisfactionScore: number;               // Computed satisfaction score (0-100)
+  satisfactionScore: number;               // 算出された満足度スコア（0-100）
   options: Array<{
-    text: string;                          // Option display text
-    votes: number;                         // Number of votes
-    percentage: number;                    // Vote percentage (0-100)
+    text: string;                          // 選択肢の表示テキスト
+    votes: number;                         // 投票数
+    percentage: number;                    // 投票割合（0-100）
   }>;
 }
 ```
 
 ---
 
-## Contact Form Submission
+## お問い合わせフォーム送信
 
 ```ts
 interface ContactSubmission {
-  name: string;                            // Submitter's name
-  email: string;                           // Submitter's email
-  category: "general"                      // General inquiry
-            | "legal"                      // Legal matter
-            | "privacy"                    // Privacy concern
-            | "rights"                     // Rights/IP issue
-            | "safety"                     // Safety concern
-            | "bug"                        // Bug report
-            | "business";                  // Business inquiry
-  subject: string;                         // Subject line
-  message: string;                         // Message body
-  attachments: string[];                   // Uploaded file URLs
+  name: string;                            // 送信者の名前
+  email: string;                           // 送信者のメールアドレス
+  category: "general"                      // 一般的なお問い合わせ
+            | "legal"                      // 法的な問題
+            | "privacy"                    // プライバシーに関する懸念
+            | "rights"                     // 権利/知的財産の問題
+            | "safety"                     // 安全性に関する懸念
+            | "bug"                        // バグ報告
+            | "business";                  // ビジネスに関するお問い合わせ
+  subject: string;                         // 件名
+  message: string;                         // メッセージ本文
+  attachments: string[];                   // アップロードされたファイルのURL
 }
 ```

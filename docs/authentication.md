@@ -1,78 +1,78 @@
-# Authentication
+# 認証
 
-Complete reference for the Karotter authentication system, including login, registration, token management, session handling, and multi-account support.
-
----
-
-## Base URL
-
-| Priority | Domain |
-|----------|--------|
-| Primary | `https://api.karotter.com/api` |
-| Failover 1 | `https://api.karotter.jp/api` |
-| Failover 2 | `https://api.karotter.net/api` |
-| Failover 3 | `https://apikarotter.karon.jp/api` |
-
-All endpoints documented below are relative to the base URL (e.g. `/auth/login` means `https://api.karotter.com/api/auth/login`).
+Karotterの認証システムの完全なリファレンスです。ログイン、新規登録、トークン管理、セッション管理、マルチアカウント対応を含みます。
 
 ---
 
-## Required Headers
+## ベースURL
 
-Every authenticated request must include the following headers:
+| 優先度 | ドメイン |
+|--------|--------|
+| プライマリ | `https://api.karotter.com/api` |
+| フェイルオーバー 1 | `https://api.karotter.jp/api` |
+| フェイルオーバー 2 | `https://api.karotter.net/api` |
+| フェイルオーバー 3 | `https://apikarotter.karon.jp/api` |
 
-| Header | Description | Example |
+以下のエンドポイントはすべてベースURLからの相対パスです（例: `/auth/login` は `https://api.karotter.com/api/auth/login`）。
+
+---
+
+## 必須ヘッダー
+
+認証済みリクエストには以下のヘッダーが必要です:
+
+| ヘッダー | 説明 | 例 |
 |--------|-------------|---------|
-| `Authorization` | Bearer token obtained from login or refresh | `Bearer eyJhbGciOiJIUzI1NiIs...` |
-| `x-csrf-token` | CSRF token obtained from `/auth/csrf-token` | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
-| `x-client-type` | Client platform identifier | `web`, `ios`, `android` |
-| `x-device-id` | Unique device identifier (UUID v4 recommended) | `550e8400-e29b-41d4-a716-446655440000` |
+| `Authorization` | ログインまたはリフレッシュで取得したBearerトークン | `Bearer eyJhbGciOiJIUzI1NiIs...` |
+| `x-csrf-token` | `/auth/csrf-token` から取得したCSRFトークン | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` |
+| `x-client-type` | クライアントプラットフォーム識別子 | `web`, `ios`, `android` |
+| `x-device-id` | 一意のデバイス識別子（UUID v4推奨） | `550e8400-e29b-41d4-a716-446655440000` |
 
 ---
 
-## Axios Client Configuration
+## Axiosクライアント設定
 
-The official client uses the following Axios defaults:
+公式クライアントは以下のAxiosデフォルト設定を使用しています:
 
 ```js
 {
   baseURL: "https://api.karotter.com/api",
-  timeout: 15000,           // 15 seconds
-  withCredentials: true,     // send cookies cross-origin
+  timeout: 15000,           // 15秒
+  withCredentials: true,     // クロスオリジンでCookieを送信
   headers: {
     "Content-Type": "application/json"
   }
 }
 ```
 
-**Special behavior:**
-- When the request body is `FormData`, the `Content-Type` header is **stripped** so the browser can set the correct `multipart/form-data` boundary automatically.
+**特殊な動作:**
+- リクエストボディが `FormData` の場合、ブラウザが正しい `multipart/form-data` バウンダリを自動設定できるよう `Content-Type` ヘッダーは**削除**されます。
 
-### Response Interceptor Logic
+### レスポンスインターセプターロジック
 
-The client implements automatic retry logic on certain error responses:
+クライアントは特定のエラーレスポンスに対する自動リトライロジックを実装しています:
 
-| Status | Condition | Action |
+| ステータス | 条件 | アクション |
 |--------|-----------|--------|
-| `401` | Token expired | Automatically call `/auth/refresh-token`, replace the token, and retry the original request once. |
-| `403` | CSRF token invalid (error code `CSRF_INVALID` or similar) | Re-fetch CSRF token via `GET /auth/csrf-token`, update stored token, and retry the original request once. |
-| `403` | Account banned detected | Redirect the user to a ban notice page. No retry. |
+| `401` | トークン期限切れ | 自動的に `/auth/refresh-token` を呼び出し、トークンを置き換えて、元のリクエストを1回リトライ |
+| `403` | CSRFトークン無効（エラーコード `CSRF_INVALID` 等） | `GET /auth/csrf-token` でCSRFトークンを再取得し、保存されたトークンを更新して、元のリクエストを1回リトライ |
+| `403` | アカウントBAN検出 | ユーザーをBAN通知ページにリダイレクト。リトライなし |
 
 ---
 
-## CSRF Token
+## CSRFトークン
 
 ### `GET /auth/csrf-token`
 
-Retrieves a CSRF token required for all state-changing requests (POST, PUT, PATCH, DELETE).
+状態変更リクエスト（POST, PUT, PATCH, DELETE）に必要なCSRFトークンを取得します。
 
-**Request Headers:**
+**リクエストヘッダー:**
 
-| Header | Required | Description |
+| ヘッダー | 必須 | 説明 |
 |--------|----------|-------------|
-| `x-client-type` | Yes | Must be one of `web`, `ios`, `android` |
+| `x-client-type` | はい | `web`, `ios`, `android` のいずれか |
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /auth/csrf-token HTTP/1.1
@@ -80,7 +80,7 @@ Host: api.karotter.com
 x-client-type: web
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -88,29 +88,29 @@ x-client-type: web
 }
 ```
 
-**Notes:**
-- The CSRF token should be stored and sent as `x-csrf-token` on all subsequent mutating requests.
-- If a `403` response indicates a CSRF mismatch, re-fetch this endpoint and retry.
+**注意:**
+- CSRFトークンは保存して、以降の変更リクエストすべてに `x-csrf-token` として送信する必要があります。
+- `403` レスポンスがCSRF不一致を示す場合、このエンドポイントを再取得してリトライしてください。
 
 ---
 
-## Login
+## ログイン
 
 ### `POST /auth/login`
 
-Authenticate a user and receive access/refresh tokens.
+ユーザーを認証し、アクセストークン/リフレッシュトークンを受け取ります。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `identifier` | `string` | Yes | Username or email address |
-| `password` | `string` | Yes | Account password |
-| `deviceId` | `string` | Yes | Unique device identifier (UUID v4) |
-| `clientType` | `string` | Yes | One of `web`, `ios`, `android` |
-| `deviceName` | `string` | Yes | Human-readable device name (e.g. `"Chrome on Windows"`) |
+| `identifier` | `string` | はい | ユーザー名またはメールアドレス |
+| `password` | `string` | はい | アカウントのパスワード |
+| `deviceId` | `string` | はい | 一意のデバイス識別子（UUID v4） |
+| `clientType` | `string` | はい | `web`, `ios`, `android` のいずれか |
+| `deviceName` | `string` | はい | 人間が読めるデバイス名（例: `"Chrome on Windows"`） |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/login HTTP/1.1
@@ -128,7 +128,7 @@ x-client-type: web
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -150,40 +150,40 @@ x-client-type: web
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `400` | `INVALID_CREDENTIALS` | Incorrect username/email or password |
-| `403` | `ACCOUNT_BANNED` | The account has been banned |
-| `403` | `EMAIL_NOT_VERIFIED` | Email verification required before login |
-| `429` | `TOO_MANY_REQUESTS` | Rate limited; retry after the specified period |
+| `400` | `INVALID_CREDENTIALS` | ユーザー名/メールまたはパスワードが不正 |
+| `403` | `ACCOUNT_BANNED` | アカウントがBANされている |
+| `403` | `EMAIL_NOT_VERIFIED` | ログイン前にメール確認が必要 |
+| `429` | `TOO_MANY_REQUESTS` | レート制限中。指定期間後にリトライ |
 
 ---
 
-## Registration
+## 新規登録
 
 ### `POST /auth/register`
 
-Create a new user account. Requires Cloudflare Turnstile verification.
+新しいユーザーアカウントを作成します。Cloudflare Turnstile認証が必要です。
 
-**Cloudflare Turnstile Sitekey:** `0x4AAAAAACujb-w-3YVWR1zA`
+**Cloudflare Turnstile サイトキー:** `0x4AAAAAACujb-w-3YVWR1zA`
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `email` | `string` | Yes | Valid email address |
-| `username` | `string` | Yes | 1-15 characters, alphanumeric and underscores only (`/^[a-zA-Z0-9_]{1,15}$/`) |
-| `gender` | `string` | Yes | One of `MALE`, `FEMALE`, `OTHER` |
-| `password` | `string` | Yes | 8-72 characters, must pass password policy (see below) |
-| `birthday` | `string` | Yes | Date of birth in `YYYY-MM-DD` format |
-| `acceptTerms` | `boolean` | Yes | Must be `true` — user accepts terms of service |
-| `acceptPrivacy` | `boolean` | Yes | Must be `true` — user accepts privacy policy |
-| `turnstileToken` | `string` | Yes | Cloudflare Turnstile verification token |
-| `_ts` | `number` | Yes | Current Unix timestamp in milliseconds |
+| `email` | `string` | はい | 有効なメールアドレス |
+| `username` | `string` | はい | 1-15文字、英数字とアンダースコアのみ (`/^[a-zA-Z0-9_]{1,15}$/`) |
+| `gender` | `string` | はい | `MALE`, `FEMALE`, `OTHER` のいずれか |
+| `password` | `string` | はい | 8-72文字、パスワードポリシーに合格する必要あり（下記参照） |
+| `birthday` | `string` | はい | 生年月日 `YYYY-MM-DD` 形式 |
+| `acceptTerms` | `boolean` | はい | `true` 必須 — 利用規約に同意 |
+| `acceptPrivacy` | `boolean` | はい | `true` 必須 — プライバシーポリシーに同意 |
+| `turnstileToken` | `string` | はい | Cloudflare Turnstile認証トークン |
+| `_ts` | `number` | はい | 現在のUnixタイムスタンプ（ミリ秒） |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/register HTTP/1.1
@@ -205,7 +205,7 @@ x-client-type: web
 }
 ```
 
-**Response `201 Created`:**
+**レスポンス `201 Created`:**
 
 ```json
 {
@@ -223,45 +223,45 @@ x-client-type: web
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `400` | `INVALID_EMAIL` | Email format is invalid |
-| `400` | `INVALID_USERNAME` | Username does not match `/^[a-zA-Z0-9_]{1,15}$/` |
-| `400` | `WEAK_PASSWORD` | Password fails policy checks |
-| `400` | `INVALID_BIRTHDAY` | Birthday is not a valid date or user is too young |
-| `400` | `TURNSTILE_FAILED` | Cloudflare Turnstile verification failed |
-| `409` | `EMAIL_TAKEN` | Email address is already registered |
-| `409` | `USERNAME_TAKEN` | Username is already taken |
+| `400` | `INVALID_EMAIL` | メール形式が不正 |
+| `400` | `INVALID_USERNAME` | ユーザー名が `/^[a-zA-Z0-9_]{1,15}$/` に一致しない |
+| `400` | `WEAK_PASSWORD` | パスワードがポリシーチェックに失敗 |
+| `400` | `INVALID_BIRTHDAY` | 生年月日が無効または年齢制限未満 |
+| `400` | `TURNSTILE_FAILED` | Cloudflare Turnstile認証に失敗 |
+| `409` | `EMAIL_TAKEN` | メールアドレスが既に登録済み |
+| `409` | `USERNAME_TAKEN` | ユーザー名が既に使用中 |
 
-### Password Policy
+### パスワードポリシー
 
-Passwords must satisfy **all** of the following rules:
+パスワードは以下の**すべて**のルールを満たす必要があります:
 
-| Rule | Details |
+| ルール | 詳細 |
 |------|---------|
-| Minimum length | 8 characters |
-| Maximum length | 72 characters |
-| Blacklist | Rejected passwords: `12345678`, `123456789`, `1234567890`, `password`, `password1`, `qwerty123`, `asdfghjk`, `00000000`, `11111111`, `87654321` |
-| All-same-digit | Rejected if every character is the same digit (e.g. `99999999`) |
-| Sequential digits | Rejected if the password contains 4 or more sequential ascending digits (e.g. `1234`) or 4 or more sequential descending digits (e.g. `4321`) |
+| 最小文字数 | 8文字 |
+| 最大文字数 | 72文字 |
+| ブラックリスト | 拒否されるパスワード: `12345678`, `123456789`, `1234567890`, `password`, `password1`, `qwerty123`, `asdfghjk`, `00000000`, `11111111`, `87654321` |
+| 同一数字の繰り返し | すべての文字が同じ数字の場合は拒否（例: `99999999`） |
+| 連続数字 | 4つ以上の連続した昇順数字（例: `1234`）または4つ以上の連続した降順数字（例: `4321`）を含む場合は拒否 |
 
 ---
 
-## Logout
+## ログアウト
 
 ### `POST /auth/logout`
 
-Invalidate the current session and revoke tokens.
+現在のセッションを無効化し、トークンを失効させます。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `deviceId` | `string` | Yes | The device ID used during login |
+| `deviceId` | `string` | はい | ログイン時に使用したデバイスID |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/logout HTTP/1.1
@@ -276,7 +276,7 @@ x-client-type: web
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -286,22 +286,22 @@ x-client-type: web
 
 ---
 
-## Token Refresh
+## トークンリフレッシュ
 
 ### `POST /auth/refresh-token`
 
-Obtain a new access token using the refresh token. Called automatically by the response interceptor on `401` errors.
+リフレッシュトークンを使用して新しいアクセストークンを取得します。`401` エラー時にレスポンスインターセプターによって自動的に呼び出されます。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `deviceId` | `string` | Yes | The device ID used during login |
-| `clientType` | `string` | Yes | One of `web`, `ios`, `android` |
-| `deviceName` | `string` | Yes | Human-readable device name |
-| `refreshToken` | `string` | **Native only** | Required for `ios` and `android` clients. Web clients rely on HTTP-only cookies instead. |
+| `deviceId` | `string` | はい | ログイン時に使用したデバイスID |
+| `clientType` | `string` | はい | `web`, `ios`, `android` のいずれか |
+| `deviceName` | `string` | はい | 人間が読めるデバイス名 |
+| `refreshToken` | `string` | **ネイティブのみ** | `ios` および `android` クライアントで必須。Webクライアントは代わりにHTTP-only Cookieを使用 |
 
-**Request (web client):**
+**リクエスト（Webクライアント）:**
 
 ```http
 POST /auth/refresh-token HTTP/1.1
@@ -318,7 +318,7 @@ x-device-id: 550e8400-e29b-41d4-a716-446655440000
 }
 ```
 
-**Request (native client):**
+**リクエスト（ネイティブクライアント）:**
 
 ```http
 POST /auth/refresh-token HTTP/1.1
@@ -336,7 +336,7 @@ x-device-id: 550e8400-e29b-41d4-a716-446655440000
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -346,28 +346,28 @@ x-device-id: 550e8400-e29b-41d4-a716-446655440000
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `401` | `INVALID_REFRESH_TOKEN` | Refresh token is expired or invalid |
-| `403` | `SESSION_REVOKED` | The session was revoked (e.g. by another device) |
+| `401` | `INVALID_REFRESH_TOKEN` | リフレッシュトークンが期限切れまたは無効 |
+| `403` | `SESSION_REVOKED` | セッションが失効済み（例: 他のデバイスにより） |
 
 ---
 
-## Email Management
+## メール管理
 
 ### `POST /auth/me/email`
 
-Update the authenticated user's email address. Triggers a verification email to the new address.
+認証済みユーザーのメールアドレスを更新します。新しいアドレスに確認メールが送信されます。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `email` | `string` | Yes | New email address |
+| `email` | `string` | はい | 新しいメールアドレス |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/me/email HTTP/1.1
@@ -381,7 +381,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -391,9 +391,9 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `POST /auth/me/email/resend`
 
-Resend the email verification link to the pending email address.
+保留中のメールアドレスに確認リンクを再送信します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/me/email/resend HTTP/1.1
@@ -402,7 +402,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -410,19 +410,19 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Cooldown:** 600 seconds (10 minutes) between resend requests. Returns `429` if called sooner.
+**クールダウン:** 再送信リクエスト間は600秒（10分）。早すぎる場合は `429` を返します。
 
 ### `POST /auth/verify-email`
 
-Verify an email address using the token from the verification email.
+確認メールのトークンを使用してメールアドレスを確認します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `token` | `string` | Yes | Verification token from the email link |
+| `token` | `string` | はい | 確認メールリンクのトークン |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/verify-email HTTP/1.1
@@ -435,7 +435,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -443,28 +443,28 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Error Responses:**
+**エラーレスポンス:**
 
-| Status | Error | Description |
+| ステータス | エラー | 説明 |
 |--------|-------|-------------|
-| `400` | `INVALID_TOKEN` | Token is malformed or expired |
-| `429` | `TOO_MANY_REQUESTS` | Resend cooldown not yet elapsed (600s) |
+| `400` | `INVALID_TOKEN` | トークンが不正または期限切れ |
+| `429` | `TOO_MANY_REQUESTS` | 再送信クールダウンが未経過（600秒） |
 
 ---
 
-## Password Reset
+## パスワードリセット
 
 ### `POST /auth/forgot-password`
 
-Request a password reset email.
+パスワードリセットメールを要求します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `email` | `string` | Yes | The account's registered email address |
+| `email` | `string` | はい | アカウントに登録されたメールアドレス |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/forgot-password HTTP/1.1
@@ -477,7 +477,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -485,20 +485,20 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-> **Note:** This endpoint always returns `200 OK` even if the email is not registered, to prevent email enumeration attacks.
+> **注意:** このエンドポイントはメールが未登録でも常に `200 OK` を返します。これはメール列挙攻撃を防ぐためです。
 
 ### `POST /auth/reset-password`
 
-Set a new password using the token from the reset email.
+リセットメールのトークンを使用して新しいパスワードを設定します。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `token` | `string` | Yes | Reset token from the email link |
-| `password` | `string` | Yes | New password (must pass password policy) |
+| `token` | `string` | はい | リセットメールリンクのトークン |
+| `password` | `string` | はい | 新しいパスワード（パスワードポリシーに合格する必要あり） |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/reset-password HTTP/1.1
@@ -512,7 +512,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -522,13 +522,13 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Sessions
+## セッション
 
 ### `GET /auth/sessions`
 
-List all active sessions for the authenticated user.
+認証済みユーザーのすべてのアクティブセッションを一覧表示します。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /auth/sessions HTTP/1.1
@@ -536,7 +536,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -565,24 +565,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-**Session Object Fields:**
+**セッションオブジェクトのフィールド:**
 
-| Field | Type | Description |
+| フィールド | 型 | 説明 |
 |-------|------|-------------|
-| `id` | `string` | Unique session identifier |
-| `deviceId` | `string` | Device UUID associated with this session |
-| `deviceName` | `string` | Human-readable device description |
-| `clientType` | `string` | One of `web`, `ios`, `android` |
-| `isCurrent` | `boolean` | Whether this is the session making the request |
-| `createdAt` | `string` | ISO 8601 timestamp of session creation |
-| `lastUsedAt` | `string` | ISO 8601 timestamp of last activity |
-| `expiresAt` | `string` | ISO 8601 timestamp of session expiration |
+| `id` | `string` | 一意のセッション識別子 |
+| `deviceId` | `string` | このセッションに紐づくデバイスUUID |
+| `deviceName` | `string` | 人間が読めるデバイスの説明 |
+| `clientType` | `string` | `web`, `ios`, `android` のいずれか |
+| `isCurrent` | `boolean` | リクエストを行っているセッションかどうか |
+| `createdAt` | `string` | ISO 8601 セッション作成タイムスタンプ |
+| `lastUsedAt` | `string` | ISO 8601 最終アクティビティのタイムスタンプ |
+| `expiresAt` | `string` | ISO 8601 セッション有効期限のタイムスタンプ |
 
 ### `DELETE /auth/sessions/:id`
 
-Revoke a specific session by its ID.
+IDを指定して特定のセッションを失効させます。
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /auth/sessions/sess_def456 HTTP/1.1
@@ -591,7 +591,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -601,15 +601,15 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `DELETE /auth/sessions/others`
 
-Revoke all sessions except the current one.
+現在のセッション以外のすべてのセッションを失効させます。
 
-**Request Headers:**
+**リクエストヘッダー:**
 
-| Header | Required | Description |
+| ヘッダー | 必須 | 説明 |
 |--------|----------|-------------|
-| `x-device-id` | Yes | Device ID of the current session (to identify which session to keep) |
+| `x-device-id` | はい | 現在のセッションのデバイスID（保持するセッションを特定するため） |
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /auth/sessions/others HTTP/1.1
@@ -619,7 +619,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 x-device-id: 550e8400-e29b-41d4-a716-446655440000
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -629,9 +629,9 @@ x-device-id: 550e8400-e29b-41d4-a716-446655440000
 
 ### `DELETE /auth/sessions/all`
 
-Revoke all sessions including the current one. Effectively logs the user out of all devices.
+現在のセッションを含むすべてのセッションを失効させます。実質的にすべてのデバイスからログアウトします。
 
-**Request:**
+**リクエスト:**
 
 ```http
 DELETE /auth/sessions/all HTTP/1.1
@@ -640,7 +640,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -650,23 +650,23 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Multi-Account Support
+## マルチアカウント対応
 
-Karotter supports up to **5 accounts** simultaneously on a single device.
+Karotterは1つのデバイスで最大**5アカウント**を同時にサポートしています。
 
 ### `POST /auth/switch-session`
 
-Switch the active session to a different account.
+アクティブセッションを別のアカウントに切り替えます。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `sessionId` | `string` | Yes | Target session ID to switch to |
-| `userId` | `string` | Yes | User ID associated with the target session |
-| `deviceId` | `string` | Yes | Current device identifier |
+| `sessionId` | `string` | はい | 切り替え先のセッションID |
+| `userId` | `string` | はい | 切り替え先セッションに紐づくユーザーID |
+| `deviceId` | `string` | はい | 現在のデバイス識別子 |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/switch-session HTTP/1.1
@@ -682,7 +682,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -699,15 +699,15 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ### `POST /auth/session-unread-snapshots`
 
-Get unread notification/message counts for all sessions on this device. Used to display badge counts for inactive accounts.
+このデバイスのすべてのセッションの未読通知/メッセージ数を取得します。非アクティブアカウントのバッジカウント表示に使用されます。
 
-**Request Body:**
+**リクエストボディ:**
 
-| Field | Type | Required | Description |
+| フィールド | 型 | 必須 | 説明 |
 |-------|------|----------|-------------|
-| `deviceId` | `string` | Yes | Current device identifier |
+| `deviceId` | `string` | はい | 現在のデバイス識別子 |
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /auth/session-unread-snapshots HTTP/1.1
@@ -721,7 +721,7 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 }
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -744,13 +744,13 @@ x-csrf-token: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 
 ---
 
-## Current User
+## 現在のユーザー
 
 ### `GET /auth/me`
 
-Retrieve the full profile of the currently authenticated user, including email (not exposed on the public profile endpoint).
+現在の認証済みユーザーの完全なプロフィールを取得します。メールアドレスを含みます（公開プロフィールエンドポイントでは公開されません）。
 
-**Request:**
+**リクエスト:**
 
 ```http
 GET /auth/me HTTP/1.1
@@ -758,7 +758,7 @@ Host: api.karotter.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
-**Response `200 OK`:**
+**レスポンス `200 OK`:**
 
 ```json
 {
@@ -794,4 +794,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 }
 ```
 
-> **Note:** This is the only endpoint that returns the user's `email` field. The public `/users/:usernameOrId` endpoint omits it.
+> **注意:** ユーザーの `email` フィールドを返す唯一のエンドポイントです。公開の `/users/:usernameOrId` エンドポイントではメールは省略されます。
