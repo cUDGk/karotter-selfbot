@@ -1,13 +1,25 @@
-# Karotter Selfbot API リファレンス & ライブラリ
+<div align="center">
 
-[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](python/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&logoColor=white)](typescript/)
-[![API Endpoints](https://img.shields.io/badge/API_Endpoints-145+-green)](docs/)
-[![Socket.IO Events](https://img.shields.io/badge/Socket.IO_Events-35+-orange)](docs/socketio.md)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-非公式_·_都度更新-red)](#注意事項)
+# Karotter Selfbot
 
-[Karotter](https://karotter.com) の非公式APIリファレンスとセルフBot用クライアントライブラリです。
+### Karotter 非公式 API リファレンス & セルフ Bot 用ライブラリ (Python + TypeScript)
+
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat&logo=python&logoColor=white)](python/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white)](typescript/)
+[![API Endpoints](https://img.shields.io/badge/API_Endpoints-145%2B-green?style=flat)](docs/)
+[![Socket.IO Events](https://img.shields.io/badge/Socket.IO_Events-35%2B-orange?style=flat)](docs/socketio.md)
+[![Status](https://img.shields.io/badge/Status-非公式_·_都度更新-red?style=flat)](#注意事項)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
+
+**Python と TypeScript 両方のクライアントをまとめた、Karotter の全 API 叩けるライブラリ。**
+
+---
+
+</div>
+
+## 概要
+
+[Karotter](https://karotter.com) の非公式 API リファレンスとセルフ Bot 用クライアントライブラリ。JS バンドル解析と実 API テストから作成。
 
 ## 注意事項
 
